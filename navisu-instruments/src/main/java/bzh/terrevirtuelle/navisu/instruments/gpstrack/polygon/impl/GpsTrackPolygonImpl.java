@@ -180,7 +180,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected Date startTime;
     protected int nbNamesDB = 0;
     protected int distanceInterval = 70;
-    protected int timeInterval = 1000;//7000;
+    protected int timeInterval = 7000;//7000;
     protected ArrayList<Position> reco = new ArrayList<Position>();
     protected ArrayList<SamplePositions> recos = new ArrayList<SamplePositions>();
     protected int nbPolygonMax = 10;
