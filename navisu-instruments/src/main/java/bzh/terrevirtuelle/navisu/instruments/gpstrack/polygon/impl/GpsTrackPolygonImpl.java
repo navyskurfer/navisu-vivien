@@ -635,14 +635,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                         nbNamesReceived++;
                         //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
                         aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " (AIS)"));
-                        MediaPlayer mediaPlayer;
+                        /*MediaPlayer mediaPlayer;
                         javafx.scene.media.Media media;
                         String userDir = System.getProperty("user.dir");
                         userDir = userDir.replace("\\", "/");
                         String url = userDir + "/data/sounds/beep-07.wav";
                         media = new Media("file:///" + url);
                         mediaPlayer = new MediaPlayer(media);
-                        mediaPlayer.setAutoPlay(true);
+                        mediaPlayer.setAutoPlay(true);*/
                     }
                 } else {
                     resu.setName(aisShips.get(i).getName());
