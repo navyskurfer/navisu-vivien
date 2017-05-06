@@ -138,7 +138,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected double diameter;
     protected double savedAltitude = 0;
     protected boolean firstDetection = false;
-    protected String[][] shipMatrix = new String[6][5000];
+    protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
