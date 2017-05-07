@@ -40,6 +40,13 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import java.io.*;
+import sun.audio.*;
+
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
@@ -326,6 +333,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         for (int n = 0; n < 100000; n++) {
             aisPath.add(null);
         }
+        
+        //playSound();
+        
     }
 
     @Override
@@ -579,6 +589,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
         if (count % 290 == 0) {
             saveShips();
+            playSound();
             nbSave++;
             Date now = new Date();
             long diff = now.getTime() - startTime.getTime();
@@ -635,6 +646,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                         nbNamesReceived++;
                         //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
                         aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " (AIS)"));
+                        playSound();
                         /*MediaPlayer mediaPlayer;
                         javafx.scene.media.Media media;
                         String userDir = System.getProperty("user.dir");
@@ -1466,6 +1478,28 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             dmp.setArmed(false);
             dmpController.setArmed(false);
             aisTrackPanel.updateAisPanelStatus("CPA zone activated - radius : " + Math.round(diameter / 2) + " meters");
+        }
+    }
+    
+    private void playSound() {
+    	try{
+    		String userDir = System.getProperty("user.dir");
+            userDir = userDir.replace("\\", "/");
+            String url = userDir + "/data/sounds/beep-07.wav";
+            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(url));
+            Clip test = AudioSystem.getClip();  
+
+            test.open(ais);
+            test.start();
+
+            while (!test.isRunning())
+                Thread.sleep(10);
+            while (test.isRunning())
+                Thread.sleep(10);
+
+            test.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
     }
 
