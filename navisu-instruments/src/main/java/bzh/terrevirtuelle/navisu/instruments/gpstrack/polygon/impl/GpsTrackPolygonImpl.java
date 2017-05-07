@@ -323,7 +323,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         attrs.setOutlineWidth(3);
 
         aisPath = new LinkedList<Path>();
-        for (int n = 0; n < 5000; n++) {
+        for (int n = 0; n < 100000; n++) {
             aisPath.add(null);
         }
     }
