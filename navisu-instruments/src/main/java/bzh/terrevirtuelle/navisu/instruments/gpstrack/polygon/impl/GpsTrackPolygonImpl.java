@@ -440,26 +440,26 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             componentReady = true;
 
             // souscription aux événements GPS
-            ggaES.subscribe(new GGAEvent() {
-
-                @Override
-                public <T extends NMEA> void notifyNmeaMessageChanged(T d) {
-
-                    GGA data = (GGA) d;
-                    if (on) {
-
-                        watchedShip.setLatitude(data.getLatitude());
-                        watchedShip.setLongitude(data.getLongitude());
-
-                        if (dmpActivated) {
-                            translatePolygon(watchedShip.getLatitude(), watchedShip.getLongitude());
-                        }
-
-                        watchTarget(watchedShip, savedMeasureTool);
-                    }
-
-                }
-            });
+//            ggaES.subscribe(new GGAEvent() {
+//
+//                @Override
+//                public <T extends NMEA> void notifyNmeaMessageChanged(T d) {
+//
+//                    GGA data = (GGA) d;
+//                    if (on) {
+//
+//                        watchedShip.setLatitude(data.getLatitude());
+//                        watchedShip.setLongitude(data.getLongitude());
+//
+//                        if (dmpActivated) {
+//                            translatePolygon(watchedShip.getLatitude(), watchedShip.getLongitude());
+//                        }
+//
+//                        watchTarget(watchedShip, savedMeasureTool);
+//                    }
+//
+//                }
+//            });
         }
 
         if (!aisServices.isOn()) {
@@ -477,8 +477,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }*/
         });
         aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
-            updateTarget(updatedData);
-            wwd.redrawNow();
+            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 300) {
+            	updateTarget(updatedData);
+            	wwd.redrawNow();
             /*Date t = new Date();
             if (pShipCreated && !verrou && (int) (t.getTime() - t0.getTime()) % 5 == 0 && etape < path.size() - 1) {
                 verrou = true;
@@ -510,6 +511,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             if (dmpActivated) {
                 watchTargetDmp(aisShips);
             }*/
+            }
         });
     }
 
@@ -664,14 +666,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                     aisPath.get(i).setAttributes(attrs);
                 }
 
-                Ship resu = new Ship();
-                resu.setLatitude(target.getLatitude());
-                resu.setLongitude(target.getLongitude());
-                resu.setMMSI(target.getMmsi());
-                if (target.getShipName() != null && !target.getShipName().equals("") && !target.getShipName().equals(aisShips.get(i).getName())) {
-                    resu.setName(target.getShipName());
-                    aisShips.set(i, resu);
-                    //if (!((target.getShipName()).equals(aisShips.get(i).getName()))) {
+                	Ship resu = new Ship();
+                	resu.setLatitude(target.getLatitude());
+                	resu.setLongitude(target.getLongitude());
+                	resu.setMMSI(target.getMmsi());
+                	if (target.getShipName() != null && !target.getShipName().equals("") && !target.getShipName().equals(aisShips.get(i).getName())) {
+                		resu.setName(target.getShipName());
+                		aisShips.set(i, resu);
+                		//if (!((target.getShipName()).equals(aisShips.get(i).getName()))) {
                         nbNamesReceived++;
                         //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
                         aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getShipName() + " new name - (AIS)"));
@@ -685,13 +687,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                         mediaPlayer = new MediaPlayer(media);
                         mediaPlayer.setAutoPlay(true);*/
                     //}
-                } else {
-                	if (target.getShipName() != null && !target.getShipName().equals("") && target.getShipName().equals(aisShips.get(i).getName())) {
-                		resu.setName(aisShips.get(i).getName());
-                		aisShips.set(i, resu);
-                		aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (aisShips.get(i).getName() + " (already in database)"));
-                        //playSound();        
-                }
+                	} else {
+                		if (target.getShipName() != null && !target.getShipName().equals("") && target.getShipName().equals(aisShips.get(i).getName())) {
+                			resu.setName(aisShips.get(i).getName());
+                			aisShips.set(i, resu);
+                			aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (aisShips.get(i).getName() + " (already in database)"));
+                			//playSound();        
+                		}
                 }
                 
                 shipMatrix[0][i] = Integer.toString(resu.getMMSI());
@@ -700,6 +702,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 shipMatrix[3][i] = Double.toString(resu.getLongitude());
                 shipMatrix[4][i] = dateFormatDate.format(date);
                 shipMatrix[5][i] = dateFormatTime.format(date);
+                
     			// Enlever les commentaires pour voir les messages AIS
                 //System.out.println(ANSI_CYAN + "Ship#" + (i+1) + " with MMSI " + target.getMMSI() + " updated - name " + resu.getName() + " - position lat " + target.getLatitude() + " and lon " + target.getLongitude() + " at " + dateFormatTime.format(date) + ANSI_RESET);
                 count++;
