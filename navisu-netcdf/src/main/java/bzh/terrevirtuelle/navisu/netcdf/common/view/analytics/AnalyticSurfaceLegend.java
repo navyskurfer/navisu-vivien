@@ -277,7 +277,7 @@ public class AnalyticSurfaceLegend implements Renderable
             y += offset.getY();
         }
 
-        TextRenderer tr = OGLTextRenderer.getOrCreateTextRenderer(dc.getTextRendererCache(), font);
+        gov.nasa.worldwind.render.TextRenderer tr = OGLTextRenderer.getOrCreateTextRenderer(dc.getTextRendererCache(), font);
         if (tr == null)
             return;
 
