@@ -691,7 +691,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 		if (target.getShipName() != null && !target.getShipName().equals("") && target.getShipName().equals(aisShips.get(i).getName())) {
                 			resu.setName(aisShips.get(i).getName());
                 			aisShips.set(i, resu);
-                			aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (aisShips.get(i).getName() + " (already in database)"));
+                			//aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (aisShips.get(i).getName() + " (already in database)"));
                 			//playSound();        
                 		}
                 }
