@@ -375,10 +375,11 @@ public class AisImpl
         	for (Ship s : savedAisShips) {
         		if (s.getMMSI()==target.getMMSI() && target.getName()==null) {
         			if (!(s.getName().equals("")) && !(s.getName().equals(null))) {
-        				target.setName(s.getName());
+        				target.setShipName(s.getName());
         				nbNamesRetrieved++;
         				Date date = new Date();
         				gpsTrackPolygonServices.getPanel().updateAisPanelName(dateFormatTime.format(date), gpsTrackPolygonServices.getInSight(), (s.getName() + " (already in database)"));
+        				gpsTrackPolygonServices.playSound();
         				if (nbNamesRetrieved<51) {
         					if (nbNamesRetrieved % 25 == 0) {
         						gpsTrackPolygonServices.getPanel().updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");

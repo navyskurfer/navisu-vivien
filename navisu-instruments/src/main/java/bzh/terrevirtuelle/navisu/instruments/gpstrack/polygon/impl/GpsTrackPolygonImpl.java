@@ -74,6 +74,8 @@ import bzh.terrevirtuelle.navisu.instruments.common.view.panel.TrackPanel;
 import bzh.terrevirtuelle.navisu.instruments.common.view.targets.GShip;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygon;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygonServices;
+import bzh.terrevirtuelle.navisu.server.DataServerServices;
+import bzh.terrevirtuelle.navisu.server.impl.vertx.DataServerImpl;
 
 import org.capcaval.c3.component.ComponentEventSubscribe;
 import org.capcaval.c3.component.ComponentState;
@@ -101,6 +103,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
     @UsedService
     AisServices aisServices;
+    
+    @UsedService
+    DataServerServices dataServerServices;
 
     ComponentManager cm;
     ComponentEventSubscribe<GGAEvent> ggaES;
@@ -477,7 +482,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }*/
         });
         aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
-            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 300) {
+            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 50) {
             	updateTarget(updatedData);
             	wwd.redrawNow();
             /*Date t = new Date();
@@ -513,6 +518,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }*/
             }
         });
+        
+        dataServerServices.openGpsd("sinagot.net", 2947);
+      //dataServerServices.openGpsd("fridu.net", 2947);
+        
     }
 
     private void createTarget(Ship target) {
@@ -556,19 +565,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisShip.setMMSI(target.getMmsi());
             aisShip.setLatitude(target.getLatitude());
             aisShip.setLongitude(target.getLongitude());
-            if (target.getShipName() != null && !target.getShipName().equals("")) {
-                aisShip.setName(target.getShipName());
-            } 
-            
             aisShips.add(aisShip);
-            
-            if (target.getShipName() != null && !target.getShipName().equals("")) {
-                aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getShipName() + " new ship & name - (AIS)"));
-                playSound();
-            } 
-            else {
-            	aisTrackPanel.updateAisPanelMmsi(dateFormatTime.format(date), inSight, target.getMmsi());
-            	}
+            aisTrackPanel.updateAisPanelMmsi(dateFormatTime.format(date), inSight, target.getMmsi());
             
             shipMatrix[0][aisShips.size() - 1] = Integer.toString(aisShip.getMMSI());
             shipMatrix[1][aisShips.size() - 1] = aisShip.getName();
@@ -1518,7 +1516,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
     }
     
-    private void playSound() {
+    public void playSound() {
     	try{
     		String userDir = System.getProperty("user.dir");
             userDir = userDir.replace("\\", "/");
