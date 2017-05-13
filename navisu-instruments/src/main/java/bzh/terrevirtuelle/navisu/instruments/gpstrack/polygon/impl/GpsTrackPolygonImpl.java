@@ -482,7 +482,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }*/
         });
         aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
-            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 50) {
+            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 75) {
             	updateTarget(updatedData);
             	wwd.redrawNow();
             /*Date t = new Date();
@@ -519,8 +519,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
         });
         
-        dataServerServices.openGpsd("sinagot.net", 2947);
-      //dataServerServices.openGpsd("fridu.net", 2947);
+      //dataServerServices.openGpsd("sinagot.net", 2947);
+      dataServerServices.openGpsd("fridu.net", 2947);
         
     }
 
