@@ -482,7 +482,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }*/
         });
         aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
-            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 75) {
+            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 100) {
             	updateTarget(updatedData);
             	wwd.redrawNow();
             /*Date t = new Date();
