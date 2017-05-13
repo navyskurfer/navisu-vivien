@@ -519,8 +519,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
         });
         
-      //dataServerServices.openGpsd("sinagot.net", 2947);
-      dataServerServices.openGpsd("fridu.net", 2947);
+      dataServerServices.openGpsd("sinagot.net", 2947);
+      //dataServerServices.openGpsd("fridu.net", 2947);
         
     }
 
