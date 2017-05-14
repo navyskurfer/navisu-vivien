@@ -75,4 +75,6 @@ public interface GpsTrackPolygonServices extends ComponentService {
     int getInSight();
 
 	void playSound();
+
+	void newNameAis5(Ship ship);
 }

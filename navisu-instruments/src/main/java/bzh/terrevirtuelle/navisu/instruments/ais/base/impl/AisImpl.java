@@ -274,6 +274,7 @@ public class AisImpl
             public <T extends NMEA> void notifyNmeaMessageChanged(T data) {
                 AIS05 ais = (AIS05) data;
                 int mmsi = ais.getMMSI();
+                Date date = new Date();
                 if (!ships.containsKey(mmsi)) {
                     ship = ShipBuilder.create()
                             .mmsi(ais.getMMSI())
@@ -282,6 +283,7 @@ public class AisImpl
                             .name(ais.getName())
                             .build();
                     ships.put(mmsi, ship);
+                    gpsTrackPolygonServices.newNameAis5(ship);
                 } else {
                     ship = ships.get(mmsi);
                     ship.setShipType(ais.getShipType());
@@ -289,6 +291,7 @@ public class AisImpl
                     ship.setETA(ais.getETA());
                     ship.setDestination(ais.getDestination());
                     aisUpdateTargetEvent.notifyAisMessageChanged(ship);
+                    gpsTrackPolygonServices.newNameAis5(ship);
                 }
                 timestamps.put(mmsi, Calendar.getInstance());
             }
@@ -378,7 +381,7 @@ public class AisImpl
         				target.setShipName(s.getName());
         				nbNamesRetrieved++;
         				Date date = new Date();
-        				gpsTrackPolygonServices.getPanel().updateAisPanelName(dateFormatTime.format(date), gpsTrackPolygonServices.getInSight(), (s.getName() + " (already in database)"));
+        				gpsTrackPolygonServices.getPanel().updateAisPanelName(dateFormatTime.format(date), gpsTrackPolygonServices.getInSight(), (s.getName() + " retrieved from database"));
         				gpsTrackPolygonServices.playSound();
         				if (nbNamesRetrieved<51) {
         					if (nbNamesRetrieved % 25 == 0) {

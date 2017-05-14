@@ -482,7 +482,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }*/
         });
         aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
-            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 100) {
+            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 75) {
             	updateTarget(updatedData);
             	wwd.redrawNow();
             /*Date t = new Date();
@@ -567,6 +567,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisShip.setLongitude(target.getLongitude());
             aisShips.add(aisShip);
             aisTrackPanel.updateAisPanelMmsi(dateFormatTime.format(date), inSight, target.getMmsi());
+            //aisTrackPanel.updateAisPanelStatus("New MMSI " + target.getMmsi() + " without ship name");
             
             shipMatrix[0][aisShips.size() - 1] = Integer.toString(aisShip.getMMSI());
             shipMatrix[1][aisShips.size() - 1] = aisShip.getName();
@@ -587,22 +588,22 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             mediaPlayer.setAutoPlay(true);*/
         }
     	
-    	if (count % 290 == 0) {
-    		saveShips();
-            //playSound();
-            nbSave++;
-            Date now = new Date();
-            long diff = now.getTime() - startTime.getTime();
-            long diffSeconds = diff / 1000 % 60;
-            long diffMinutes = diff / (60 * 1000) % 60;
-            long diffHours = diff / (60 * 60 * 1000) % 24;
-            long diffDays = diff / (60 * 60 * 1000) / 24;
-            //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
-            aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
-            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
-            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
-        }
+//    	if (nbMmsiReceived % 30 == 0) {
+//    		saveShips();
+//            //playSound();
+//            nbSave++;
+//            Date now = new Date();
+//            long diff = now.getTime() - startTime.getTime();
+//            long diffSeconds = diff / 1000 % 60;
+//            long diffMinutes = diff / (60 * 1000) % 60;
+//            long diffHours = diff / (60 * 60 * 1000) % 24;
+//            long diffDays = diff / (60 * 60 * 1000) / 24;
+//            //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
+//            aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
+//            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+//            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
+//            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
+//        }
         
     }
 
@@ -615,97 +616,97 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
         }
 
-        if (count % 290 == 0) {
-            saveShips();
-            //playSound();
-            nbSave++;
-            Date now = new Date();
-            long diff = now.getTime() - startTime.getTime();
-            long diffSeconds = diff / 1000 % 60;
-            long diffMinutes = diff / (60 * 1000) % 60;
-            long diffHours = diff / (60 * 60 * 1000) % 24;
-            long diffDays = diff / (60 * 60 * 1000) / 24;
-            //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
-            aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
-            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
-            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
-        }
+//        if (count % 60 == 0) {
+//            saveShips();
+//            //playSound();
+//            nbSave++;
+//            Date now = new Date();
+//            long diff = now.getTime() - startTime.getTime();
+//            long diffSeconds = diff / 1000 % 60;
+//            long diffMinutes = diff / (60 * 1000) % 60;
+//            long diffHours = diff / (60 * 60 * 1000) % 24;
+//            long diffDays = diff / (60 * 60 * 1000) / 24;
+//            //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
+//            aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
+//            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+//            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
+//            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
+//        }
 
         /*if (count % 5001 == 0) {
             System.gc();
         }*/
 
-        for (int i = 0; i < aisShips.size(); i++) {
-            if (aisShips.get(i).getMMSI() == target.getMmsi()) {
-
-                if (aisPath.get(i) != null) {
-                    if (aisTrackLayer.isEnabled()) {
-                        aisTrackLayer.removeRenderable(aisPath.get(i));
-                    }
-                    ArrayList<Position> resu1 = (ArrayList<Position>) aisPath.get(i).getPositions();
-                    if (!(resu1.get(resu1.size() - 1).equals(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 10)))) {
-                        resu1.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 10));
-                        aisPath.get(i).setPositions(resu1);
-                    }
-
-                    if (aisTrackLayer.isEnabled()) {
-                        aisTrackLayer.addRenderable(aisPath.get(i));
-                        wwd.redrawNow();
-                    }
-                } else {
-                    ArrayList<Position> resu2 = new ArrayList<Position>();
-                    resu2.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 1));
-                    aisPath.set(i, new Path(resu2));
-                    aisPath.get(i).setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
-                    aisPath.get(i).setVisible(true);
-                    aisPath.get(i).setExtrude(true);
-                    aisPath.get(i).setPathType(AVKey.GREAT_CIRCLE);
-                    aisPath.get(i).setAttributes(attrs);
-                }
-
-                	Ship resu = new Ship();
-                	resu.setLatitude(target.getLatitude());
-                	resu.setLongitude(target.getLongitude());
-                	resu.setMMSI(target.getMmsi());
-                	if (target.getShipName() != null && !target.getShipName().equals("") && !target.getShipName().equals(aisShips.get(i).getName())) {
-                		resu.setName(target.getShipName());
-                		aisShips.set(i, resu);
-                		//if (!((target.getShipName()).equals(aisShips.get(i).getName()))) {
-                        nbNamesReceived++;
-                        //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
-                        aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getShipName() + " new name - (AIS)"));
-                        playSound();
-                        /*MediaPlayer mediaPlayer;
-                        javafx.scene.media.Media media;
-                        String userDir = System.getProperty("user.dir");
-                        userDir = userDir.replace("\\", "/");
-                        String url = userDir + "/data/sounds/beep-07.wav";
-                        media = new Media("file:///" + url);
-                        mediaPlayer = new MediaPlayer(media);
-                        mediaPlayer.setAutoPlay(true);*/
-                    //}
-                	} else {
-                		if (target.getShipName() != null && !target.getShipName().equals("") && target.getShipName().equals(aisShips.get(i).getName())) {
-                			resu.setName(aisShips.get(i).getName());
-                			aisShips.set(i, resu);
-                			//aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (aisShips.get(i).getName() + " (already in database)"));
-                			//playSound();        
-                		}
-                }
-                
-                shipMatrix[0][i] = Integer.toString(resu.getMMSI());
-                shipMatrix[1][i] = resu.getName();
-                shipMatrix[2][i] = Double.toString(resu.getLatitude());
-                shipMatrix[3][i] = Double.toString(resu.getLongitude());
-                shipMatrix[4][i] = dateFormatDate.format(date);
-                shipMatrix[5][i] = dateFormatTime.format(date);
-                
-    			// Enlever les commentaires pour voir les messages AIS
-                //System.out.println(ANSI_CYAN + "Ship#" + (i+1) + " with MMSI " + target.getMMSI() + " updated - name " + resu.getName() + " - position lat " + target.getLatitude() + " and lon " + target.getLongitude() + " at " + dateFormatTime.format(date) + ANSI_RESET);
-                count++;
-            }
-        }
+//        for (int i = 0; i < aisShips.size(); i++) {
+//            if (aisShips.get(i).getMMSI() == target.getMmsi()) {
+//
+//                if (aisPath.get(i) != null) {
+//                    if (aisTrackLayer.isEnabled()) {
+//                        aisTrackLayer.removeRenderable(aisPath.get(i));
+//                    }
+//                    ArrayList<Position> resu1 = (ArrayList<Position>) aisPath.get(i).getPositions();
+//                    if (!(resu1.get(resu1.size() - 1).equals(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 10)))) {
+//                        resu1.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 10));
+//                        aisPath.get(i).setPositions(resu1);
+//                    }
+//
+//                    if (aisTrackLayer.isEnabled()) {
+//                        aisTrackLayer.addRenderable(aisPath.get(i));
+//                        wwd.redrawNow();
+//                    }
+//                } else {
+//                    ArrayList<Position> resu2 = new ArrayList<Position>();
+//                    resu2.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 1));
+//                    aisPath.set(i, new Path(resu2));
+//                    aisPath.get(i).setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
+//                    aisPath.get(i).setVisible(true);
+//                    aisPath.get(i).setExtrude(true);
+//                    aisPath.get(i).setPathType(AVKey.GREAT_CIRCLE);
+//                    aisPath.get(i).setAttributes(attrs);
+//                }
+//
+//                	Ship resu = new Ship();
+//                	resu.setLatitude(target.getLatitude());
+//                	resu.setLongitude(target.getLongitude());
+//                	resu.setMMSI(target.getMmsi());
+//                	if (target.getShipName() != null && !target.getShipName().equals("") && !target.getShipName().equals(aisShips.get(i).getName())) {
+//                		resu.setName(target.getShipName());
+//                		aisShips.set(i, resu);
+//                		//if (!((target.getShipName()).equals(aisShips.get(i).getName()))) {
+//                        nbNamesReceived++;
+//                        //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
+//                        aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getShipName() + " new name - (AIS)"));
+//                        playSound();
+//                        /*MediaPlayer mediaPlayer;
+//                        javafx.scene.media.Media media;
+//                        String userDir = System.getProperty("user.dir");
+//                        userDir = userDir.replace("\\", "/");
+//                        String url = userDir + "/data/sounds/beep-07.wav";
+//                        media = new Media("file:///" + url);
+//                        mediaPlayer = new MediaPlayer(media);
+//                        mediaPlayer.setAutoPlay(true);*/
+//                    //}
+//                	} else {
+//                		if (target.getShipName() != null && !target.getShipName().equals("") && target.getShipName().equals(aisShips.get(i).getName())) {
+//                			resu.setName(aisShips.get(i).getName());
+//                			aisShips.set(i, resu);
+//                			//aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (aisShips.get(i).getName() + " (already in database)"));
+//                			//playSound();        
+//                		}
+//                }
+//                
+//                shipMatrix[0][i] = Integer.toString(resu.getMMSI());
+//                shipMatrix[1][i] = resu.getName();
+//                shipMatrix[2][i] = Double.toString(resu.getLatitude());
+//                shipMatrix[3][i] = Double.toString(resu.getLongitude());
+//                shipMatrix[4][i] = dateFormatDate.format(date);
+//                shipMatrix[5][i] = dateFormatTime.format(date);
+//                
+//    			// Enlever les commentaires pour voir les messages AIS
+//                //System.out.println(ANSI_CYAN + "Ship#" + (i+1) + " with MMSI " + target.getMMSI() + " updated - name " + resu.getName() + " - position lat " + target.getLatitude() + " and lon " + target.getLongitude() + " at " + dateFormatTime.format(date) + ANSI_RESET);
+//                count++;
+//            }
+//        }
     }
 
     @Override
@@ -1536,6 +1537,140 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }catch(Exception ex){
             ex.printStackTrace();
         }
+    }
+    
+    public void newNameAis5(Ship target) {
+    	
+    	Date date = new Date();
+    	boolean shipExistsAis5 = false;
+    	
+        if (count % 51 == 0) {
+            //System.out.println(ANSI_BLUE + inSight + " ships in sight at " + dateFormatTime.format(date) + ANSI_RESET);
+            aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
+        }
+
+        if ((nbNamesReceived+1) % 10 == 0) {
+            saveShips();
+            //playSound();
+            nbSave++;
+            Date now = new Date();
+            long diff = now.getTime() - startTime.getTime();
+            long diffSeconds = diff / 1000 % 60;
+            long diffMinutes = diff / (60 * 1000) % 60;
+            long diffHours = diff / (60 * 60 * 1000) % 24;
+            long diffDays = diff / (60 * 60 * 1000) / 24;
+            //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
+            aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
+            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
+            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
+        }
+        
+    	for (int i = 0; i < aisShips.size(); i++) {
+            if (aisShips.get(i).getMMSI() == target.getMMSI()) {
+            	shipExistsAis5 = true;
+                if (aisPath.get(i) != null) {
+                    if (aisTrackLayer.isEnabled()) {
+                        aisTrackLayer.removeRenderable(aisPath.get(i));
+                    }
+                    ArrayList<Position> resu1 = (ArrayList<Position>) aisPath.get(i).getPositions();
+                    if (!(resu1.get(resu1.size() - 1).equals(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 10)))) {
+                        resu1.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 10));
+                        aisPath.get(i).setPositions(resu1);
+                    }
+
+                    if (aisTrackLayer.isEnabled()) {
+                        aisTrackLayer.addRenderable(aisPath.get(i));
+                        wwd.redrawNow();
+                    }
+                } else {
+                    ArrayList<Position> resu2 = new ArrayList<Position>();
+                    resu2.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 1));
+                    aisPath.set(i, new Path(resu2));
+                    aisPath.get(i).setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
+                    aisPath.get(i).setVisible(true);
+                    aisPath.get(i).setExtrude(true);
+                    aisPath.get(i).setPathType(AVKey.GREAT_CIRCLE);
+                    aisPath.get(i).setAttributes(attrs);
+                }
+
+                	Ship resu = new Ship();
+                	resu.setLatitude(target.getLatitude());
+                	resu.setLongitude(target.getLongitude());
+                	if (!target.getName().equals(aisShips.get(i).getName())) {
+                		resu.setName(target.getName());
+                		aisShips.set(i, resu);
+                		//if (!((target.getShipName()).equals(aisShips.get(i).getName()))) {
+                        nbNamesReceived++;
+                        //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
+                        aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " new name - (AIS5)"));
+                        playSound();
+                        /*MediaPlayer mediaPlayer;
+                        javafx.scene.media.Media media;
+                        String userDir = System.getProperty("user.dir");
+                        userDir = userDir.replace("\\", "/");
+                        String url = userDir + "/data/sounds/beep-07.wav";
+                        media = new Media("file:///" + url);
+                        mediaPlayer = new MediaPlayer(media);
+                        mediaPlayer.setAutoPlay(true);*/
+                    //}
+                	} else {
+                		aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " name already in database (AIS5)"));
+                		}
+                
+                shipMatrix[0][i] = Integer.toString(resu.getMMSI());
+                shipMatrix[1][i] = resu.getName();
+                shipMatrix[2][i] = Double.toString(resu.getLatitude());
+                shipMatrix[3][i] = Double.toString(resu.getLongitude());
+                shipMatrix[4][i] = dateFormatDate.format(date);
+                shipMatrix[5][i] = dateFormatTime.format(date);
+                
+    			// Enlever les commentaires pour voir les messages AIS
+                //System.out.println(ANSI_CYAN + "Ship#" + (i+1) + " with MMSI " + target.getMMSI() + " updated - name " + resu.getName() + " - position lat " + target.getLatitude() + " and lon " + target.getLongitude() + " at " + dateFormatTime.format(date) + ANSI_RESET);
+                count++;
+            }
+        }
+    	if (!shipExistsAis5) {
+            ArrayList<Position> resu1 = new ArrayList<Position>();
+            resu1.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 1));
+            aisPath.set(aisShips.size(), new Path(resu1));
+            aisPath.get(aisShips.size()).setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
+            aisPath.get(aisShips.size()).setVisible(true);
+            aisPath.get(aisShips.size()).setExtrude(true);
+            aisPath.get(aisShips.size()).setPathType(AVKey.GREAT_CIRCLE);
+            aisPath.get(aisShips.size()).setAttributes(attrs);
+
+            nbMmsiReceived++;
+            Ship aisShip = new Ship();
+            aisShip.setMMSI(target.getMMSI());
+            aisShip.setLatitude(target.getLatitude());
+            aisShip.setLongitude(target.getLongitude());
+            if (!target.getName().equals("") && target.getName() != null) {
+            	aisShip.setName(target.getName());
+                nbNamesReceived++;
+            	aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " new ship & name - (AIS5)"));
+            }
+            aisShips.add(aisShip);
+            aisTrackPanel.updateAisPanelMmsi(dateFormatTime.format(date), inSight, target.getMmsi());
+            
+            shipMatrix[0][aisShips.size() - 1] = Integer.toString(aisShip.getMMSI());
+            shipMatrix[1][aisShips.size() - 1] = aisShip.getName();
+            shipMatrix[2][aisShips.size() - 1] = Double.toString(target.getLatitude());
+            shipMatrix[3][aisShips.size() - 1] = Double.toString(target.getLongitude());
+            shipMatrix[4][aisShips.size() - 1] = dateFormatDate.format(date);
+            shipMatrix[5][aisShips.size() - 1] = dateFormatTime.format(date);
+		// Enlever les commentaires pour voir les messages AIS
+            //System.err.println("Ship#" + aisShips.size() + " with MMSI " + aisShip.getMMSI() + " created - name " + aisShip.getName() + " - position lat " + aisShip.getLatitude() + " and lon " + aisShip.getLongitude() + " at " + dateFormatTime.format(date));
+            count++;
+            /*MediaPlayer mediaPlayer;
+            javafx.scene.media.Media media;
+            String userDir = System.getProperty("user.dir");
+            userDir = userDir.replace("\\", "/");
+            String url = userDir + "/data/sounds/pling.wav";
+            media = new Media("file:///" + url);
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setAutoPlay(true);*/
+    	}
     }
 
     private void saveShips() {
