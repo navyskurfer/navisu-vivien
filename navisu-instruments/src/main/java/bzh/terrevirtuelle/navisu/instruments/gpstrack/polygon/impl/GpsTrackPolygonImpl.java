@@ -152,6 +152,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
+    protected int coldStart = 25;//number of ships to create before getting ship updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
@@ -482,7 +483,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }*/
         });
         aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
-            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > 50) {
+            if ((updatedData.getShipName() != null && !updatedData.getShipName().equals("")) || inSight > coldStart) {
             	updateTarget(updatedData);
             	wwd.redrawNow();
             /*Date t = new Date();
@@ -1546,10 +1547,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     	Date date = new Date();
     	boolean shipExistsAis5 = false;
     	
-        if (count % 51 == 0) {
-            //System.out.println(ANSI_BLUE + inSight + " ships in sight at " + dateFormatTime.format(date) + ANSI_RESET);
-            aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
-        }
 
         if ((nbNamesReceived+1) % 5 == 0) {
             saveShips();
@@ -1630,7 +1627,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 
     			// Enlever les commentaires pour voir les messages AIS
                 //System.out.println(ANSI_CYAN + "Ship#" + (i+1) + " with MMSI " + target.getMMSI() + " updated - name " + resu.getName() + " - position lat " + target.getLatitude() + " and lon " + target.getLongitude() + " at " + dateFormatTime.format(date) + ANSI_RESET);
-                count++;
             }
         }
     	if (!shipExistsAis5) {
@@ -1664,7 +1660,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             shipMatrix[5][aisShips.size() - 1] = dateFormatTime.format(date);
 		// Enlever les commentaires pour voir les messages AIS
             //System.err.println("Ship#" + aisShips.size() + " with MMSI " + aisShip.getMMSI() + " created - name " + aisShip.getName() + " - position lat " + aisShip.getLatitude() + " and lon " + aisShip.getLongitude() + " at " + dateFormatTime.format(date));
-            count++;
             /*MediaPlayer mediaPlayer;
             javafx.scene.media.Media media;
             String userDir = System.getProperty("user.dir");
