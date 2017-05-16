@@ -382,7 +382,7 @@ public class AisImpl
         				nbNamesRetrieved++;
         				Date date = new Date();
         				gpsTrackPolygonServices.getPanel().updateAisPanelName(dateFormatTime.format(date), gpsTrackPolygonServices.getInSight(), (s.getName() + " retrieved from database"));
-        				gpsTrackPolygonServices.playSound();
+        				//gpsTrackPolygonServices.playSound();
         				if (nbNamesRetrieved<51) {
         					if (nbNamesRetrieved % 25 == 0) {
         						gpsTrackPolygonServices.getPanel().updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
