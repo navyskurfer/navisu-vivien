@@ -1596,6 +1596,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	Ship resu = new Ship();
                 	resu.setLatitude(target.getLatitude());
                 	resu.setLongitude(target.getLongitude());
+                	resu.setMMSI(target.getMMSI());
                 		
                 	if (!target.getName().equals(aisShips.get(i).getName())) {
                 		resu.setName(target.getName());
@@ -1619,11 +1620,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 		}
                 
                 shipMatrix[0][i] = Integer.toString(resu.getMMSI());
-                shipMatrix[1][i] = resu.getName();
-                shipMatrix[2][i] = Double.toString(resu.getLatitude());
-                shipMatrix[3][i] = Double.toString(resu.getLongitude());
-                shipMatrix[4][i] = dateFormatDate.format(date);
-                shipMatrix[5][i] = dateFormatTime.format(date);
+                shipMatrix[1][i] = aisShips.get(i).getName();
+                if (target.getLatitude()!=0 && target.getLongitude()!=0) {
+                	shipMatrix[2][i] = Double.toString(resu.getLatitude());
+                	shipMatrix[3][i] = Double.toString(resu.getLongitude());
+                    shipMatrix[4][i] = dateFormatDate.format(date);
+                    shipMatrix[5][i] = dateFormatTime.format(date);
+                    }
                 
     			// Enlever les commentaires pour voir les messages AIS
                 //System.out.println(ANSI_CYAN + "Ship#" + (i+1) + " with MMSI " + target.getMMSI() + " updated - name " + resu.getName() + " - position lat " + target.getLatitude() + " and lon " + target.getLongitude() + " at " + dateFormatTime.format(date) + ANSI_RESET);
