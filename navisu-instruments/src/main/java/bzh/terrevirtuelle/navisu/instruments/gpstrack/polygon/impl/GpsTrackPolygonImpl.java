@@ -1658,10 +1658,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             
             shipMatrix[0][aisShips.size() - 1] = Integer.toString(aisShip.getMMSI());
             shipMatrix[1][aisShips.size() - 1] = aisShip.getName();
-            shipMatrix[2][aisShips.size() - 1] = Double.toString(target.getLatitude());
-            shipMatrix[3][aisShips.size() - 1] = Double.toString(target.getLongitude());
-            shipMatrix[4][aisShips.size() - 1] = dateFormatDate.format(date);
-            shipMatrix[5][aisShips.size() - 1] = dateFormatTime.format(date);
+            
+            if (target.getLatitude()!=0 && target.getLongitude()!=0) {
+            	shipMatrix[2][aisShips.size() - 1] = Double.toString(target.getLatitude());
+            	shipMatrix[3][aisShips.size() - 1] = Double.toString(target.getLongitude());
+                shipMatrix[4][aisShips.size() - 1] = dateFormatDate.format(date);
+                shipMatrix[5][aisShips.size() - 1] = dateFormatTime.format(date);
+                }
+            
 		// Enlever les commentaires pour voir les messages AIS
             //System.err.println("Ship#" + aisShips.size() + " with MMSI " + aisShip.getMMSI() + " created - name " + aisShip.getName() + " - position lat " + aisShip.getLatitude() + " and lon " + aisShip.getLongitude() + " at " + dateFormatTime.format(date));
             /*MediaPlayer mediaPlayer;
