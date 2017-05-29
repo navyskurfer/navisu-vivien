@@ -703,7 +703,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //                }
                 
                 shipMatrix[0][i] = Integer.toString(resu.getMMSI());
-                shipMatrix[1][i] = resu.getName();
+                if (resu.getName() != null && !resu.getName().equals("") ) {
+                	shipMatrix[1][i] = resu.getName();
+                	}
                 shipMatrix[2][i] = Double.toString(resu.getLatitude());
                 shipMatrix[3][i] = Double.toString(resu.getLongitude());
                 shipMatrix[4][i] = dateFormatDate.format(date);
