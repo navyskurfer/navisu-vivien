@@ -615,10 +615,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     private void updateTarget(Ship target) {
 
         Date date = new Date();
-        
-        if (inSight == (coldStart+1)) {
-        	aisTrackPanel.updateAisPanelStatus("Cold start terminé");
-        }
 
         if (count % 31 == 0) {
             //System.out.println(ANSI_BLUE + inSight + " ships in sight at " + dateFormatTime.format(date) + ANSI_RESET);
