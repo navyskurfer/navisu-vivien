@@ -152,7 +152,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int coldStart = 50;//number of ships to create before getting ship updates
+    protected int coldStart = 20;//number of ships to create before getting ship updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
@@ -520,9 +520,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
         });
         
-      dataServerServices.openGpsd("sinagot.net", 2947);//atlantique
+      //dataServerServices.openGpsd("sinagot.net", 2947);//atlantique
       //dataServerServices.openGpsd("sinagot.net", 2948);//méditerrannée
-      //dataServerServices.openGpsd("fridu.net", 2947);
+      dataServerServices.openGpsd("fridu.net", 2947);
       //dataServerServices.openGpsd("http://hd-sf.com", 9009);
         
     }
