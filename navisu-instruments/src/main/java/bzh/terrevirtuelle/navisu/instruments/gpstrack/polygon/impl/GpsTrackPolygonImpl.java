@@ -536,7 +536,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
         
         if (inSight == (coldStart+1)) {
-        	aisTrackPanel.updateAisPanelStatus("Cold start terminé ("+coldStart+" ships)");
+        	aisTrackPanel.updateAisPanelStatus("Cold start complete ("+coldStart+" ships)");
         }
 
         for (int i = 0; i < aisShips.size(); i++) {
