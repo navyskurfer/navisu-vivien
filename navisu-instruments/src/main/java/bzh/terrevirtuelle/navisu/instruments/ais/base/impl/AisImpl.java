@@ -381,7 +381,7 @@ public class AisImpl
         				target.setShipName(s.getName());
         				nbNamesRetrieved++;
         				Date date = new Date();
-        				gpsTrackPolygonServices.getPanel().updateAisPanelName(dateFormatTime.format(date), gpsTrackPolygonServices.getInSight(), (s.getName() + " retrieved from database"));
+        				gpsTrackPolygonServices.getPanel().updateAisPanelStatus("Ship name : " + s.getName() + " retrieved from database");
         				//gpsTrackPolygonServices.playSound();
         				if (nbNamesRetrieved<51) {
         					if (nbNamesRetrieved % 25 == 0) {

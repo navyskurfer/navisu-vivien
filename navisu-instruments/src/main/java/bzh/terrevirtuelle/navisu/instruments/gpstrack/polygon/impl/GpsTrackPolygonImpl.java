@@ -152,7 +152,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int coldStart = 10;//number of ships to create before getting ship updates
+    protected int coldStart = 30;//number of ships to create before getting ship updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
@@ -534,10 +534,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         Date date = new Date();
         inSight++;
         aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
-        
-        if (inSight == (coldStart+1)) {
-        	aisTrackPanel.updateAisPanelStatus("Cold start complete ("+coldStart+" ships)");
-        }
 
         for (int i = 0; i < aisShips.size(); i++) {
             if (aisShips.get(i).getMMSI() == target.getMmsi()) {
@@ -612,6 +608,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
 //            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
 //        }
+        
+        if (inSight == coldStart) {
+        	aisTrackPanel.updateAisPanelStatus("Cold start complete ("+coldStart+" ships)");
+        }
         
     }
 
