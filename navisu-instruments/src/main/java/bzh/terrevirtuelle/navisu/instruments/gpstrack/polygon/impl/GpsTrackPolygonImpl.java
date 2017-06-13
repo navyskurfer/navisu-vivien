@@ -152,7 +152,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int coldStart = 100;//number of ships to create before getting ship updates
+    protected int coldStart = 50;//number of ships to create before getting ship updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
