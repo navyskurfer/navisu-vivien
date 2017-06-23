@@ -283,6 +283,7 @@ public class AisImpl
                             .name(ais.getName())
                             .build();
                     ships.put(mmsi, ship);
+                    //aisCreateTargetEvent.notifyAisMessageChanged(ship);
                     gpsTrackPolygonServices.newNameAis5(ship);
                 } else {
                     ship = ships.get(mmsi);
