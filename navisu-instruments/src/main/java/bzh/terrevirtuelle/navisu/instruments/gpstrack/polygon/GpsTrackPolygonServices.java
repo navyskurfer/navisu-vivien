@@ -77,4 +77,6 @@ public interface GpsTrackPolygonServices extends ComponentService {
 	void playSound();
 
 	void newNameAis5(Ship ship);
+
+	void retrieveShipName(Ship ship);
 }

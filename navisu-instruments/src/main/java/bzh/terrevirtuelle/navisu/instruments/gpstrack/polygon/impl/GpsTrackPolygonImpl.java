@@ -152,7 +152,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int coldStart = 30;//number of ships to create before getting ship updates
+    protected int coldStart = 60;//number of ships to create before getting ship updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
@@ -190,6 +190,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int nbSave = 0;
     protected int nbMmsiReceived = 0;
     protected int nbNamesReceived = 0;
+    protected int nbNamesRetrieved = 0;
     protected Date startTime;
     protected int nbNamesDB = 0;
     protected int distanceInterval = 70;
@@ -520,8 +521,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
         });
         
-        dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
-        dataServerServices.openGpsd("5.39.78.33", 2948);//méditerrannée
+      dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
+      dataServerServices.openGpsd("5.39.78.33", 2948);//méditerrannée
       //dataServerServices.openGpsd("sinagot.net", 2947);
       //dataServerServices.openGpsd("fridu.net", 2947);
       //dataServerServices.openGpsd("http://hd-sf.com", 9009);
@@ -552,7 +553,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
 
         if (shipExists) {
-            updateTarget(target);
+        	if (inSight > coldStart) {
+        		updateTarget(target);
+        	}
         } else {
 
             ArrayList<Position> resu = new ArrayList<Position>();
@@ -1557,7 +1560,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     	boolean shipExistsAis5 = false;
     	
 
-        if ((nbNamesReceived+1) % 5 == 0) {
+        if ((nbNamesReceived+1) % 2 == 0) {
             saveShips();
             //playSound();
             nbSave++;
@@ -1866,5 +1869,29 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     public int getInSight() {
     	return inSight;
     }
+    
+	public void retrieveShipName(Ship target) {
+		for (Ship s : aisShips) {
+			if (s.getMMSI() == target.getMMSI() && target.getName() == null) {
+				if (!(s.getName().equals("")) && !(s.getName().equals(null))) {
+					target.setShipName(s.getName());
+					nbNamesRetrieved++;
+					Date date = new Date();
+					aisTrackPanel.updateAisPanelStatus(s.getName() + " retrieved from database");
+
+					if (nbNamesRetrieved < 51) {
+						if (nbNamesRetrieved % 5 == 0) {
+							aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
+						}
+					} else {
+						if (nbNamesRetrieved % 2 == 0) {
+							aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
+						}
+					}
+				}
+			}
+		}
+
+	}
 
 }

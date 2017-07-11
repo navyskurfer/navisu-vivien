@@ -155,7 +155,7 @@ public class AisImpl
                             .latitude(ais.getLatitude()).longitude(ais.getLongitude())
                             .navigationalStatus(ais.getNavigationalStatus())
                             .build();
-                    retrieveShipName(ship);
+                    gpsTrackPolygonServices.retrieveShipName(ship);
                     ships.put(mmsi, ship);
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
                 } else {
@@ -167,7 +167,7 @@ public class AisImpl
                     ship.setLatitude(ais.getLatitude());
                     ship.setLongitude(ais.getLongitude());
                     ship.setNavigationalStatus(ais.getNavigationalStatus());
-                    retrieveShipName(ship);
+                    gpsTrackPolygonServices.retrieveShipName(ship);
                     aisUpdateTargetEvent.notifyAisMessageChanged(ship);
                 }
                 timestamps.put(mmsi, Calendar.getInstance());
@@ -188,7 +188,7 @@ public class AisImpl
                             .latitude(ais.getLatitude()).longitude(ais.getLongitude())
                             .navigationalStatus(ais.getNavigationalStatus())
                             .build();
-                    retrieveShipName(ship);
+                    gpsTrackPolygonServices.retrieveShipName(ship);
                     ships.put(mmsi, ship);
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
                 } else {
@@ -200,7 +200,7 @@ public class AisImpl
                     ship.setLatitude(ais.getLatitude());
                     ship.setLongitude(ais.getLongitude());
                     ship.setNavigationalStatus(ais.getNavigationalStatus());
-                    retrieveShipName(ship);
+                    gpsTrackPolygonServices.retrieveShipName(ship);
                     aisUpdateTargetEvent.notifyAisMessageChanged(ship);
                 }
                 timestamps.put(mmsi, Calendar.getInstance());
@@ -223,7 +223,7 @@ public class AisImpl
                             .latitude(ais.getLatitude()).longitude(ais.getLongitude())
                             .navigationalStatus(ais.getNavigationalStatus())
                             .build();
-                    retrieveShipName(ship);
+                    gpsTrackPolygonServices.retrieveShipName(ship);
                     ships.put(mmsi, ship);
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
                 } else {
@@ -235,7 +235,7 @@ public class AisImpl
                     ship.setLatitude(ais.getLatitude());
                     ship.setLongitude(ais.getLongitude());
                     ship.setNavigationalStatus(ais.getNavigationalStatus());
-                    retrieveShipName(ship);
+                    gpsTrackPolygonServices.retrieveShipName(ship);
                     aisUpdateTargetEvent.notifyAisMessageChanged(ship);
                 }
                 timestamps.put(mmsi, Calendar.getInstance());
@@ -373,8 +373,8 @@ public class AisImpl
         return midMap;
     }
     
-    private void retrieveShipName(Ship target) {
-    	if (gpsTrackPolygonServices.isOn() && gpsTrackPolygonServices.getComponentReady()) {
+    //private void retrieveShipName(Ship target) {
+    	/*if (gpsTrackPolygonServices.isOn() && gpsTrackPolygonServices.getComponentReady()) {
         	savedAisShips = gpsTrackPolygonServices.getSavedAisShips();
         	for (Ship s : savedAisShips) {
         		if (s.getMMSI()==target.getMMSI() && target.getName()==null) {
@@ -397,8 +397,8 @@ public class AisImpl
         			}
         		}
         	}
-        }
-    }
+        }*/
+    //}
 
     private void scheduleLostTarget() {
         task = new TimerTask() {
