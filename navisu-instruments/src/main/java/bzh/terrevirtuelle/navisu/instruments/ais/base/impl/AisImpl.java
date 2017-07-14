@@ -291,8 +291,8 @@ public class AisImpl
                     ship.setName(ais.getShipName());
                     ship.setETA(ais.getETA());
                     ship.setDestination(ais.getDestination());
-                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
                     gpsTrackPolygonServices.newNameAis5(ship);
+                    //aisUpdateTargetEvent.notifyAisMessageChanged(ship);
                 }
                 timestamps.put(mmsi, Calendar.getInstance());
             }

@@ -680,24 +680,24 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	resu.setLatitude(target.getLatitude());
                 	resu.setLongitude(target.getLongitude());
                 	resu.setMMSI(target.getMmsi());
-                	if (target.getShipName() != null && !target.getShipName().equals("") && !target.getShipName().equals(aisShips.get(i).getName())) {
-                		resu.setName(target.getShipName());
-                		aisShips.set(i, resu);
-                		//if (!((target.getShipName()).equals(aisShips.get(i).getName()))) {
-                        nbNamesReceived++;
-                        //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
-                        aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getShipName() + " new name - (AIS)"));
-                        playSound();
-                        /*MediaPlayer mediaPlayer;
-                        javafx.scene.media.Media media;
-                        String userDir = System.getProperty("user.dir");
-                        userDir = userDir.replace("\\", "/");
-                        String url = userDir + "/data/sounds/beep-07.wav";
-                        media = new Media("file:///" + url);
-                        mediaPlayer = new MediaPlayer(media);
-                        mediaPlayer.setAutoPlay(true);*/
-                    //}
-                	} 
+//                	if (target.getShipName() != null && !target.getShipName().equals("") && !target.getShipName().equals(aisShips.get(i).getName())) {
+//                		resu.setName(target.getShipName());
+//                		aisShips.set(i, resu);
+//                		//if (!((target.getShipName()).equals(aisShips.get(i).getName()))) {
+//                        nbNamesReceived++;
+//                        //System.out.println(ANSI_PURPLE + "New name received : " + target.getName() + " for ship#" + (i+1) + " with MMSI " + target.getMMSI() + ANSI_RESET);
+//                        aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getShipName() + " new name - (AIS)"));
+//                        playSound();
+//                        /*MediaPlayer mediaPlayer;
+//                        javafx.scene.media.Media media;
+//                        String userDir = System.getProperty("user.dir");
+//                        userDir = userDir.replace("\\", "/");
+//                        String url = userDir + "/data/sounds/beep-07.wav";
+//                        media = new Media("file:///" + url);
+//                        mediaPlayer = new MediaPlayer(media);
+//                        mediaPlayer.setAutoPlay(true);*/
+//                    //}
+//                	} 
                 	
 //                	else {
 //                		if (target.getShipName() != null && !target.getShipName().equals("") && target.getShipName().equals(aisShips.get(i).getName())) {
