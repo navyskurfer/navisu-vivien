@@ -152,7 +152,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int coldStart = 200;//number of ships to create before getting ship updates
+    protected int coldStart = 150;//number of ships to create before getting ship updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
@@ -615,6 +615,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
         if (inSight == coldStart) {
         	aisTrackPanel.updateAisPanelStatus("Cold start complete ("+coldStart+" ships)");
+        	playSound();
         }
         
         if (inSight % 10 == 0) {
