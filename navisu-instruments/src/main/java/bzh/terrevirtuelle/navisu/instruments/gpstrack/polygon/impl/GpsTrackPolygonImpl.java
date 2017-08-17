@@ -152,7 +152,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int coldStart1 = 1000;//number of ships to create before getting database ships updates
+    protected int coldStart1 = 0;//number of ships to create before getting database ships updates
     protected int coldStart2 = 10000;//number of ships to create before getting online ships updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
@@ -486,7 +486,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         });
         aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
             if (inSight > coldStart2) {
-            	updateTarget(updatedData);
+            	updateOnlineTarget(updatedData);
             	wwd.redrawNow();
             /*Date t = new Date();
             if (pShipCreated && !verrou && (int) (t.getTime() - t0.getTime()) % 5 == 0 && etape < path.size() - 1) {
@@ -539,10 +539,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         inSight++;
         
         aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
-
+        
+        int indice = -1;
+        
         for (int i = 0; i < aisShips.size(); i++) {
             if (aisShips.get(i).getMMSI() == target.getMmsi()) {
                 shipExists = true;
+                indice = i;
 //                if (inSight > coldStart1) {
 //                	ArrayList<Position> resu = new ArrayList<Position>();
 //                	resu.add(new Position(LatLon.fromDegrees(target.getLatitude(), target.getLongitude()), 1));
@@ -559,7 +562,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
         if (shipExists) {
         	if (inSight > coldStart1) {
-        		updateTarget(target);
+        		updateCreatedTargetDB(target, indice);
         	}
         } else {
 
@@ -646,7 +649,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
     }
 
-    private void updateTarget(Ship target) {
+    private void updateOnlineTarget(Ship target) {
 
         Date date = new Date();
 
@@ -740,10 +743,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //                if (resu.getName() != null && !resu.getName().equals("") ) {
 //                	shipMatrix[1][i] = resu.getName();
 //                	}
-                shipMatrix[2][i] = Double.toString(target.getLatitude());
-                shipMatrix[3][i] = Double.toString(target.getLongitude());
-                shipMatrix[4][i] = dateFormatDate.format(date);
-                shipMatrix[5][i] = dateFormatTime.format(date);
+                	shipMatrix[2][i] = Double.toString(target.getLatitude());
+                	shipMatrix[3][i] = Double.toString(target.getLongitude());
+                	shipMatrix[4][i] = dateFormatDate.format(date);
+                	shipMatrix[5][i] = dateFormatTime.format(date);
                 
     			// Enlever les commentaires pour voir les messages AIS
                 //System.out.println(ANSI_CYAN + "Ship#" + (i+1) + " with MMSI " + target.getMMSI() + " updated - name " + resu.getName() + " - position lat " + target.getLatitude() + " and lon " + target.getLongitude() + " at " + dateFormatTime.format(date) + ANSI_RESET);
@@ -752,6 +755,25 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
         }
     }
+    
+    
+    private void updateCreatedTargetDB(Ship target, int j) {
+
+        Date date = new Date();
+        
+        shipMatrix[2][j] = Double.toString(target.getLatitude());
+        shipMatrix[3][j] = Double.toString(target.getLongitude());
+        shipMatrix[4][j] = dateFormatDate.format(date);
+        shipMatrix[5][j] = dateFormatTime.format(date);
+            
+        if (target.getName() != null) {
+        	aisTrackPanel.updateAisPanelStatus(target.getMMSI() + "/" + target.getName() + " : position updated");
+        	}
+        else {
+        	aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position updated");
+        	}
+    }
+    
 
     @Override
     public void off() {
@@ -1933,7 +1955,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					target.setShipName(s.getName());
 					nbNamesRetrieved++;
 					aisTrackPanel.updateAisPanelStatus(s.getName() + " retrieved from database");
-					if (nbNamesRetrieved % 5 == 0) {
+					if (nbNamesRetrieved % 10 == 0) {
 						aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
 					}
 				}
