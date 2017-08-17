@@ -152,8 +152,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int coldStart1 = 10000;//number of ships to create before getting database ships updates
-    protected int coldStart2 = 50000;//number of ships to create before getting online ships updates
+    protected int coldStart1 = 1000;//number of ships to create before getting database ships updates
+    protected int coldStart2 = 3000;//number of ships to create before getting online ships updates
     protected int inSight = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
@@ -1932,22 +1932,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				if (!(s.getName().equals("")) && !(s.getName().equals(null))) {
 					target.setShipName(s.getName());
 					nbNamesRetrieved++;
-					Date date = new Date();
 					aisTrackPanel.updateAisPanelStatus(s.getName() + " retrieved from database");
-
-					if (nbNamesRetrieved < 51) {
-						if (nbNamesRetrieved % 5 == 0) {
-							aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
-						}
-					} else {
-						if (nbNamesRetrieved % 2 == 0) {
-							aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
-						}
+					if (nbNamesRetrieved % 5 == 0) {
+						aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
 					}
 				}
+				break;
 			}
 		}
-
 	}
 
 }
