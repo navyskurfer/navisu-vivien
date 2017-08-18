@@ -153,8 +153,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
-    protected int coldStart2 = 10000;//number of ships to create before getting online ships updates
+    protected int coldStart2 = 75000;//number of ships to create before getting online ships updates
     protected int inSight = 0;
+    protected int posUpdates = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
     protected MeasureToolController pmtc;
@@ -630,7 +631,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         	playSound2();
         }
         
-        if (inSight % 10 == 0) {
+        if (inSight % 50 == 0) {
         	saveShips();
             //playSound();
             nbSave++;
@@ -765,6 +766,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         shipMatrix[3][j] = Double.toString(target.getLongitude());
         shipMatrix[4][j] = dateFormatDate.format(date);
         shipMatrix[5][j] = dateFormatTime.format(date);
+        
+        posUpdates++;
             
         if (target.getName() != null) {
         	aisTrackPanel.updateAisPanelStatus(target.getMMSI() + "/" + target.getName() + " : position updated");
@@ -772,6 +775,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         else {
         	aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position updated");
         	}
+        
+        if (posUpdates % 10 == 0) {
+			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
+		}
     }
     
 
