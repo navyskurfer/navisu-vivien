@@ -771,11 +771,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		if (target.getName() != null) {
 			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + "/" + target.getName() + " : position updated");
-		} else {
-			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position updated");
 		}
+//		else {
+//			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position updated");
+//		}
 
-		if (posUpdates % 10 == 0 && !(posUpdates % 50 == 0)) {
+		if (posUpdates % 10 == 0) {
 			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
 		}
 
@@ -1775,8 +1776,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             mediaPlayer.setAutoPlay(true);*/
     	}
     	
-        if ((nbNamesReceived) % 10 == 0) {
-            saveShips();
+        if ((nbNamesReceived) % 5 == 0 && nbNamesReceived > 0) {
+        	aisTrackPanel.updateAisPanelStatus(nbNamesReceived + " new names received");
+        }
+        
+        if ((nbNamesReceived) % 10 == 0 && nbNamesReceived > 0) {
+        	saveShips();
             //playSound();
             nbSave++;
             long diff = date.getTime() - startTime.getTime();
