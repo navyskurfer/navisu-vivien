@@ -769,14 +769,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		posUpdates++;
 
-		if (target.getName() != null) {
-			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + "/" + target.getName() + " : position updated");
-		}
+//		if (target.getName() != null) {
+//			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + "/" + target.getName() + " : position updated");
+//		}
 //		else {
 //			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position updated");
 //		}
 
-		if (posUpdates % 10 == 0) {
+		if (posUpdates % 25 == 0) {
 			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
 		}
 
@@ -1999,7 +1999,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					target.setShipName(s.getName());
 					nbNamesRetrieved++;
 					//aisTrackPanel.updateAisPanelStatus(s.getName() + " retrieved from database");
-					if (nbNamesRetrieved % 50 == 0) {
+					if (nbNamesRetrieved % 25 == 0) {
 						aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
 					}
 				}
