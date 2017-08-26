@@ -28,7 +28,8 @@ public class NetReaderImpl
                     NetSocket socket = asyncResult.result();
                     socket.dataHandler((Buffer buffer) -> {
                         String source = buffer.toString().trim();
-                        System.out.println(source);
+                        String cutSource = source.substring(0, 70);//limitation de la taille d'affichage des messages dans la console
+                        System.out.println(cutSource);
                         
                         if ((source.startsWith("{") && source.endsWith("}")) // Gpsd well formatted
                                 || source.startsWith("!") // AIS
