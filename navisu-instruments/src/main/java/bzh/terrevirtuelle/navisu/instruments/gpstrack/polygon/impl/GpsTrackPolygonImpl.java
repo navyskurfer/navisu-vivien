@@ -33,6 +33,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -152,6 +153,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
+    protected int updateInterval = 5;//number of days within ships positions are not updated
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
     protected int coldStart2 = 75000;//number of ships to create before getting online ships updates
     protected int inSight = 0;
@@ -562,9 +564,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
 
         if (shipExists) {
-        	if (inSight > coldStart1) {
-        		updateCreatedTargetDB(target, indice);
-        	}
+        	try {
+				if (inSight > coldStart1 && daysBetween(date,dateFormatDate.parse(shipMatrix[4][indice])) > updateInterval) {
+					updateCreatedTargetDB(target, indice);
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         } else {
 
 //            ArrayList<Position> resu = new ArrayList<Position>();
@@ -648,6 +655,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
         }
         
+    }
+    
+    private static long daysBetween(Date one, Date two) {
+    	
+        long difference =  (one.getTime()-two.getTime())/86400000;
+        return Math.abs(difference);
     }
 
     private void updateOnlineTarget(Ship target) {
@@ -776,7 +789,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position updated");
 //		}
 
-		if (posUpdates % 25 == 0) {
+		if (posUpdates % 5 == 0) {
 			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
 		}
 
