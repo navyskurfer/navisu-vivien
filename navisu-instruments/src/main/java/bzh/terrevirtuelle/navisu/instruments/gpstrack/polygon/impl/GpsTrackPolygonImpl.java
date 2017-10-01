@@ -774,6 +774,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 	private void updateCreatedTargetDB(Ship target, int j) {
 
 		Date date = new Date();
+		
+		if (target.getName() != null && !target.getName().equals("")) {
+			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " - " + target.getName() + " : position update");
+			aisTrackPanel.updateAisPanelStatus("Last known position at " + shipMatrix[5][j] + " - " + shipMatrix[4][j]);
+		} else {
+			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position update");
+			aisTrackPanel.updateAisPanelStatus("Last known position at " + shipMatrix[5][j] + " - " + shipMatrix[4][j]);
+		}
 
 		shipMatrix[2][j] = Double.toString(target.getLatitude());
 		shipMatrix[3][j] = Double.toString(target.getLongitude());
