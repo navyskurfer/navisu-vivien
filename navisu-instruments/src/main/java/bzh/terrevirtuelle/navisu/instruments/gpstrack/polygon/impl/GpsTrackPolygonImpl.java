@@ -525,8 +525,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
         });
         
-      dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
-      dataServerServices.openGpsd("5.39.78.33", 2948);//méditerrannée
+      dataServerServices.openGpsd("sinagot.net", 2947);//atlantique
+      dataServerServices.openGpsd("sinagot.net", 2948);//méditerrannée
+      //dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
+      //dataServerServices.openGpsd("5.39.78.33", 2948);//méditerrannée
       //dataServerServices.openGpsd("sinagot.net", 2947);
       //dataServerServices.openGpsd("fridu.net", 2947);
       //dataServerServices.openGpsd("http://hd-sf.com", 9009);
@@ -1930,11 +1932,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             Date date = new Date();
             aisTrackPanel = new TrackPanel(KeyCode.T, KeyCombination.CONTROL_DOWN);
 // parametres ubuntu ATOL
-            aisTrackPanel.setTranslateX(750);
-            aisTrackPanel.setTranslateY(150);
+            //aisTrackPanel.setTranslateX(750);
+            //aisTrackPanel.setTranslateY(150);
 // parametres windows perso Vivien		  
-            //aisTrackPanel.setTranslateX(475);
-            //aisTrackPanel.setTranslateY(-50);
+            aisTrackPanel.setTranslateX(50);
+            aisTrackPanel.setTranslateY(-50);
             guiAgentServices.getScene().addEventFilter(KeyEvent.KEY_RELEASED, aisTrackPanel);
             guiAgentServices.getRoot().getChildren().add(aisTrackPanel);
             aisTrackPanel.setScale(1.0);
