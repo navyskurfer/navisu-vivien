@@ -6,6 +6,9 @@
 package bzh.terrevirtuelle.navisu.server.impl.gpsd.impl;
 
 import bzh.terrevirtuelle.navisu.server.impl.gpsd.NetReader;
+
+import java.util.concurrent.TimeUnit;
+
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Vertx;
@@ -29,8 +32,24 @@ public class NetReaderImpl
                     socket.dataHandler((Buffer buffer) -> {
                         String source = buffer.toString().trim();
                       
-                        if (source.contains("tcp://data.aishub.net:4299")) {System.out.println("atl");}
-                        if (source.contains("tcp://data.aishub.net:4572")) {System.out.println("med");}
+                        if (source.contains("tcp://data.aishub.net:4299")) {
+                        	System.out.println("atl");
+                            try {
+								TimeUnit.MILLISECONDS.sleep(100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+                        }
+                        if (source.contains("tcp://data.aishub.net:4572")) {
+                        	System.out.println("med");
+                            try {
+								TimeUnit.MILLISECONDS.sleep(100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+                        }
                         
                         if ((source.startsWith("{") && source.endsWith("}")) // Gpsd well formatted
                                 || source.startsWith("!") // AIS
