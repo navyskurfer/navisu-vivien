@@ -566,14 +566,21 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
 
         if (shipExists) {
-        	try {
-				if (inSight > coldStart1 && !(shipMatrix[4][indice].equals(null)) && daysBetween(date,dateFormatDate.parse(shipMatrix[4][indice])) > updateInterval) {
+			try {
+				if (shipMatrix[4][indice] == null || shipMatrix[4][indice].equals(null) || shipMatrix[4][indice].equals("")) {
 					updateCreatedTargetDB(target, indice);
+				} else {
+					if (inSight > coldStart1
+							&& daysBetween(date, dateFormatDate.parse(shipMatrix[4][indice])) > updateInterval) {
+						updateCreatedTargetDB(target, indice);
+					}
 				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			
         } else {
 
 //            ArrayList<Position> resu = new ArrayList<Position>();
@@ -640,6 +647,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         	playSound2();
         }
         
+        
         if (inSight % 50 == 0) {
         	saveShips();
             //playSound();
@@ -659,7 +667,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
     }
     
-    private static long daysBetween(Date one, Date two) {
+    private long daysBetween(Date one, Date two) {
     	
         long difference =  (one.getTime()-two.getTime())/86400000;
         return Math.abs(difference);
