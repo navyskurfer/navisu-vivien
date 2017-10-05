@@ -34,21 +34,21 @@ public class NetReaderImpl
                       
                         if (source.contains("tcp://data.aishub.net:4299")) {
                         	System.out.println("atl");
-                            try {
-								TimeUnit.MILLISECONDS.sleep(100);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+//                            try {
+//								TimeUnit.MILLISECONDS.sleep(150);
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
                         }
                         if (source.contains("tcp://data.aishub.net:4572")) {
                         	System.out.println("med");
-                            try {
-								TimeUnit.MILLISECONDS.sleep(100);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+//                            try {
+//								TimeUnit.MILLISECONDS.sleep(150);
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
                         }
                         
                         if ((source.startsWith("{") && source.endsWith("}")) // Gpsd well formatted

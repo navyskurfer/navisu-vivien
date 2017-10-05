@@ -567,7 +567,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
         if (shipExists) {
         	try {
-				if (inSight > coldStart1 && daysBetween(date,dateFormatDate.parse(shipMatrix[4][indice])) > updateInterval) {
+				if (inSight > coldStart1 && !(shipMatrix[4][indice].equals(null)) && daysBetween(date,dateFormatDate.parse(shipMatrix[4][indice])) > updateInterval) {
 					updateCreatedTargetDB(target, indice);
 				}
 			} catch (ParseException e) {
