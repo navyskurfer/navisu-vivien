@@ -525,9 +525,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
         });
         
-      dataServerServices.openGpsd("sinagot.net", 2947);//atlantique
-      dataServerServices.openGpsd("sinagot.net", 2948);//méditerrannée
-      //dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
+      //dataServerServices.openGpsd("sinagot.net", 2947);//atlantique
+      //dataServerServices.openGpsd("sinagot.net", 2948);//méditerrannée
+      dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
       //dataServerServices.openGpsd("5.39.78.33", 2948);//méditerrannée
       //dataServerServices.openGpsd("sinagot.net", 2947);
       //dataServerServices.openGpsd("fridu.net", 2947);
@@ -566,19 +566,19 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
 
         if (shipExists) {
-			try {
-				if (shipMatrix[4][indice] == null || shipMatrix[4][indice].equals(null) || shipMatrix[4][indice].equals("")) {
-					updateCreatedTargetDB(target, indice);
-				} else {
-					if (inSight > coldStart1
-							&& daysBetween(date, dateFormatDate.parse(shipMatrix[4][indice])) > updateInterval) {
-						updateCreatedTargetDB(target, indice);
-					}
-				}
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				if (shipMatrix[4][indice] == null || shipMatrix[4][indice].equals(null) || shipMatrix[4][indice].equals("")) {
+//					updateCreatedTargetDB(target, indice);
+//				} else {
+//					if (inSight > coldStart1
+//							&& daysBetween(date, dateFormatDate.parse(shipMatrix[4][indice])) > updateInterval) {
+//						updateCreatedTargetDB(target, indice);
+//					}
+//				}
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 
 			
         } else {

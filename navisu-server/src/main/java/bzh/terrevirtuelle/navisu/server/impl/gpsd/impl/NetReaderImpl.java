@@ -35,7 +35,7 @@ public class NetReaderImpl
                         if (source.contains("tcp://data.aishub.net:4299")) {
                         	System.out.println("atl");
                             try {
-								TimeUnit.MILLISECONDS.sleep(100);
+								TimeUnit.MILLISECONDS.sleep(200);
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -44,7 +44,7 @@ public class NetReaderImpl
                         if (source.contains("tcp://data.aishub.net:4572")) {
                         	System.out.println("med");
                             try {
-								TimeUnit.MILLISECONDS.sleep(100);
+								TimeUnit.MILLISECONDS.sleep(200);
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
