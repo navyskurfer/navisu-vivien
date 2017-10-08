@@ -632,7 +632,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //            long diffDays = diff / (60 * 60 * 1000) / 24;
 //            //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
 //            aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-//            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+//            aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");       	
 //            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
 //            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
 //        }
@@ -641,6 +641,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 	    
 	    if (inSight % 21 == 0) {
 		    dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
+		    wwd.redrawNow();
+		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
         }
 	    
 	    if (inSight == coldStart1) {
@@ -666,7 +668,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             long diffDays = diff / (60 * 60 * 1000) / 24;
             //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
             aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+            aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
             aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
             aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
         }
@@ -700,7 +702,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //            long diffDays = diff / (60 * 60 * 1000) / 24;
 //            //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
 //            aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-//            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+//            aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");        
 //            aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
 //            aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
 //        }
@@ -829,8 +831,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			// System.out.println(ANSI_GREEN + "List of AIS ships saved (" +
 			// aisShips.size() + " ships in database)" + ANSI_RESET);
 			aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-			aisTrackPanel.updateAisPanelStatus(
-					nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+			aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
 			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
@@ -1754,7 +1755,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                             long diffDays = diff / (60 * 60 * 1000) / 24;
                             //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
                             aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-                            aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+                            aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
                             aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
                             aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
                         }
@@ -1819,7 +1820,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                     long diffDays = diff / (60 * 60 * 1000) / 24;
                     //System.out.println(ANSI_GREEN + "List of AIS ships saved (" + aisShips.size() + " ships in database)" + ANSI_RESET);
                     aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-                    aisTrackPanel.updateAisPanelStatus(nbMmsiReceived + " new ships / " + nbNamesReceived + " new names in database");
+                    aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
                     aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
                     aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
                 }
