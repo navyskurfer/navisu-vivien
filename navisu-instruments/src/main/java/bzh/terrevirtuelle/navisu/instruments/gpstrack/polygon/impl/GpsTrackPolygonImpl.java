@@ -645,6 +645,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
         }
 	    
+	    if (inSight % 251 == 0) {
+		    System.gc();
+		    aisTrackPanel.updateAisPanelStatus("JAVA garbage collector launched");
+        }
+	    
 	    if (inSight == coldStart1) {
         	aisTrackPanel.updateAisPanelStatus("Cold start 1 complete ("+coldStart1+" ships)");
         	playSound2();
