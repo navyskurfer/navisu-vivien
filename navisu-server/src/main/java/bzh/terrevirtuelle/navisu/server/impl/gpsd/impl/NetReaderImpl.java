@@ -5,24 +5,24 @@
  */
 package bzh.terrevirtuelle.navisu.server.impl.gpsd.impl;
 
-import bzh.terrevirtuelle.navisu.server.impl.gpsd.NetReader;
-
-import java.util.concurrent.TimeUnit;
-
+import org.capcaval.c3.component.annotation.UsedService;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Vertx;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.net.NetSocket;
 
+import bzh.terrevirtuelle.navisu.server.impl.gpsd.NetReader;
+
 /**
  *
  * @author Serge
  */
+
 public class NetReaderImpl
         implements NetReader {
-
-    public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
+	
+	public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
         vertx.createNetClient().connect(port, hostname, (AsyncResultHandler<NetSocket>) new AsyncResultHandler<NetSocket>() {
 
             @Override
@@ -34,21 +34,21 @@ public class NetReaderImpl
                       
                         if (source.contains("tcp://data.aishub.net:4299")) {
                         	System.out.println("atl");
-                            try {
-								TimeUnit.MILLISECONDS.sleep(200);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+//                            try {
+//								TimeUnit.MILLISECONDS.sleep(200);
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
                         }
                         if (source.contains("tcp://data.aishub.net:4572")) {
                         	System.out.println("med");
-                            try {
-								TimeUnit.MILLISECONDS.sleep(200);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+//                            try {
+//								TimeUnit.MILLISECONDS.sleep(200);
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
                         }
                         
                         if ((source.startsWith("{") && source.endsWith("}")) // Gpsd well formatted
