@@ -818,7 +818,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		posUpdates++;
 		
-		if (lastShipArea.size() >= 5) {
+		if (lastShipArea.size() >= 10) {
 			String temp = lastShipArea.removeFirst();
 		}
 		
@@ -828,11 +828,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			lastShipArea.add("atl");
 			}
 		
-//		String listArea = new String();
-//		for (String s : lastShipArea) {
-//			listArea = listArea + " " + s;
-//		}
-//		aisTrackPanel.updateAisPanelStatus(listArea);
+		String listArea = "";
+		for (String s : lastShipArea) {
+			listArea = listArea + s + " ";
+		}
+		aisTrackPanel.updateAisPanelStatus(listArea);
 
 //		if (target.getName() != null) {
 //			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + "/" + target.getName() + " : position updated");
@@ -845,7 +845,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
 		}
 		
-		if (posUpdates > 0 && posUpdates % restartFreq == 0 && lastShipArea.size() ==5 && !(lastShipArea.contains("atl"))) {
+		if (posUpdates > 0 && posUpdates % restartFreq == 0 && lastShipArea.size() == 10 && !(lastShipArea.contains("atl"))) {
 			dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
 		    wwd.redrawNow();
 		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
