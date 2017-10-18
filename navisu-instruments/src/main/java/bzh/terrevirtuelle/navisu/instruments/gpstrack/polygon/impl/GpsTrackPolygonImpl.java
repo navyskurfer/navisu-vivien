@@ -155,10 +155,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int updateInterval = 5;//number of days within ships positions are not updated
+    protected int updateInterval = 2;//number of days within ships positions are not updated
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
     protected int coldStart2 = 50000;//number of ships to create before getting online ships updates
     protected int restartFreq = 1;//number of ship position updates before restarting atlantic stream
+    protected int areaHistory = 6;//number of saved areas
     protected int inSight = 0;
     protected int posUpdates = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
@@ -818,7 +819,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		posUpdates++;
 		
-		if (lastShipArea.size() >= 10) {
+		if (lastShipArea.size() >= areaHistory) {
 			String temp = lastShipArea.removeFirst();
 		}
 		
@@ -845,7 +846,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
 		}
 		
-		if (posUpdates > 0 && posUpdates % restartFreq == 0 && lastShipArea.size() == 10 && !(lastShipArea.contains("atl"))) {
+		if (posUpdates > 0 && posUpdates % restartFreq == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("atl"))) {
 			dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
 		    wwd.redrawNow();
 		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
