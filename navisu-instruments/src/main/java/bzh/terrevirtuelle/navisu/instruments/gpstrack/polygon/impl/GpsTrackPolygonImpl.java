@@ -155,7 +155,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int updateInterval = 5;//number of days within ships positions are not updated
+    protected int updateInterval = 30;//number of days within ships positions are not updated
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
     protected int coldStart2 = 50000;//number of ships to create before getting online ships updates
     protected int restartFreq = 1;//number of ship position updates before restarting atlantic stream
