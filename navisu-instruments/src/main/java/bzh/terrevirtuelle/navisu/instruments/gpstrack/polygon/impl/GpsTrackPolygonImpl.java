@@ -155,9 +155,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    protected int updateInterval = 30;//number of days within ships positions are not updated
+    protected int updateInterval = 5;//number of days within ships positions are not updated
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
-    protected int coldStart2 = 50000;//number of ships to create before getting online ships updates
+    //protected int coldStart2 = 50000;//number of ships to create before getting online ships updates
     protected int restartFreq = 1;//number of ship position updates before restarting atlantic stream
     protected int areaHistory = 5;//number of saved areas
     protected int inSight = 0;
@@ -249,7 +249,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         vtgES = cm.getComponentEventSubscribe(VTGEvent.class);
 
         aisCTEvent = cm.getComponentEventSubscribe(AisCreateTargetEvent.class);
-        aisUTEvent = cm.getComponentEventSubscribe(AisUpdateTargetEvent.class);
+        //aisUTEvent = cm.getComponentEventSubscribe(AisUpdateTargetEvent.class);
 
         measureTool = new MeasureTool(GeoWorldWindViewImpl.getWW());
         savedMeasureTool = new LinkedList<MeasureTool>();
@@ -493,43 +493,43 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 watchTargetDmp(aisShips);
             }*/
         });
-        aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
-            if (inSight > coldStart2) {
-    		    updateMessages++;
-            	updateOnlineTarget(updatedData);
-            /*Date t = new Date();
-            if (pShipCreated && !verrou && (int) (t.getTime() - t0.getTime()) % 5 == 0 && etape < path.size() - 1) {
-                verrou = true;
-                Position p1 = new Position(LatLon.fromDegrees(path.get(etape).getLatitude().getDegrees(), path.get(etape).getLongitude().getDegrees()), 0);
-                Position p2 = new Position(LatLon.fromDegrees(path.get(etape + 1).getLatitude().getDegrees(), path.get(etape + 1).getLongitude().getDegrees()), 0);
-                double course = Utils.computeCourse(p1, p2);
-                pShip.setCog(course);
-                etape++;
-                pShip.setLatitude(path.get(etape).getLatitude().getDegrees());
-                pShip.setLongitude(path.get(etape).getLongitude().getDegrees());
-                updatePathTarget(pShip);
-                watchTarget(pShip, savedMeasureTool);
-                if (dmpActivated) {
-                    translatePolygon(pShip.getLatitude(), pShip.getLongitude());
-                }
-
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    public void run() {
-                        verrou = false;
-                    }
-                }, timeInterval);
-            }
-
-            for (int j = 0; j < savedMeasureTool.size(); j++) {
-                watchTargetAis(aisShips, savedMeasureTool.get(j));
-            }
-
-            if (dmpActivated) {
-                watchTargetDmp(aisShips);
-            }*/
-            }
-        });
+//        aisUTEvent.subscribe((AisUpdateTargetEvent) (Ship updatedData) -> {
+//            if (inSight > coldStart2) {
+//    		    updateMessages++;
+//            	updateOnlineTarget(updatedData);
+//            /*Date t = new Date();
+//            if (pShipCreated && !verrou && (int) (t.getTime() - t0.getTime()) % 5 == 0 && etape < path.size() - 1) {
+//                verrou = true;
+//                Position p1 = new Position(LatLon.fromDegrees(path.get(etape).getLatitude().getDegrees(), path.get(etape).getLongitude().getDegrees()), 0);
+//                Position p2 = new Position(LatLon.fromDegrees(path.get(etape + 1).getLatitude().getDegrees(), path.get(etape + 1).getLongitude().getDegrees()), 0);
+//                double course = Utils.computeCourse(p1, p2);
+//                pShip.setCog(course);
+//                etape++;
+//                pShip.setLatitude(path.get(etape).getLatitude().getDegrees());
+//                pShip.setLongitude(path.get(etape).getLongitude().getDegrees());
+//                updatePathTarget(pShip);
+//                watchTarget(pShip, savedMeasureTool);
+//                if (dmpActivated) {
+//                    translatePolygon(pShip.getLatitude(), pShip.getLongitude());
+//                }
+//
+//                Timer timer = new Timer();
+//                timer.schedule(new TimerTask() {
+//                    public void run() {
+//                        verrou = false;
+//                    }
+//                }, timeInterval);
+//            }
+//
+//            for (int j = 0; j < savedMeasureTool.size(); j++) {
+//                watchTargetAis(aisShips, savedMeasureTool.get(j));
+//            }
+//
+//            if (dmpActivated) {
+//                watchTargetDmp(aisShips);
+//            }*/
+//            }
+//        });
         
       //dataServerServices.openGpsd("sinagot.net", 2947);//atlantique
       //dataServerServices.openGpsd("sinagot.net", 2948);//méditerrannée
@@ -583,7 +583,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.err.println("Date parse exception");
 			}
 
 			
@@ -651,20 +652,15 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
 //        }
 	    
-	    if (inSight % 251 == 0) {
-		    System.gc();
-		    aisTrackPanel.updateAisPanelStatus("JAVA garbage collector launched");
-        }
-	    
 	    if (inSight == coldStart1) {
         	aisTrackPanel.updateAisPanelStatus("Cold start 1 complete ("+coldStart1+" ships)");
         	playSound2();
         }
         
-        if (inSight == coldStart2) {
-        	aisTrackPanel.updateAisPanelStatus("Cold start 2 complete ("+coldStart2+" ships)");
-        	playSound2();
-        }
+//        if (inSight == coldStart2) {
+//        	aisTrackPanel.updateAisPanelStatus("Cold start 2 complete ("+coldStart2+" ships)");
+//        	playSound2();
+//        }
         
         
         if (inSight % 50 == 0) {
@@ -806,10 +802,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		
 		if (target.getName() != null && !target.getName().equals("")) {
 			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " - " + target.getName() + " : position update");
-			aisTrackPanel.updateAisPanelStatus("Last known position at " + shipMatrix[5][j] + " - " + shipMatrix[4][j]);
+			if (shipMatrix[4][j] != null && !(shipMatrix[4][j].equals(null)) && !(shipMatrix[4][j].equals(""))) {
+				aisTrackPanel.updateAisPanelStatus("Last known position at " + shipMatrix[5][j] + " - " + shipMatrix[4][j]);
+				}
 		} else {
 			aisTrackPanel.updateAisPanelStatus(target.getMMSI() + " : position update");
-			aisTrackPanel.updateAisPanelStatus("Last known position at " + shipMatrix[5][j] + " - " + shipMatrix[4][j]);
+			if (shipMatrix[4][j] != null && !(shipMatrix[4][j].equals(null)) && !(shipMatrix[4][j].equals(""))) {
+				aisTrackPanel.updateAisPanelStatus("Last known position at " + shipMatrix[5][j] + " - " + shipMatrix[4][j]);
+			}
 		}
 
 		shipMatrix[2][j] = Double.toString(target.getLatitude());
@@ -848,21 +848,18 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		
 		if (posUpdates > 0 && posUpdates % restartFreq == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("A"))) {
 			dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
-		    wwd.redrawNow();
 		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
 		    lastShipArea = new LinkedList<String>();
 		}
 		
-		if (posUpdates > 0 && posUpdates % restartFreq == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("M"))) {
+		if (posUpdates > 0 && posUpdates % (5*restartFreq) == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("M"))) {
 			dataServerServices.openGpsd("5.39.78.33", 2948);//med
-		    wwd.redrawNow();
 		    aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted");
 		    lastShipArea = new LinkedList<String>();
 		}
 		
 //		if (posUpdates > 0 && posUpdates % (3*restartFreq) == 0) {
 //			dataServerServices.openGpsd("5.39.78.33", 2948);//méditerranée
-//		    wwd.redrawNow();
 //		    aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted");
 //		}
 

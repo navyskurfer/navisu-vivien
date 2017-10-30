@@ -158,18 +158,20 @@ public class AisImpl
                     gpsTrackPolygonServices.retrieveShipName(ship);
                     ships.put(mmsi, ship);
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
-                } else {
-                    ship = ships.get(mmsi);
-                    ship.setHeading(ais.getHeading());
-                    ship.setCog(ais.getCog());
-                    ship.setSog(ais.getSog());
-                    ship.setRot(ais.getRot());
-                    ship.setLatitude(ais.getLatitude());
-                    ship.setLongitude(ais.getLongitude());
-                    ship.setNavigationalStatus(ais.getNavigationalStatus());
-                    gpsTrackPolygonServices.retrieveShipName(ship);
-                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
-                }
+                } 
+                
+//                else {
+//                    ship = ships.get(mmsi);
+//                    ship.setHeading(ais.getHeading());
+//                    ship.setCog(ais.getCog());
+//                    ship.setSog(ais.getSog());
+//                    ship.setRot(ais.getRot());
+//                    ship.setLatitude(ais.getLatitude());
+//                    ship.setLongitude(ais.getLongitude());
+//                    ship.setNavigationalStatus(ais.getNavigationalStatus());
+//                    gpsTrackPolygonServices.retrieveShipName(ship);
+//                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
+//                }
                 timestamps.put(mmsi, Calendar.getInstance());
             }
         });
@@ -191,18 +193,20 @@ public class AisImpl
                     gpsTrackPolygonServices.retrieveShipName(ship);
                     ships.put(mmsi, ship);
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
-                } else {
-                    ship = ships.get(mmsi);
-                    ship.setHeading(ais.getHeading());
-                    ship.setCog(ais.getCog());
-                    ship.setSog(ais.getSog());
-                    ship.setRot(ais.getRot());
-                    ship.setLatitude(ais.getLatitude());
-                    ship.setLongitude(ais.getLongitude());
-                    ship.setNavigationalStatus(ais.getNavigationalStatus());
-                    gpsTrackPolygonServices.retrieveShipName(ship);
-                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
-                }
+                } 
+                
+//                else {
+//                    ship = ships.get(mmsi);
+//                    ship.setHeading(ais.getHeading());
+//                    ship.setCog(ais.getCog());
+//                    ship.setSog(ais.getSog());
+//                    ship.setRot(ais.getRot());
+//                    ship.setLatitude(ais.getLatitude());
+//                    ship.setLongitude(ais.getLongitude());
+//                    ship.setNavigationalStatus(ais.getNavigationalStatus());
+//                    gpsTrackPolygonServices.retrieveShipName(ship);
+//                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
+//                }
                 timestamps.put(mmsi, Calendar.getInstance());
             }
         });
@@ -226,47 +230,49 @@ public class AisImpl
                     gpsTrackPolygonServices.retrieveShipName(ship);
                     ships.put(mmsi, ship);
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
-                } else {
-                    ship = ships.get(mmsi);
-                    ship.setHeading(ais.getHeading());
-                    ship.setCog(ais.getCog());
-                    ship.setSog(ais.getSog());
-                    ship.setRot(ais.getRot());
-                    ship.setLatitude(ais.getLatitude());
-                    ship.setLongitude(ais.getLongitude());
-                    ship.setNavigationalStatus(ais.getNavigationalStatus());
-                    gpsTrackPolygonServices.retrieveShipName(ship);
-                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
-                }
+                } 
+                
+//                else {
+//                    ship = ships.get(mmsi);
+//                    ship.setHeading(ais.getHeading());
+//                    ship.setCog(ais.getCog());
+//                    ship.setSog(ais.getSog());
+//                    ship.setRot(ais.getRot());
+//                    ship.setLatitude(ais.getLatitude());
+//                    ship.setLongitude(ais.getLongitude());
+//                    ship.setNavigationalStatus(ais.getNavigationalStatus());
+//                    gpsTrackPolygonServices.retrieveShipName(ship);
+//                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
+//                }
                 timestamps.put(mmsi, Calendar.getInstance());
             }
         });
-        ais4ES.subscribe(new AIS04Event() {
-
-            @Override
-            public <T extends NMEA> void notifyNmeaMessageChanged(T data) {
-
-                AIS04 ais = (AIS04) data;
-                //System.out.println("reception ais " + ais);
-                int mmsi = ais.getMMSI();
-
-                if (!stations.containsKey(mmsi)) {
-                    station = new BaseStation(
-                            ais.getMMSI(),
-                            ais.getLatitude(), ais.getLongitude(),
-                            ais.getDate(),
-                            ais.getTypeOfElectronicPositionFixingDevice());
-                    stations.put(mmsi, station);
-                    aisCreateStationEvent.notifyAisMessageChanged(station);
-                } else {
-                    station = stations.get(mmsi);
-                    station.setDate(ais.getDate());
-                    station.setEpfd(ais.getTypeOfElectronicPositionFixingDevice());
-                    aisUpdateStationEvent.notifyAisMessageChanged(station);
-                }
-                timestamps.put(mmsi, Calendar.getInstance());
-            }
-        });
+//        ais4ES.subscribe(new AIS04Event() {
+//
+//            @Override
+//            public <T extends NMEA> void notifyNmeaMessageChanged(T data) {
+//
+//                AIS04 ais = (AIS04) data;
+//                //System.out.println("reception ais " + ais);
+//                int mmsi = ais.getMMSI();
+//
+//                if (!stations.containsKey(mmsi)) {
+//                    station = new BaseStation(
+//                            ais.getMMSI(),
+//                            ais.getLatitude(), ais.getLongitude(),
+//                            ais.getDate(),
+//                            ais.getTypeOfElectronicPositionFixingDevice());
+//                    stations.put(mmsi, station);
+//                    aisCreateStationEvent.notifyAisMessageChanged(station);
+//                } else {
+//                    station = stations.get(mmsi);
+//                    station.setDate(ais.getDate());
+//                    station.setEpfd(ais.getTypeOfElectronicPositionFixingDevice());
+//                    aisUpdateStationEvent.notifyAisMessageChanged(station);
+//                }
+//                timestamps.put(mmsi, Calendar.getInstance());
+//            }
+//        });
 
         ais5ES.subscribe(new AIS05Event() {
 

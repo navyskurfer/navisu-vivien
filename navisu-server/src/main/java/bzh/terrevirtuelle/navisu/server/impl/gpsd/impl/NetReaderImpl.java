@@ -5,6 +5,8 @@
  */
 package bzh.terrevirtuelle.navisu.server.impl.gpsd.impl;
 
+import javax.print.attribute.standard.Media;
+
 import org.capcaval.c3.component.annotation.UsedService;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
@@ -22,7 +24,9 @@ import bzh.terrevirtuelle.navisu.server.impl.gpsd.NetReader;
 public class NetReaderImpl
         implements NetReader {
 	
-	public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
+	protected int count = 0;
+    
+    public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
         vertx.createNetClient().connect(port, hostname, (AsyncResultHandler<NetSocket>) new AsyncResultHandler<NetSocket>() {
 
             @Override
@@ -33,7 +37,11 @@ public class NetReaderImpl
                         String source = buffer.toString().trim();
                       
                         if (source.contains("tcp://data.aishub.net:4299")) {
-                        	System.out.println("atl");
+                        			count++;
+                        			if (count % 50 == 0) {
+                        				System.out.println("atl");
+                        				}
+                        			//System.out.print("a");
 //                            try {
 //								TimeUnit.MILLISECONDS.sleep(200);
 //							} catch (InterruptedException e) {
@@ -42,7 +50,11 @@ public class NetReaderImpl
 //							}
                         }
                         if (source.contains("tcp://data.aishub.net:4572")) {
-                        	System.out.println("med");
+                        			count++;
+                        			if (count % 75 == 0) {
+                        				System.out.println("med");
+                        				}
+                        			//System.out.print("m");
 //                            try {
 //								TimeUnit.MILLISECONDS.sleep(200);
 //							} catch (InterruptedException e) {
