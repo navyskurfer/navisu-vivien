@@ -24,7 +24,8 @@ import bzh.terrevirtuelle.navisu.server.impl.gpsd.NetReader;
 public class NetReaderImpl
         implements NetReader {
 	
-	protected int count = 0;
+	protected int countAtl = 0;
+	protected int countMed = 0;
     
     public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
         vertx.createNetClient().connect(port, hostname, (AsyncResultHandler<NetSocket>) new AsyncResultHandler<NetSocket>() {
@@ -36,32 +37,19 @@ public class NetReaderImpl
                     socket.dataHandler((Buffer buffer) -> {
                         String source = buffer.toString().trim();
                       
-                        if (source.contains("tcp://data.aishub.net:4299")) {
-                        			count++;
-                        			if (count % 50 == 0) {
-                        				System.out.println("atl");
-                        				}
-                        			//System.out.print("a");
-//                            try {
-//								TimeUnit.MILLISECONDS.sleep(200);
-//							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-                        }
-                        if (source.contains("tcp://data.aishub.net:4572")) {
-                        			count++;
-                        			if (count % 75 == 0) {
-                        				System.out.println("med");
-                        				}
-                        			//System.out.print("m");
-//                            try {
-//								TimeUnit.MILLISECONDS.sleep(200);
-//							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-                        }
+								if (source.contains("tcp://data.aishub.net:4299")) {
+									countAtl++;
+									if (countAtl % 50 == 0) {
+										System.out.println("atl");
+									}
+								}
+
+								if (source.contains("tcp://data.aishub.net:4572")) {
+									countMed++;
+									if (countMed % 50 == 0) {
+										System.out.println("med");
+									}
+								}
                         
                         if ((source.startsWith("{") && source.endsWith("}")) // Gpsd well formatted
                                 || source.startsWith("!") // AIS

@@ -160,18 +160,18 @@ public class AisImpl
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
                 } 
                 
-//                else {
-//                    ship = ships.get(mmsi);
-//                    ship.setHeading(ais.getHeading());
-//                    ship.setCog(ais.getCog());
-//                    ship.setSog(ais.getSog());
-//                    ship.setRot(ais.getRot());
-//                    ship.setLatitude(ais.getLatitude());
-//                    ship.setLongitude(ais.getLongitude());
-//                    ship.setNavigationalStatus(ais.getNavigationalStatus());
-//                    gpsTrackPolygonServices.retrieveShipName(ship);
-//                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
-//                }
+                else {
+                    ship = ships.get(mmsi);
+                    ship.setHeading(ais.getHeading());
+                    ship.setCog(ais.getCog());
+                    ship.setSog(ais.getSog());
+                    ship.setRot(ais.getRot());
+                    ship.setLatitude(ais.getLatitude());
+                    ship.setLongitude(ais.getLongitude());
+                    ship.setNavigationalStatus(ais.getNavigationalStatus());
+                    gpsTrackPolygonServices.retrieveShipName(ship);
+                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
+                }
                 timestamps.put(mmsi, Calendar.getInstance());
             }
         });
@@ -195,18 +195,18 @@ public class AisImpl
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
                 } 
                 
-//                else {
-//                    ship = ships.get(mmsi);
-//                    ship.setHeading(ais.getHeading());
-//                    ship.setCog(ais.getCog());
-//                    ship.setSog(ais.getSog());
-//                    ship.setRot(ais.getRot());
-//                    ship.setLatitude(ais.getLatitude());
-//                    ship.setLongitude(ais.getLongitude());
-//                    ship.setNavigationalStatus(ais.getNavigationalStatus());
-//                    gpsTrackPolygonServices.retrieveShipName(ship);
-//                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
-//                }
+                else {
+                    ship = ships.get(mmsi);
+                    ship.setHeading(ais.getHeading());
+                    ship.setCog(ais.getCog());
+                    ship.setSog(ais.getSog());
+                    ship.setRot(ais.getRot());
+                    ship.setLatitude(ais.getLatitude());
+                    ship.setLongitude(ais.getLongitude());
+                    ship.setNavigationalStatus(ais.getNavigationalStatus());
+                    gpsTrackPolygonServices.retrieveShipName(ship);
+                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
+                }
                 timestamps.put(mmsi, Calendar.getInstance());
             }
         });
@@ -232,18 +232,18 @@ public class AisImpl
                     aisCreateTargetEvent.notifyAisMessageChanged(ship);
                 } 
                 
-//                else {
-//                    ship = ships.get(mmsi);
-//                    ship.setHeading(ais.getHeading());
-//                    ship.setCog(ais.getCog());
-//                    ship.setSog(ais.getSog());
-//                    ship.setRot(ais.getRot());
-//                    ship.setLatitude(ais.getLatitude());
-//                    ship.setLongitude(ais.getLongitude());
-//                    ship.setNavigationalStatus(ais.getNavigationalStatus());
-//                    gpsTrackPolygonServices.retrieveShipName(ship);
-//                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
-//                }
+                else {
+                    ship = ships.get(mmsi);
+                    ship.setHeading(ais.getHeading());
+                    ship.setCog(ais.getCog());
+                    ship.setSog(ais.getSog());
+                    ship.setRot(ais.getRot());
+                    ship.setLatitude(ais.getLatitude());
+                    ship.setLongitude(ais.getLongitude());
+                    ship.setNavigationalStatus(ais.getNavigationalStatus());
+                    gpsTrackPolygonServices.retrieveShipName(ship);
+                    aisUpdateTargetEvent.notifyAisMessageChanged(ship);
+                }
                 timestamps.put(mmsi, Calendar.getInstance());
             }
         });
@@ -378,33 +378,6 @@ public class AisImpl
     public Map<Integer, String> getMidMap() {
         return midMap;
     }
-    
-    //private void retrieveShipName(Ship target) {
-    	/*if (gpsTrackPolygonServices.isOn() && gpsTrackPolygonServices.getComponentReady()) {
-        	savedAisShips = gpsTrackPolygonServices.getSavedAisShips();
-        	for (Ship s : savedAisShips) {
-        		if (s.getMMSI()==target.getMMSI() && target.getName()==null) {
-        			if (!(s.getName().equals("")) && !(s.getName().equals(null))) {
-        				target.setShipName(s.getName());
-        				nbNamesRetrieved++;
-        				Date date = new Date();
-        				gpsTrackPolygonServices.getPanel().updateAisPanelStatus(s.getName() + " retrieved from database");
-        				//gpsTrackPolygonServices.playSound();
-        				if (nbNamesRetrieved<51) {
-        					if (nbNamesRetrieved % 25 == 0) {
-        						gpsTrackPolygonServices.getPanel().updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
-        					}
-        				} 
-        				else {
-        					if (nbNamesRetrieved % 10 == 0) {
-        						gpsTrackPolygonServices.getPanel().updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
-        					}
-        				}
-        			}
-        		}
-        	}
-        }*/
-    //}
 
     private void scheduleLostTarget() {
         task = new TimerTask() {

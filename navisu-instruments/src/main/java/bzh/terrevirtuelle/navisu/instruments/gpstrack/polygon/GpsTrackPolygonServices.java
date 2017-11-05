@@ -5,6 +5,7 @@
  */
 package bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import bzh.terrevirtuelle.navisu.app.drivers.instrumentdriver.InstrumentDriver;
@@ -66,7 +67,7 @@ public interface GpsTrackPolygonServices extends ComponentService {
     
     void activateRule();
     
-    LinkedList<Ship> getSavedAisShips();
+    ArrayList<Ship> getSavedAisShips();
     
     TrackPanel getPanel();
     
