@@ -157,8 +157,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long count = 1;
     protected int updateInterval = 0;//number of days within ships positions are not updated
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
-    protected int coldStart2 = 0;//number of ships to create before getting online ships updates
-    protected int restartFreq = 100000;//number of ship position updates before restarting atlantic stream
+    protected int coldStart2 = 1500;//number of ships to create before getting online ships updates
+    protected int restartFreq = 1000000;//number of ship position updates before attempting to restart AIS stream
     protected int areaHistory = 5;//number of saved areas
     protected int inSight = 0;
     protected int posUpdates = 0;
