@@ -157,10 +157,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long count = 1;
     protected int updateInterval = 0;//number of days within ships positions are not updated
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
-    protected int coldStart2 = 500;//number of ships to create before starting med AIS stream
-    protected int coldStart3 = 2000;//number of ships to create before getting online ships updates
+    protected int coldStart2 = 1;//number of ships to create before starting med AIS stream
+    protected int coldStart3 = 5000;//number of ships to create before getting online ships updates
     protected int restartFreq = 1000000;//number of ship position updates before attempting to restart AIS stream
-    protected int areaHistory = 5;//number of saved areas
+    protected int areaHistory = 20;//number of saved areas
     protected int inSight = 0;
     protected int posUpdates = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
@@ -552,6 +552,39 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
         aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
         
+        //------------------------------------------------------------
+        
+        if (lastShipArea.size() >= areaHistory) {
+			String temp = lastShipArea.removeFirst();
+		}
+		
+		if (target.getLatitude() < 47.4) {
+			lastShipArea.add("M");//med
+		} else {
+			lastShipArea.add("A");//atl
+			}
+		
+		String listArea = "";
+		for (String s : lastShipArea) {
+			listArea = listArea + s + " ";
+		}
+		
+		//aisTrackPanel.updateAisPanelStatus(listArea);
+		
+		if (inSight > 0 && inSight % restartFreq == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("A"))) {
+			dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
+		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
+		    lastShipArea = new LinkedList<String>();
+		}
+		
+		if (inSight > 0 && inSight % restartFreq == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("M"))) {
+			dataServerServices.openGpsd("5.39.78.33", 2948);//med
+		    aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted");
+		    lastShipArea = new LinkedList<String>();
+		}
+
+        //-------------------------------------------
+		
         int indice = -1;
         
         for (int i = 0; i < aisShips.size(); i++) {
@@ -622,7 +655,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 	    if (inSight == coldStart2) {
 	    	dataServerServices.openGpsd("5.39.78.33", 2948);//méditerrannée
         	aisTrackPanel.updateAisPanelStatus("Cold start 2 complete ("+coldStart2+" ships)");
-        	aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted");
+        	aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream started");
         	playSound2();
         }
         
@@ -736,36 +769,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		posUpdates++;
 		
-		if (lastShipArea.size() >= areaHistory) {
-			String temp = lastShipArea.removeFirst();
-		}
-		
-		if (target.getLatitude() < 47.4) {
-			lastShipArea.add("M");//med
-		} else {
-			lastShipArea.add("A");//atl
-			}
-		
-		String listArea = "";
-		for (String s : lastShipArea) {
-			listArea = listArea + s + " ";
-		}
-		//aisTrackPanel.updateAisPanelStatus(listArea);
-
 		if (posUpdates % 20 == 0) {
 			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
-		}
-		
-		if (posUpdates > 0 && posUpdates % restartFreq == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("A"))) {
-			dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
-		    aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
-		    lastShipArea = new LinkedList<String>();
-		}
-		
-		if (posUpdates > 0 && posUpdates % (5*restartFreq) == 0 && lastShipArea.size() == areaHistory && !(lastShipArea.contains("M"))) {
-			dataServerServices.openGpsd("5.39.78.33", 2948);//med
-		    aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted");
-		    lastShipArea = new LinkedList<String>();
 		}
 
 		if (posUpdates % 100 == 0) {
@@ -1710,7 +1715,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             	playSound();
             	
             	aisTrackPanel.updateAisPanelStatus(nbNamesReceived + " new name(s) received");
-            	aisTrackPanel.updateAisPanelStatus("New name received : " + target.getName());
+            	aisTrackPanel.updateAisPanelStatus("New ship & name received : " + target.getMmsi() + "/" + target.getName());
                 
                 if (nbNamesReceived % 10 == 0) {
                 	saveShips();
