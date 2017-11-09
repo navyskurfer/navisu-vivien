@@ -158,7 +158,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int updateInterval = 0;//number of days within ships positions are not updated
     protected int coldStart1 = 0;//number of ships to create before getting database ships updates
     protected int coldStart2 = 1;//number of ships to create before starting med AIS stream
-    protected int coldStart3 = 2000;//number of ships to create before getting online ships updates
+    protected int coldStart3 = 1000;//number of ships to create before getting online ships updates
     protected int restartFreq = 1;//number of ship creations before attempting to restart AIS stream
     protected int areaHistory = 15;//number of saved areas on ship creation
     protected int inSight = 0;
@@ -553,39 +553,43 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
         
         //------------------------------------------------------------
-
-		if (lastShipArea.size() >= areaHistory) {
-			String temp = lastShipArea.removeFirst();
-		}
-
-		if (target.getLatitude() < 47.4) {
-			lastShipArea.add("M");// med
-		} else {
-			lastShipArea.add("A");// atl
-		}
-
-		String listArea = "";
-		for (String s : lastShipArea) {
-			listArea = listArea + s + " ";
-		}
-
-		// aisTrackPanel.updateAisPanelStatus(listArea);
-
-		if (inSight > 100 && inSight % restartFreq == 0 && lastShipArea.size() == areaHistory
-				&& !(lastShipArea.contains("A"))) {
-			dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
-			aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
-			lastShipArea = new LinkedList<String>();
-		}
-
-		if (inSight > 100 && inSight % restartFreq == 0 && lastShipArea.size() == areaHistory
-				&& !(lastShipArea.contains("M"))) {
-			dataServerServices.openGpsd("5.39.78.33", 2948);// med
-			aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted");
-			lastShipArea = new LinkedList<String>();
-		}
+        
+		if (inSight > coldStart2) {
 			
-        //-------------------------------------------
+			if (lastShipArea.size() >= areaHistory) {
+				String temp = lastShipArea.removeFirst();
+			}
+
+			if (target.getLatitude() < 47.4) {
+				lastShipArea.add("M");// med
+			} else {
+				lastShipArea.add("A");// atl
+			}
+
+			String listArea = "";
+			for (String s : lastShipArea) {
+				listArea = listArea + s + " ";
+			}
+
+			//aisTrackPanel.updateAisPanelStatus(listArea);
+
+			if (inSight > 100 && inSight % restartFreq == 0 && lastShipArea.size() == areaHistory
+					&& !(lastShipArea.contains("A"))) {
+				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
+				aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
+				lastShipArea = new LinkedList<String>();
+			}
+
+			if (inSight > 100 && inSight % restartFreq == 0 && lastShipArea.size() == areaHistory
+					&& !(lastShipArea.contains("M"))) {
+				dataServerServices.openGpsd("5.39.78.33", 2948);// med
+				aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted");
+				lastShipArea = new LinkedList<String>();
+			
+			}
+		}
+        
+		//-------------------------------------------
 		
         int indice = -1;
         
