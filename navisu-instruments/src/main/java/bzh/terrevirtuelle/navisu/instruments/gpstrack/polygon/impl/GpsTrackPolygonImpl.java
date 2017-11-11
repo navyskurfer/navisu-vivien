@@ -156,14 +156,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
-    protected int updateInterval = 0;//number of days within ships positions are not updated
-    protected int coldStart1 = 0;//number of ships to create before getting database ships updates
-    protected int coldStart2 = 1;//number of ships to create before starting med AIS stream
-    protected int coldStart3 = 100;//number of ships to create before getting online ships updates
-    protected int coldStart4 = 1500;////number of ships to create before changing saved areas buffer size
-    protected int restartFreq = 1;//number of ship creations before attempting to restart AIS stream
-    protected int areaHistory = 15;//number of saved areas on ship creation
-    protected int areaHistory2 = 7;//number of saved areas on ship creation after buffer size change
+    protected int updateInterval = 0;   //number of days within ships positions are not updated
+    protected int coldStart1 = 0;       //number of ships to create before getting database ships updates
+    protected int coldStart2 = 1;       //number of ships to create before starting med AIS stream
+    protected int coldStart3 = 100;     //number of ships to create before getting online ships updates
+    protected int coldStart4 = 1500;    //number of ships to create before changing saved areas buffer size
+    protected int restartFreq = 1;      //number of ship creations before attempting to restart AIS stream
+    protected int areaHistory = 15;     //number of saved areas on ship creation
+    protected int areaHistory2 = 10;    //number of saved areas on ship creation after buffer size change
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
