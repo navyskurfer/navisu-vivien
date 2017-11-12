@@ -158,7 +158,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long count = 1;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     protected int updateInterval = 0;  //number of days within ships positions are not updated
-    protected int updateInterval2 = 1; //number of minutes for online ship updates
+    protected int updateInterval2 = 0; //number of minutes for online ship updates
     protected int coldStart1 = 0;      //number of ships to create before getting database ships updates
     protected int coldStart2 = 50;     //number of ships to create before starting med AIS stream
     protected int coldStart3 = 25;     //number of ships to create before getting online ships updates
@@ -651,7 +651,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						updateCreatedTargetDB(target, indice);
 					}
 				} catch (ParseException e) {
-					System.err.println("Date parse exception");
+					System.err.println("Date parse exception : " + aisShips.get(indice).getMMSI() + " / " + aisShips.get(indice).getName()+ " / " +shipMatrix[4][indice]);
+					aisTrackPanel.updateAisPanelStatus("Date parse exception :");
+					aisTrackPanel.updateAisPanelStatus(aisShips.get(indice).getMMSI() + "/" + aisShips.get(indice).getName()+ "/" +shipMatrix[4][indice]);
+					updateCreatedTargetDB(target, indice);
 				}
 
 			}
