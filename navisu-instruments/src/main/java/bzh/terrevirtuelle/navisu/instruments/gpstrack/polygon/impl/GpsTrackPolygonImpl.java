@@ -161,9 +161,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int updateInterval2 = 0; //number of minutes for online ship updates
     protected int coldStart1 = 0;      //number of ships to create before getting database ships updates
     protected int coldStart2 = 50;     //number of ships to create before starting med AIS stream
-    protected int coldStart3 = 25;     //number of ships to create before getting online ships updates
-    protected int coldStart4 = 1500;   //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 2000;   //number of ships to create before changing saved areas buffer size again
+    protected int coldStart3 = 150;    //number of ships to create before getting online ships updates
+    protected int coldStart4 = 950;    //number of ships to create before changing saved areas buffer size
+    protected int coldStart5 = 1450;   //number of ships to create before changing saved areas buffer size again
     protected int restartFreq = 1;     //number of ship creations before attempting to restart AIS stream
     protected int areaHistory = 15;    //number of saved areas on ship creation
     protected int areaHistory2 = 10;   //number of saved areas on ship creation after buffer size change
@@ -677,7 +677,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisShips.add(aisShip);
             lastUpdateDate.add(date);
             aisTrackPanel.updateAisPanelMmsi(dateFormatTime.format(date), inSight, target.getMmsi());
-            aisTrackPanel.updateAisPanelStatus("New MMSI " + target.getMmsi() + " without name");
+            aisTrackPanel.updateAisPanelStatus("New ship : " + target.getMmsi());
             
             shipMatrix[0][aisShips.size() - 1] = Integer.toString(aisShip.getMMSI());
             shipMatrix[1][aisShips.size() - 1] = aisShip.getName();
