@@ -157,17 +157,17 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
-    protected int updateInterval = 0;  //number of days within ships positions are not updated
-    protected int updateInterval2 = 0; //number of minutes for online ship updates
-    protected int coldStart1 = 0;      //number of ships to create before getting database ships updates
-    protected int coldStart2 = 50;     //number of ships to create before starting med AIS stream
-    protected int coldStart3 = 150;    //number of ships to create before getting online ships updates
-    protected int coldStart4 = 950;    //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 1450;   //number of ships to create before changing saved areas buffer size again
-    protected int restartFreq = 1;     //number of ship creations before attempting to restart AIS stream
-    protected int areaHistory = 15;    //number of saved areas on ship creation
-    protected int areaHistory2 = 10;   //number of saved areas on ship creation after buffer size change
-    protected int areaHistory3 = 7;    //number of saved areas on ship creation after second buffer size change
+    protected int updateInterval = 0;        //number of days within ships positions are not updated
+    protected double updateInterval2 = 0.33; //number of minutes for online ship updates
+    protected int coldStart1 = 0;            //number of ships to create before getting database ships updates
+    protected int coldStart2 = 50;           //number of ships to create before starting med AIS stream
+    protected int coldStart3 = 10;           //number of ships to create before getting online ships updates
+    protected int coldStart4 = 700;          //number of ships to create before changing saved areas buffer size
+    protected int coldStart5 = 950;          //number of ships to create before changing saved areas buffer size again
+    protected int restartFreq = 1;           //number of ship creations before attempting to restart AIS stream
+    protected int areaHistory = 15;          //number of saved areas on ship creation
+    protected int areaHistory2 = 10;         //number of saved areas on ship creation after buffer size change
+    protected int areaHistory3 = 7;          //number of saved areas on ship creation after second buffer size change
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -731,10 +731,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         return Math.abs(difference);
     }
     
-    private long minutesBetween(Date one, Date two) {
+    private double minutesBetween(Date one, Date two) {
     	
-        long difference =  (one.getTime()-two.getTime())/60000;
-        return Math.abs(difference);
+        double difference =  (double) ((((Number)one.getTime()).doubleValue()-((Number)two.getTime()).doubleValue())/((Number)60000).doubleValue());
+        return difference;
     }
 
     private void updateOnlineTarget(Ship target) {
@@ -743,7 +743,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		for (int i = 0; i < aisShips.size(); i++) {
 			if (aisShips.get(i).getMMSI() == target.getMmsi()) {
-				if (minutesBetween(date, lastUpdateDate.get(i)) > updateInterval2) {
+				//if (minutesBetween(date, lastUpdateDate.get(i)) > updateInterval2) {
+				if (Double.compare(minutesBetween(date, lastUpdateDate.get(i)), updateInterval2) > 0) {
 					//aisTrackPanel.updateAisPanelStatus(target.getMmsi() + "-online update: " + minutesBetween(date, lastUpdateDate.get(i)) + " minutes");
 					updateMessages++;
 					lastUpdateDate.set(i, date);
