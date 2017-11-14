@@ -161,16 +161,16 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long count = 1;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     protected long updateInterval = 360;  //number of minutes within ships positions are not updated
-    protected long updateInterval2 = 20; //number of seconds for online ship updates
-    protected int coldStart1 = 0;        //number of ships to create before getting database ships updates
-    protected int coldStart2 = 50;       //number of ships to create before starting med AIS stream
-    protected int coldStart3 = 10;       //number of ships to create before getting online ships updates
-    protected int coldStart4 = 700;      //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 950;      //number of ships to create before changing saved areas buffer size again
-    protected int restartFreq = 1;       //number of ship creations before attempting to restart AIS stream
-    protected int areaHistory = 15;      //number of saved areas on ship creation
-    protected int areaHistory2 = 10;     //number of saved areas on ship creation after buffer size change
-    protected int areaHistory3 = 7;      //number of saved areas on ship creation after second buffer size change
+    protected long updateInterval2 = 20;  //number of seconds for online ship updates
+    protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
+    protected int coldStart2 = 50;        //number of ships to create before starting med AIS stream
+    protected int coldStart3 = 10;        //number of ships to create before getting online ships updates
+    protected int coldStart4 = 700;       //number of ships to create before changing saved areas buffer size
+    protected int coldStart5 = 950;       //number of ships to create before changing saved areas buffer size again
+    protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
+    protected int areaHistory = 15;       //number of saved areas on ship creation
+    protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
+    protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -650,11 +650,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				updateCreatedTargetDB(target, indice);
 			} else {
 				try {
-					if (inSight > coldStart1 && minutesBetween(date, dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]) > updateInterval) {
+					if (inSight > coldStart1 && minutesBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice])) > updateInterval) {
+//						System.err.println("            ");
 //						System.err.println("---------------------------------------------");
-//						System.err.println(daysBetween(date, dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]) + " days");
-//						System.err.println(hoursBetween(date, dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]) + " hours");
-//						System.err.println(minutesBetween(date, dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]) + " minutes");
+//						System.err.println(daysBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice])) + " days");
+//						System.err.println(hoursBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice])) + " hours");
+//						System.err.println(minutesBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice])) + " minutes");
 //						System.err.println(date);
 //						System.err.println(shipMatrix[5][indice] + " - " + shipMatrix[4][indice]);
 //						System.err.println("---------------------------------------------");
@@ -735,7 +736,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
     }
     
-    private long diffDates(Date one, Date two, String hour) {
+    private Date convDate(Date date, String hour) {
     	
     	Character a = hour.charAt(0);//ab:cd:xx
     	Character b = hour.charAt(1);
@@ -745,38 +746,17 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     	String m = "" + c + d;
     	
     	Calendar cal = Calendar.getInstance();
-    	cal.setTime(two);
+    	cal.setTime(date);
     	cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(h.toString()));
     	cal.set(Calendar.MINUTE, Integer.parseInt(m.toString()));
     	cal.setTimeZone(TimeZone.getTimeZone("CET"));
     	
-    	two = cal.getTime();
+    	date = cal.getTime();
     	
-    	long difference  = one.getTime() - two.getTime();
-    	return difference;
+    	return date;
     }
     
-    private long daysBetween(Date one, Date two, String hour) {
-    	
-    	return TimeUnit.MILLISECONDS.toDays(diffDates(one, two, hour));
-    }
-    
-    private long hoursBetween(Date one, Date two, String hour) {
-    	
-        return TimeUnit.MILLISECONDS.toHours(diffDates(one, two, hour));
-    }
-    
-    private long minutesBetween(Date one, Date two, String hour) {
-    	
-    	return TimeUnit.MILLISECONDS.toMinutes(diffDates(one, two, hour));
-    }
-    
-    private long secondsBetween(Date one, Date two, String hour) {
-    	
-    	return TimeUnit.MILLISECONDS.toSeconds(diffDates(one, two, hour));
-    }
-    
-private long diffDates(Date one, Date two) {
+    private long diffDates(Date one, Date two) {
     	
     	long difference  = one.getTime() - two.getTime();
     	return difference;
