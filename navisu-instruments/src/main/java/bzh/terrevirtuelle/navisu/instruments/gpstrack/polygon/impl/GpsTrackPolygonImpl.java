@@ -161,12 +161,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long count = 1;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     protected long updateInterval = 360;  //number of minutes within ships positions are not updated
-    protected long updateInterval2 = 20;  //number of seconds for online ship updates
+    protected long updateInterval2 = 30;  //number of seconds for online ship updates
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
-    protected int coldStart2 = 50;        //number of ships to create before starting med AIS stream
-    protected int coldStart3 = 900;        //number of ships to create before getting online ships updates
+    protected int coldStart2 = 50;        //number of ships to create before starting MED AIS stream
+    protected int coldStart3 = 150;       //number of ships to create before getting online ships updates
     protected int coldStart4 = 700;       //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 950;       //number of ships to create before changing saved areas buffer size again
+    protected int coldStart5 = 1950;      //number of ships to create before changing saved areas buffer size again
     protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
     protected int areaHistory = 15;       //number of saved areas on ship creation
     protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
@@ -463,9 +463,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             wwd.getInputHandler().addMouseListener(ma3);
             wwd.getInputHandler().addMouseMotionListener(mma1);
             
+            startTime = new Date();
             readShips();
             addPanelController();
-            startTime = new Date();
+            
             //feu vert pour l'actualisation des noms depuis la base pour le module AIS
             componentReady = true;
 
@@ -794,7 +795,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					lastUpdateDate.set(i, date);
 					
 					if (updateMessages % 50 == 0) {
-						aisTrackPanel.updateAisPanelStatus(updateMessages + " online position updates");
+						//aisTrackPanel.updateAisPanelStatus(updateMessages + " online position updates");
+						int onlineUpdatedShips = 0;
+						for (Date d : lastUpdateDate) {
+							if (secondsBetween(d, startTime) < 10) {
+								onlineUpdatedShips++;
+							}
+						}
+						aisTrackPanel.updateAisPanelStatus((lastUpdateDate.size()-onlineUpdatedShips) + " updates / " + inSight + " in sight");
 					}
 
 					if (updateMessages % 500 == 0) {
@@ -1622,6 +1630,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     public void polyShapeOn() {
         measureTool.setMeasureShapeType(MeasureTool.SHAPE_POLYGON);
         aisTrackPanel.updateAisPanelStatus("Polygon shape activated");
+        dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
     }
 
     @Override
@@ -1949,8 +1958,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 }
             }
         }
-        Date date = new Date();
-        for (Ship s : aisShips) {lastUpdateDate.add(date);}
+        for (Ship s : aisShips) {lastUpdateDate.add(startTime);}
     }
 
     private void addPanelController() {
