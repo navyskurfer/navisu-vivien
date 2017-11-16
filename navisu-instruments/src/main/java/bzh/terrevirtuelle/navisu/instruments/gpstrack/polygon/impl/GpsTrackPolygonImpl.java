@@ -595,7 +595,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				String temp = lastShipArea.removeFirst();
 			}
 
-			if (target.getLatitude() < 47.4) {
+			if (target.getLatitude() < 45.9) {
 				lastShipArea.add("M");// med
 			} else {
 				lastShipArea.add("A");// atl
