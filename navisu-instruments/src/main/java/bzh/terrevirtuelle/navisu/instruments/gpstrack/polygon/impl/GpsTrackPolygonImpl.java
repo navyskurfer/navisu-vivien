@@ -164,14 +164,14 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long updateInterval2 = 30;  //number of seconds for online ship updates
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
     protected int coldStart2 = 50;        //number of ships to create before starting MED AIS stream
-    protected int coldStart3 = 0;         //number of ships to create before getting online ships updates
-    protected int coldStart4 = 700;       //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 1200;      //number of ships to create before changing saved areas buffer size again
+    protected int coldStart3 = 10;        //number of ships to create before getting online ships updates
+    protected int coldStart4 = 600;       //number of ships to create before changing saved areas buffer size
+    protected int coldStart5 = 900;       //number of ships to create before changing saved areas buffer size again
     protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
     protected int areaHistory = 15;       //number of saved areas on ship creation
     protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
-    protected int forcedRestart = 1200;   //number of ships to create before forcing ATL AIS stream restart
+    protected int forcedRestart = 10000;  //number of ships to create before forcing ATL AIS stream restart
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -641,7 +641,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	aisPath.get(i).setExtrude(true);
                 	aisPath.get(i).setPathType(AVKey.GREAT_CIRCLE);
                 	aisPath.get(i).setAttributes(attrs);
-                	lastUpdateDate.set(i, date);
                 	}
                 break;
             }
@@ -795,18 +794,21 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					updateMessages++;
 					lastUpdateDate.set(i, date);
 					
-					if (updateMessages % 50 == 0) {
+					if (updateMessages % 100 == 0) {
 						//aisTrackPanel.updateAisPanelStatus(updateMessages + " online position updates");
-						int onlineUpdatedShips = 0;
+						int onlineUpdatedShips;
+						int notUpdated = 0;
 						for (Date d : lastUpdateDate) {
-							if (secondsBetween(d, startTime) < 10) {
-								onlineUpdatedShips++;
+							if (secondsBetween(d, startTime) < 3) {
+								notUpdated++;
 							}
 						}
-						aisTrackPanel.updateAisPanelStatus((lastUpdateDate.size()-onlineUpdatedShips) + " updates / " + inSight + " in sight (delta : " + (inSight-(lastUpdateDate.size()-onlineUpdatedShips)) + ")");
+						onlineUpdatedShips = lastUpdateDate.size()-notUpdated;
+						float percent = (onlineUpdatedShips * 100.0f) / inSight;
+						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + inSight + " in sight (ratio : " + String.format ("%.1f", percent) + "%)");
 					}
 
-					if (updateMessages % 500 == 0) {
+					if (updateMessages % 250 == 0) {
 						saveShips();
 						nbSave++;
 						Date now = new Date();
@@ -823,11 +825,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 								+ diffMinutes + " minutes " + diffSeconds + " seconds");
 						aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 								nbNamesDB + nbNamesReceived);
-						
-						if (inSight > forcedRestart) {
-							dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
-							aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
-						}
+					}
+					
+					if (updateMessages % 150 == 0 && inSight > forcedRestart) {
+						dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
+						aisTrackPanel.updateAisPanelStatus("Altantic ships stream : forced restart");
 					}
 					
 					if (aisPath.get(i) != null) {
