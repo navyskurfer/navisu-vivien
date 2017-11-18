@@ -14,6 +14,7 @@ import org.vertx.java.core.Vertx;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.net.NetSocket;
 
+
 import bzh.terrevirtuelle.navisu.server.impl.gpsd.NetReader;
 
 /**
@@ -23,8 +24,8 @@ import bzh.terrevirtuelle.navisu.server.impl.gpsd.NetReader;
 
 public class NetReaderImpl
         implements NetReader {
-	
-	protected int countAtl = 0;
+    
+    protected int countAtl = 0;
 	protected int countMed = 0;
     
     public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
