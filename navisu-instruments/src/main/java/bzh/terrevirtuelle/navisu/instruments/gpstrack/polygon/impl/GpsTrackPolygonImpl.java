@@ -37,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.TimeZone;
@@ -150,6 +151,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected ArrayList<Ship> aisShips;
     protected ArrayList<Date> lastUpdateDate;
     protected LinkedList<String> lastShipArea;
+    protected LinkedList<String> lastShipAreaUpdate;
     protected MeasureTool dmp;
     protected RenderableLayer dmpLayer;
     protected MeasureToolController dmpController;
@@ -161,17 +163,18 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long count = 1;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     protected long updateInterval = 360;  //number of minutes within ships positions are not updated
-    protected long updateInterval2 = 20;  //number of seconds for online ship updates
+    protected long updateInterval2 = 60;  //number of seconds for online ship updates
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
     protected int coldStart2 = 50;        //number of ships to create before starting MED AIS stream
     protected int coldStart3 = 10;        //number of ships to create before getting online ships updates
-    protected int coldStart4 = 600;       //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 900;       //number of ships to create before changing saved areas buffer size again
+    protected int coldStart4 = 350;       //number of ships to create before changing saved areas buffer size
+    protected int coldStart5 = 550;       //number of ships to create before changing saved areas buffer size again
     protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
     protected int areaHistory = 15;       //number of saved areas on ship creation
     protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
-    protected int forcedRestart = 10000;  //number of ships to create before forcing ATL AIS stream restart
+    protected int areaHistory4 = 25;      //number of saved areas on online ship updates
+    protected int forcedRestart = 9000;   //number of ships to create before forcing ATL AIS stream restart
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -270,6 +273,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         savedPolygons = new LinkedList<ArrayList<Position>>();
         centered = new LinkedList<Boolean>();
         lastShipArea = new LinkedList<String>();
+        lastShipAreaUpdate = new LinkedList<String>();
         for (int k = 0; k < 100; k++) {
             centered.add(false);
         }
@@ -589,7 +593,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
         //------------------------------------------------------------
         
-		if (inSight > coldStart2) {
+		if (inSight > coldStart2 && inSight < (coldStart5+250)) {
 			
 			if (lastShipArea.size() >= areaHistory) {
 				String temp = lastShipArea.removeFirst();
@@ -786,6 +790,50 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     private void updateOnlineTarget(Ship target) {
 
 		Date date = new Date();
+		
+		//------------------------------------------------------------
+        
+				if (inSight > coldStart5) {
+					
+					if (lastShipAreaUpdate.size() >= areaHistory4) {
+						String temp = lastShipAreaUpdate.removeFirst();
+					}
+
+					if (target.getLatitude() < 45.9) {
+						lastShipAreaUpdate.add("M");// med
+					} else {
+						lastShipAreaUpdate.add("A");// atl
+					}
+
+					String listAreaUpdate = "";
+					for (String s : lastShipAreaUpdate) {
+						listAreaUpdate = listAreaUpdate + s + " ";
+					}
+
+					int occurrences = Collections.frequency(lastShipAreaUpdate, "A");
+					//System.err.println(listAreaUpdate + " " + occurrences);
+					if (occurrences < 5) {
+						System.err.println(occurrences + " / " + areaHistory4);
+						}
+
+					if (inSight > 100 && inSight % restartFreq == 0 && lastShipAreaUpdate.size() == areaHistory4
+							&& !(lastShipAreaUpdate.contains("A"))) {
+						dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
+						aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted (updates)");
+						lastShipAreaUpdate = new LinkedList<String>();
+					}
+
+					if (inSight > 100 && inSight % restartFreq == 0 && lastShipAreaUpdate.size() == areaHistory4
+							&& !(lastShipAreaUpdate.contains("M"))) {
+						dataServerServices.openGpsd("5.39.78.33", 2948);// med
+						aisTrackPanel.updateAisPanelStatus("Mediterranean ships stream restarted (updates)");
+						lastShipAreaUpdate = new LinkedList<String>();
+					
+					}
+				}
+		        
+				//-------------------------------------------
+				
 
 		for (int i = 0; i < aisShips.size(); i++) {
 			if (aisShips.get(i).getMMSI() == target.getMmsi()) {
@@ -827,7 +875,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 								nbNamesDB + nbNamesReceived);
 					}
 					
-					if (updateMessages % 150 == 0 && inSight > forcedRestart) {
+					if (updateMessages % 50 == 0 && inSight > forcedRestart) {
 						dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
 						aisTrackPanel.updateAisPanelStatus("Altantic ships stream : forced restart");
 					}
