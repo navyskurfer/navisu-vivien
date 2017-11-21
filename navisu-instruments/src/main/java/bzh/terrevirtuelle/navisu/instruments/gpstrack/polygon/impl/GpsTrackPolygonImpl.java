@@ -173,8 +173,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int areaHistory = 15;       //number of saved areas on ship creation
     protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
-    protected int areaHistory4 = 25;      //number of saved areas on online ship updates
-    protected int forcedRestart = 9000;   //number of ships to create before forcing ATL AIS stream restart
+    protected int areaHistory4 = 30;      //number of saved areas on online ship updates
+    protected int forcedRestart = 90000;  //number of ships to create before forcing ATL AIS stream restart
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
