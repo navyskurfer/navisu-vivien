@@ -174,6 +174,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int areaHistory = 15;       //number of saved areas on ship creation
     protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
+    protected int waitRestartTime = 5;    //number of minutes since last target to restart ATL AIS stream
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -790,11 +791,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     private void updateOnlineTarget(Ship target) {
 
 		Date date = new Date();
+		
+		long delta = minutesBetween(date, lastAtlDate);
 				
-		if (minutesBetween(date, lastAtlDate) >= 5) {
+		if (delta >= waitRestartTime) {
 			dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
-			aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted");
-			aisTrackPanel.updateAisPanelStatus(minutesBetween(date, lastAtlDate) + " minutes since last atlantic target creation");
+			aisTrackPanel.updateAisPanelStatus("Altantic ships stream restarted at " + dateFormatTime.format(date));
+			aisTrackPanel.updateAisPanelStatus(delta + " minutes since last atlantic target creation");
 			lastAtlDate = date;
 		}		
 
