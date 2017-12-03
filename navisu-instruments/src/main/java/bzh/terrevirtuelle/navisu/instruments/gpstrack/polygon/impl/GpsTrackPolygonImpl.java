@@ -168,13 +168,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
     protected int coldStart2 = 25;        //number of ships to create before starting MED AIS stream
     protected int coldStart3 = 10;        //number of ships to create before getting online ships updates
-    protected int coldStart4 = 350;       //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 550;       //number of ships to create before changing saved areas buffer size again
+    protected int coldStart4 = 550;       //number of ships to create before changing saved areas buffer size
+    protected int coldStart5 = 1050;       //number of ships to create before changing saved areas buffer size again
     protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
     protected int areaHistory = 15;       //number of saved areas on ship creation
     protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
-    protected int waitRestartTime = 5;    //number of minutes since last target to restart ATL AIS stream
+    protected int waitRestartTime = 1;    //number of minutes since last target to restart ATL AIS stream
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
