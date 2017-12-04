@@ -175,6 +175,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
     protected int waitRestartTime = 90;   //number of seconds since last target to restart ATL AIS stream
+    protected int waitRestartTime2 = 180; //number of seconds since last target to restart ATL AIS stream
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -584,6 +585,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
         if (inSight == coldStart5) {
         	areaHistory = areaHistory3;
+        	waitRestartTime = waitRestartTime2;
         	while (lastShipArea.size() >= areaHistory) {
         		String temp3 = lastShipArea.removeFirst();
         	}
