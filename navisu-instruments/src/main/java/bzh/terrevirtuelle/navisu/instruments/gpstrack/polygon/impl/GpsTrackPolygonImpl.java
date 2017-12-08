@@ -153,6 +153,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected LinkedList<String> lastShipArea;
     protected LinkedList<String> lastShipAreaUpdate;
     protected Date lastAtlDate;
+    protected Date lastReceptionDate;
+    protected boolean isTimerOn;
+    protected Timer t;
     protected MeasureTool dmp;
     protected RenderableLayer dmpLayer;
     protected MeasureToolController dmpController;
@@ -470,6 +473,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             wwd.getInputHandler().addMouseMotionListener(mma1);
             
             startTime = new Date();
+            lastReceptionDate = startTime;
+            isTimerOn = false;
             readShips();
             addPanelController();
             
@@ -561,14 +566,43 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
       playSound2();
         
     }
+    
+    private class MonAction extends TimerTask {
+
+		public void run() {
+			Date date = new Date();
+			if (secondsBetween(date, lastReceptionDate) > 10) {
+				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
+				System.err.println("restart");
+			} else {
+				System.out.println(ANSI_GREEN + "good" + ANSI_RESET);
+				//t.cancel();
+				//isTimerOn = false;
+			}
+		}
+	}
 
     private void createTarget(Ship target) {
         
         boolean shipExists = false;
         Date date = new Date();
+        
+		if (target.getLatitude() > 45.9) {
+			lastReceptionDate = date;// atl
+		}
+		
         inSight++;
         
         aisTrackPanel.updateAisPanelShips(dateFormatTime.format(date), inSight);
+        
+        //-------------------------------------------------------------
+        
+        if (!isTimerOn) {
+        	isTimerOn = true;
+        	System.out.println("timer on");
+        	t = new Timer();
+        	t.scheduleAtFixedRate(new MonAction(), 5*1000, 10*1000);
+        }
         
         //-------------------------------------------------------------
         
@@ -810,7 +844,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					updateMessages++;
 					lastUpdateDate.set(i, date);
 					
-					if (updateMessages % 100 == 0) {
+					if (updateMessages % 25 == 0) {
 						//aisTrackPanel.updateAisPanelStatus(updateMessages + " online position updates");
 						int onlineUpdatedShips;
 						int notUpdated = 0;

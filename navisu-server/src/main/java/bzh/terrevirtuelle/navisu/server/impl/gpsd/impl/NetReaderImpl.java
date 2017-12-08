@@ -27,6 +27,16 @@ public class NetReaderImpl
     
     protected int countAtl = 0;
 	protected int countMed = 0;
+	
+    protected static final String ANSI_RESET = "\u001B[0m";
+    protected static final String ANSI_BLACK = "\u001B[30m";
+    protected static final String ANSI_RED = "\u001B[31m";
+    protected static final String ANSI_GREEN = "\u001B[32m";
+    protected static final String ANSI_YELLOW = "\u001B[33m";
+    protected static final String ANSI_BLUE = "\u001B[34m";
+    protected static final String ANSI_PURPLE = "\u001B[35m";
+    protected static final String ANSI_CYAN = "\u001B[36m";
+    protected static final String ANSI_WHITE = "\u001B[37m";
     
     public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
         vertx.createNetClient().connect(port, hostname, (AsyncResultHandler<NetSocket>) new AsyncResultHandler<NetSocket>() {
@@ -41,14 +51,14 @@ public class NetReaderImpl
 								if (source.contains("tcp://data.aishub.net:4299")) {
 									countAtl++;
 									if (countAtl % 50 == 0) {
-										System.out.println("atl");
+										System.out.println(ANSI_PURPLE + "atl" + ANSI_RESET);
 									}
 								}
 
 								if (source.contains("tcp://data.aishub.net:4572")) {
 									countMed++;
 									if (countMed % 50 == 0) {
-										System.out.println("med");
+										System.out.println(ANSI_BLUE + "med" + ANSI_RESET);
 									}
 								}
                         
