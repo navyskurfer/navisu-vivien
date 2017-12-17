@@ -169,8 +169,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long updateInterval = 360;  //number of minutes within ships positions are not updated
     protected long updateInterval2 = 180; //number of seconds for online ship updates
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
-    protected int coldStart2 = 1;        //number of ships to create before starting MED AIS stream
-    protected int coldStart3 = 1;        //number of ships to create before getting online ships updates
+    protected int coldStart2 = 25;        //number of ships to create before starting MED AIS stream
+    protected int coldStart3 = 25;        //number of ships to create before getting online ships updates
     protected int coldStart4 = 550;       //number of ships to create before changing saved areas buffer size
     protected int coldStart5 = 1050;      //number of ships to create before changing saved areas buffer size again
     protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
@@ -179,6 +179,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
     protected int waitRestartTime = 90;   //number of seconds since last target to restart ATL AIS stream
     protected int waitRestartTime2 = 180; //number of seconds since last target to restart ATL AIS stream
+    protected int delayAtl = 30;          //number of seconds to restart AIS stream (timer)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -565,6 +566,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
       //dataServerServices.openGpsd("http://hd-sf.com", 9009);
       
       playSound2();
+      
+      if (!isTimerOn) {
+      	isTimerOn = true;
+      	System.out.println("timer on");
+      	t = new Timer();
+      	t.scheduleAtFixedRate(new MonAction(), 5*1000, 10*1000);
+      }
         
     }
     
@@ -572,11 +580,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		public void run() {
 			Date date = new Date();
-			if (secondsBetween(date, lastReceptionDate) > 10) {
+			long delay = secondsBetween(date, lastReceptionDate);
+			if (delay > delayAtl) {
 				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
-				System.err.println("restart");
+				System.err.println("restart (delay : " + delay + ")" );
 			} else {
-				System.out.println(ANSI_GREEN + "good" + ANSI_RESET);
+				System.out.println(ANSI_GREEN + "good (delay : " + delay + ")" + ANSI_RESET);
 				//t.cancel();
 				//isTimerOn = false;
 			}
@@ -598,12 +607,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
         //-------------------------------------------------------------
         
-        if (!isTimerOn) {
-        	isTimerOn = true;
-        	System.out.println("timer on");
-        	t = new Timer();
-        	t.scheduleAtFixedRate(new MonAction(), 5*1000, 10*1000);
-        }
+//        if (!isTimerOn) {
+//        	isTimerOn = true;
+//        	System.out.println("timer on");
+//        	t = new Timer();
+//        	t.scheduleAtFixedRate(new MonAction(), 5*1000, 10*1000);
+//        }
         
         //-------------------------------------------------------------
         
@@ -668,6 +677,18 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
 		//-------------------------------------------
 		
+        if (inSight == 2000) {
+        	delayAtl = 2*delayAtl;
+        	System.out.println(ANSI_YELLOW + "========== delay set to " + delayAtl + " ==========" + ANSI_RESET);
+        }
+        
+        if (inSight == 4000) {
+        	delayAtl = 2*delayAtl;
+        	System.out.println(ANSI_YELLOW + "========== delay set to " + delayAtl + " ==========" + ANSI_RESET);
+        }
+        
+        //-------------------------------------------
+        	
         int indice = -1;
         
         for (int i = 0; i < aisShips.size(); i++) {
