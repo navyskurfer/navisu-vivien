@@ -179,7 +179,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
     protected int waitRestartTime = 90;   //number of seconds since last target to restart ATL AIS stream
     protected int waitRestartTime2 = 180; //number of seconds since last target to restart ATL AIS stream
-    protected int delayAtl = 30;          //number of seconds to restart AIS stream (timer)
+    protected int delayAtl = 10;          //number of seconds to restart AIS stream (timer)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -677,13 +677,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
 		//-------------------------------------------
 		
-        if (inSight == 2000) {
+        if (inSight == 4000) {
         	delayAtl = 2*delayAtl;
         	System.out.println(ANSI_YELLOW + "========== delay set to " + delayAtl + " ==========" + ANSI_RESET);
         }
         
-        if (inSight == 4000) {
-        	delayAtl = 2*delayAtl;
+        if (inSight == 6000) {
+        	delayAtl = 3*delayAtl;
         	System.out.println(ANSI_YELLOW + "========== delay set to " + delayAtl + " ==========" + ANSI_RESET);
         }
         
@@ -1705,6 +1705,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     public void polyShapeOn() {
         measureTool.setMeasureShapeType(MeasureTool.SHAPE_POLYGON);
         aisTrackPanel.updateAisPanelStatus("Polygon shape activated");
+        
         dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
     }
 
@@ -1712,6 +1713,23 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     public void ellipseShapeOn() {
         measureTool.setMeasureShapeType(MeasureTool.SHAPE_ELLIPSE);
         aisTrackPanel.updateAisPanelStatus("Ellipse shape activated");
+        
+		saveShips();
+		nbSave++;
+		Date now = new Date();
+		long diff = now.getTime() - startTime.getTime();
+		long diffSeconds = diff / 1000 % 60;
+		long diffMinutes = diff / (60 * 1000) % 60;
+		long diffHours = diff / (60 * 60 * 1000) % 24;
+		long diffDays = diff / (60 * 60 * 1000) / 24;
+
+		aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
+		aisTrackPanel.updateAisPanelStatus(
+				posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
+		aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
+				+ diffMinutes + " minutes " + diffSeconds + " seconds");
+		aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
+				nbNamesDB + nbNamesReceived);
     }
 
     @Override
