@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Formatter;
@@ -53,6 +54,7 @@ public class DataServerImpl
     private int port;
     private String hostName;
     private List<Reader> readers;
+    private List<Reader> netReaders;
     private List<CircularFifoQueue<String>> sentenceQueues;
     private int readerIndex = 0;
     private int currentReaderIndex = 0;
@@ -65,6 +67,7 @@ public class DataServerImpl
     public void componentInitiated() {
         properties = new Properties();
         readers = new ArrayList<>();
+        netReaders = new ArrayList<>();
         sentenceQueues = new ArrayList<>();
         try {
             properties.load(new FileInputStream("properties/server.properties"));
@@ -157,6 +160,7 @@ public class DataServerImpl
     public void openGpsd(String hostname, int port) {
         netReader = new NetReaderImpl(readerIndex, vertx, hostname, port);
         readers.add(netReader);
+        netReaders.add(netReader);
         initEventBus();
     }
 
@@ -214,6 +218,24 @@ public class DataServerImpl
     public void openHttpServer(String hostname, int port) {
         HttpServer httpserver = new HttpServer(vertx, hostname, port);
     }
+
+	@Override
+	public Date getAtlDate() {
+		Date result = null;
+		for (Reader r : netReaders) {
+			if (r.getAtlDate() != null) {result = r.getAtlDate();}
+		}
+		return result;
+	}
+
+	@Override
+	public Date getMedDate() {
+		Date result = null;
+		for (Reader r : netReaders) {
+			if (r.getMedDate() != null) {result = r.getMedDate();}
+		}
+		return result;
+	}
 }
 
 class MyFormatter extends Formatter {

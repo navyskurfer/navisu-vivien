@@ -1,6 +1,8 @@
 package bzh.terrevirtuelle.navisu.server;
 
 import java.io.StringWriter;
+import java.util.Date;
+
 import org.capcaval.c3.component.ComponentService;
 
 /**
@@ -15,6 +17,8 @@ public interface DataServerServices
     public void init();
     public void init(String hostName, int port);
     public void openGpsd(String hostName, int port);
+    public Date getAtlDate();
+    public Date getMedDate();
     public void openSerialPort();
     public void openSerialPort(String portName, int baudRate, int dataBits, int stopBits, int parity);
     public void openFile();

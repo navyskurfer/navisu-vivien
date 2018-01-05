@@ -181,7 +181,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int waitRestartTime = 90;   //number of seconds since last target to restart ATL AIS stream
     protected int waitRestartTime2 = 180; //number of seconds since last target to restart ATL AIS stream
     protected int delayAtl = 15;          //number of seconds to restart ATL AIS stream (timer)
-    protected int delayMed = 60;          //number of seconds to restart MED AIS stream (timer)
+    protected int delayMed = 15;          //number of seconds to restart MED AIS stream (timer)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -583,6 +583,15 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		public void run() {
 			Date date = new Date();
+			
+			if (dataServerServices.getAtlDate() != null) {
+				lastReceptionDateAtl = dataServerServices.getAtlDate();
+				}
+			
+			if (dataServerServices.getMedDate() != null) {
+				lastReceptionDateMed = dataServerServices.getMedDate();
+				}
+
 			long delayAtlCalculated = secondsBetween(date, lastReceptionDateAtl);
 			long delayMedCalculated = secondsBetween(date, lastReceptionDateMed);
 			if (delayAtlCalculated > delayAtl) {
@@ -590,6 +599,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				System.err.println("restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
 			} else {
 				System.out.println(ANSI_GREEN + "ATL stream OK (delay : " + delayAtlCalculated + ")" + ANSI_RESET);
+//				if (dataServerServices.getAtlDate() != null) {
+//					System.err.println(dateFormatTime.format(dataServerServices.getAtlDate()));
+//					}
 				// t.cancel();
 				// isTimerOn = false;
 			}
@@ -599,6 +611,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				System.err.println("restart MED AIS stream (delay : " + delayMedCalculated + ")");
 			} else {
 				System.out.println(ANSI_GREEN + "MED stream OK (delay : " + delayMedCalculated + ")" + ANSI_RESET);
+//				if (dataServerServices.getMedDate() != null) {
+//					System.err.println(dateFormatTime.format(dataServerServices.getMedDate()));
+//					}
 				// t.cancel();
 				// isTimerOn = false;
 			}
@@ -610,11 +625,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         boolean shipExists = false;
         Date date = new Date();
         
-		if (target.getLatitude() > 45.9) {
-			lastReceptionDateAtl = date;// atl
-		} else {
-			lastReceptionDateMed = date;
-		}
+//		if (target.getLatitude() > 45.9) {
+//			lastReceptionDateAtl = date;// atl
+//		} else {
+//			lastReceptionDateMed = date;
+//		}
 		
         inSight++;
         
@@ -692,26 +707,26 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
 		//-------------------------------------------
 		
-        if (inSight == 2000) {
-        	delayAtl = 2*delayAtl;
-        	delayMed = 2*delayMed;
-        	System.err.println("========== ATL delay set to " + delayAtl + " ==========");
-        	System.err.println("========== MED delay set to " + delayMed + " ==========");
-        }
-        
-        if (inSight == 4000) {
-        	delayAtl = 2*delayAtl;
-        	delayMed = 2*delayMed;
-        	System.err.println("========== ATL delay set to " + delayAtl + " ==========");
-        	System.err.println("========== MED delay set to " + delayMed + " ==========");
-        }
-        
-        if (inSight == 6000) {
-        	delayAtl = 3*delayAtl;
-        	delayMed = 2*delayMed;
-        	System.err.println("========== ATL delay set to " + delayAtl + " ==========");
-        	System.err.println("========== MED delay set to " + delayMed + " ==========");
-        }
+//        if (inSight == 2000) {
+//        	delayAtl = 2*delayAtl;
+//        	delayMed = 2*delayMed;
+//        	System.err.println("========== ATL delay set to " + delayAtl + " ==========");
+//        	System.err.println("========== MED delay set to " + delayMed + " ==========");
+//        }
+//        
+//        if (inSight == 4000) {
+//        	delayAtl = 2*delayAtl;
+//        	delayMed = 2*delayMed;
+//        	System.err.println("========== ATL delay set to " + delayAtl + " ==========");
+//        	System.err.println("========== MED delay set to " + delayMed + " ==========");
+//        }
+//        
+//        if (inSight == 6000) {
+//        	delayAtl = 3*delayAtl;
+//        	delayMed = 2*delayMed;
+//        	System.err.println("========== ATL delay set to " + delayAtl + " ==========");
+//        	System.err.println("========== MED delay set to " + delayMed + " ==========");
+//        }
         
         //-------------------------------------------
         	

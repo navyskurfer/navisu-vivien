@@ -5,6 +5,8 @@
  */
 package bzh.terrevirtuelle.navisu.server.impl.gpsd.impl;
 
+import java.util.Date;
+
 import javax.print.attribute.standard.Media;
 
 import org.capcaval.c3.component.annotation.UsedService;
@@ -28,6 +30,9 @@ public class NetReaderImpl
     protected int countAtl = 0;
 	protected int countMed = 0;
 	
+	protected Date dateAtl;
+	protected Date dateMed;
+	
     protected static final String ANSI_RESET = "\u001B[0m";
     protected static final String ANSI_BLACK = "\u001B[30m";
     protected static final String ANSI_RED = "\u001B[31m";
@@ -50,6 +55,7 @@ public class NetReaderImpl
                       
 								if (source.contains("tcp://data.aishub.net:4299")) {
 									countAtl++;
+									dateAtl = new Date();
 									if (countAtl % 50 == 0) {
 										System.out.println(ANSI_PURPLE + "atl" + ANSI_RESET);
 									}
@@ -57,6 +63,7 @@ public class NetReaderImpl
 
 								if (source.contains("tcp://data.aishub.net:4572")) {
 									countMed++;
+									dateMed = new Date();
 									if (countMed % 50 == 0) {
 										System.out.println(ANSI_BLUE + "med" + ANSI_RESET);
 									}
@@ -87,6 +94,14 @@ public class NetReaderImpl
     @Override
     public String getData() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Date getAtlDate() {
+    	return dateAtl;
+    }
+    
+    public Date getMedDate() {
+    	return dateMed;
     }
 
 }

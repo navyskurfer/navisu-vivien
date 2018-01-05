@@ -5,6 +5,8 @@
  */
 package bzh.terrevirtuelle.navisu.server.impl;
 
+import java.util.Date;
+
 /**
  *
  * @author Serge
@@ -14,5 +16,8 @@ public interface Reader {
     public void read();
 
     public String getData();
+
+	public Date getAtlDate();
+	public Date getMedDate();
 
 }
