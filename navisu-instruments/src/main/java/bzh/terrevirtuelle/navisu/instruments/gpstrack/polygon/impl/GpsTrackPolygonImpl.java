@@ -180,8 +180,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
     protected int waitRestartTime = 90;   //number of seconds since last target to restart ATL AIS stream
     protected int waitRestartTime2 = 180; //number of seconds since last target to restart ATL AIS stream
-    protected int delayAtl = 5;           //number of seconds to restart ATL AIS stream (timer)
-    protected int delayMed = 5;           //number of seconds to restart MED AIS stream (timer)
+    protected int delayAtl = 15;           //number of seconds to restart ATL AIS stream (timer)
+    protected int delayMed = 15;           //number of seconds to restart MED AIS stream (timer)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected int inSight = 0;
     protected int posUpdates = 0;
@@ -597,6 +597,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			if (delayAtlCalculated > delayAtl) {
 				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
 				System.err.println("restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
+				lastReceptionDateAtl.setTime(date.getTime() + 30*1000);
 			} else {
 				System.out.println(ANSI_GREEN + "ATL stream OK (delay : " + delayAtlCalculated + ")" + ANSI_RESET);
 //				if (dataServerServices.getAtlDate() != null) {
@@ -609,6 +610,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			if (delayMedCalculated > delayMed) {
 				dataServerServices.openGpsd("5.39.78.33", 2948);// méditerranée
 				System.err.println("restart MED AIS stream (delay : " + delayMedCalculated + ")");
+				lastReceptionDateMed.setTime(date.getTime() + 30*1000);
 			} else {
 				System.out.println(ANSI_GREEN + "MED stream OK (delay : " + delayMedCalculated + ")" + ANSI_RESET);
 //				if (dataServerServices.getMedDate() != null) {
