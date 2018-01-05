@@ -6,6 +6,8 @@
 package bzh.terrevirtuelle.navisu.server.impl.file.impl;
 
 import bzh.terrevirtuelle.navisu.server.impl.file.FileReader;
+
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.vertx.java.core.AsyncResult;
@@ -57,5 +59,17 @@ public class FileReaderImpl
     public String getData() {
         return null;
     }
+
+	@Override
+	public Date getAtlDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Date getMedDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

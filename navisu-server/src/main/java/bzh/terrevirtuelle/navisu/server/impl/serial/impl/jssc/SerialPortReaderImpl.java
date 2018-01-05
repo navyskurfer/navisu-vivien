@@ -8,6 +8,7 @@ package bzh.terrevirtuelle.navisu.server.impl.serial.impl.jssc;
 import bzh.terrevirtuelle.navisu.server.impl.serial.SerialPortReader;
 import jssc.*;
 
+import java.util.Date;
 import java.util.logging.Level;
 import org.vertx.java.core.Vertx;
 
@@ -89,4 +90,16 @@ public class SerialPortReaderImpl
     public String getData() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+	@Override
+	public Date getAtlDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Date getMedDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
