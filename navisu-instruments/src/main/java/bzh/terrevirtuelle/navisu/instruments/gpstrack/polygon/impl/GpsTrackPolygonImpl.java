@@ -167,7 +167,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
-    protected long updateInterval = 360;  //number of minutes within ships positions are not updated
+    protected long updateInterval = 30;   //number of minutes within ships positions are not updated
     protected long updateInterval2 = 180; //number of seconds for online ship updates
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
     protected int coldStart2 = 25;        //number of ships to create before starting MED AIS stream
@@ -186,6 +186,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int inSight = 0;
     protected int posUpdates = 0;
     protected int lastUpdateIndex = -1;
+    protected int onlineDBupdate = 0;
     protected LinkedList<ArrayList<Position>> savedPolygons;
     protected MeasureTool pmt;
     protected MeasureToolController pmtc;
@@ -909,6 +910,24 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					updateMessages++;
 					lastUpdateDate.set(i, date);
 					
+					if (shipMatrix[4][i] == null || shipMatrix[4][i].equals(null) || shipMatrix[4][i].equals("")) {
+						updateCreatedTargetDB(target, i);
+						onlineDBupdate++;
+					} else {
+						try {
+							if (inSight > coldStart1 && minutesBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][i]), shipMatrix[5][i])) > updateInterval) {
+								updateCreatedTargetDB(target, i);
+								onlineDBupdate++;
+							}
+						} catch (ParseException e) {
+							System.err.println("Date parse exception : " + aisShips.get(i).getMMSI() + " / " + aisShips.get(i).getName()+ " / " +shipMatrix[4][i]);
+							aisTrackPanel.updateAisPanelStatus("Date parse exception :");
+							aisTrackPanel.updateAisPanelStatus(aisShips.get(i).getMMSI() + "/" + aisShips.get(i).getName()+ "/" +shipMatrix[4][i]);
+							updateCreatedTargetDB(target, i);
+							onlineDBupdate++;
+						}
+					}
+					
 					if (updateMessages % 25 == 0) {
 						//aisTrackPanel.updateAisPanelStatus(updateMessages + " online position updates");
 						int onlineUpdatedShips;
@@ -1006,7 +1025,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		posUpdates++;
 		
 		if (posUpdates % 50 == 0) {
-			aisTrackPanel.updateAisPanelStatus(posUpdates + " position updates");
+			aisTrackPanel.updateAisPanelStatus((posUpdates-onlineDBupdate) + " position updates (on ship creation)");
+			aisTrackPanel.updateAisPanelStatus(onlineDBupdate + " position updates (on ship update)");
 		}
 
 		if (posUpdates % 100 == 0) {
