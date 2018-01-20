@@ -51,7 +51,7 @@ import javax.sound.sampled.Clip;
 
 import java.io.*;
 import sun.audio.*;
-
+import test.test2components.numberproducer.NumberProducerService;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
@@ -166,6 +166,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
+    public int maxTarget;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     protected long updateInterval = 30;   //number of minutes within ships positions are not updated
     protected long updateInterval2 = 180; //number of seconds for online ship updates
@@ -255,6 +256,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     @Override
     public void componentInitiated() {
 
+        maxTarget = 0;
         watchedShip = new Ship();
         watchedShip.setMMSI(999999998);
         watchedShip.setName("PLASTRON2");
@@ -840,6 +842,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
             aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
             aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
+            aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
         }
         
     }
@@ -959,6 +962,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 								+ diffMinutes + " minutes " + diffSeconds + " seconds");
 						aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 								nbNamesDB + nbNamesReceived);
+						aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
 					}
 					
 					if (aisPath.get(i) != null) {
@@ -1046,6 +1050,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 					nbNamesDB + nbNamesReceived);
+			aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
 		}
 	}
 
@@ -1793,6 +1798,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				+ diffMinutes + " minutes " + diffSeconds + " seconds");
 		aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
 				nbNamesDB + nbNamesReceived);
+		aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
     }
 
     @Override
@@ -1960,6 +1966,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                             aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
                             aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
                             aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
+                            aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
                         }
 
                 	} else {
@@ -2009,6 +2016,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                     aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
                     aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
                     aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
+                    aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
                 }
             }
             aisShips.add(aisShip);
@@ -2048,6 +2056,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 }
                 writer.write("\r\n");
             }
+            
+            calculateMaxTarget();
+            saveMaxTarget();
 
         } catch (IOException ex) {
             // report
@@ -2114,7 +2125,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 }
             }
         }
-        for (Ship s : aisShips) {lastUpdateDate.add(startTime);}
+        for (Ship s : aisShips) {
+        	lastUpdateDate.add(startTime);
+        	}
+        loadMaxTarget();
+        //aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
     }
 
     private void addPanelController() {
@@ -2134,6 +2149,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
             aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), 0, aisShips.size(), nbNamesDB);
             aisTrackPanel.updateAisPanelStatus("Reading file done (" + aisShips.size() + " ships / " + nbNamesDB + " names in database)");
+            aisTrackPanel.updateAisPanelStatus("Max target successfully loaded : " + maxTarget);
         });
 
     }
@@ -2220,5 +2236,79 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			}
 		}
 	}
+	
+	public void loadMaxTarget() {
+		// chargement du maxTarget sauvegardé
+		String csvFile = "data/saved/savedMaxTarget.csv";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ";";
+		int resu = 0;
+
+		try {
+
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+				// use separator
+				String[] numbers = line.split(cvsSplitBy);
+				// double maxi = Double.parseDouble(numbers[0]);
+				// aisTrackPanel.updateAisPanelStatus("Max target received : " +
+				// maxi);
+				// for (int j = 0; j <= numbers.length - 1; j = j + 1) {
+				// System.out.println(numbers[j]);
+				// System.out.println(Integer.parseInt(numbers[j]));
+				// }
+				try {
+					resu = Integer.parseInt(numbers[0]);
+					maxTarget = resu;
+				} catch (Exception e) {
+					System.out.println("Please enter a number not string");
+				}
+
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
+	public void saveMaxTarget() {
+			// sauvegarde du maxTarget
+            //declare output stream
+            BufferedWriter writer = null;
+
+            try {
+                // open file for writing
+                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/saved/savedMaxTarget.csv"), "utf-8"));
+                //Put data - if needed put the loop around more than orw of records
+                writer.write(maxTarget + ";" + "\r\n");
+            } catch (IOException ex) {
+                // report
+            } finally {
+                //close file
+                try {
+                    writer.close();
+                } catch (Exception ex) {
+                }
+            }
+    }
+	
+	public void calculateMaxTarget () {
+		if (inSight > maxTarget) {
+			maxTarget = inSight;
+		}
+	}
+	
 
 }
