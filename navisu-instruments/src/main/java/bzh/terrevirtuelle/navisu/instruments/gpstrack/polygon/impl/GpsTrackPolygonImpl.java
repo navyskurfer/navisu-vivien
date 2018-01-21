@@ -167,6 +167,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
     protected int maxTarget;
+    protected String dayMaxTarget;
+    protected String hourMaxTarget;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     protected long updateInterval = 30;   //number of minutes within ships positions are not updated
     protected long updateInterval2 = 180; //number of seconds for online ship updates
@@ -2148,7 +2150,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
             aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), 0, aisShips.size(), nbNamesDB);
             aisTrackPanel.updateAisPanelStatus("Reading file done (" + aisShips.size() + " ships / " + nbNamesDB + " names in database)");
-            aisTrackPanel.updateAisPanelStatus("Max target successfully loaded : " + maxTarget);
+            aisTrackPanel.updateAisPanelStatus("Max target successfully loaded : " + maxTarget + " on " + dayMaxTarget + " at " + hourMaxTarget);
         });
 
     }
@@ -2260,6 +2262,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				try {
 					resu = Integer.parseInt(numbers[0]);
 					maxTarget = resu;
+					dayMaxTarget = numbers[1];
+					hourMaxTarget = numbers[2];
 				} catch (Exception e) {
 					System.out.println("Please enter a number not string");
 				}
@@ -2286,12 +2290,15 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			// sauvegarde du maxTarget
             //declare output stream
             BufferedWriter writer = null;
+            Date date = new Date();
+            String day = dateFormatDate.format(date);
+            String hour = dateFormatTime.format(date);
 
             try {
                 // open file for writing
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/saved/savedMaxTarget.csv"), "utf-8"));
                 //Put data - if needed put the loop around more than orw of records
-                writer.write(maxTarget + ";" + "\r\n");
+                writer.write(maxTarget + ";" + day + ";" + hour + ";" + "\r\n");
             } catch (IOException ex) {
                 // report
             } finally {
