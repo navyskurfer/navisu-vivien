@@ -166,7 +166,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean firstDetection = false;
     protected String[][] shipMatrix = new String[6][100000];
     protected long count = 1;
-    public int maxTarget;
+    protected int maxTarget;
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     protected long updateInterval = 30;   //number of minutes within ships positions are not updated
     protected long updateInterval2 = 180; //number of seconds for online ship updates
@@ -2058,7 +2058,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             }
             
             calculateMaxTarget();
-            saveMaxTarget();
 
         } catch (IOException ex) {
             // report
@@ -2307,6 +2306,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 	public void calculateMaxTarget () {
 		if (inSight > maxTarget) {
 			maxTarget = inSight;
+			saveMaxTarget();
 		}
 	}
 	
