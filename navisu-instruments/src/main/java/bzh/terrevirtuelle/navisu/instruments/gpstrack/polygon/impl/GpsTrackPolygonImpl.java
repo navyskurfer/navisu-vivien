@@ -847,7 +847,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             
 			aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
 			aisTrackPanel.updateAisPanelStatus(
-					posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
+					(posUpdates-onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
 			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
@@ -972,7 +972,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 						aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
 						aisTrackPanel.updateAisPanelStatus(
-								posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
+								(posUpdates-onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
 						aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 								+ diffMinutes + " minutes " + diffSeconds + " seconds");
 						aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
@@ -1066,7 +1066,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			// aisShips.size() + " ships in database)" + ANSI_RESET);
 			aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
 			aisTrackPanel.updateAisPanelStatus(
-					posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
+					(posUpdates-onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
 			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
@@ -1819,7 +1819,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
 		aisTrackPanel.updateAisPanelStatus(
-				posUpdates + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
+				(posUpdates-onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
 		aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes
 				+ " minutes " + diffSeconds + " seconds");
 		aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
@@ -1994,7 +1994,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                             long diffDays = diff / (60 * 60 * 1000) / 24;
 
 						aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-						aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived
+						aisTrackPanel.updateAisPanelStatus((posUpdates-onlineDBupdate) + " pos updated / " + nbMmsiReceived
 								+ " new ships / " + nbNamesReceived + " new names");
 						aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 								+ diffMinutes + " minutes " + diffSeconds + " seconds");
@@ -2052,7 +2052,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                     long diffDays = diff / (60 * 60 * 1000) / 24;
 
 					aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-					aisTrackPanel.updateAisPanelStatus(posUpdates + " pos updated / " + nbMmsiReceived + " new ships / "
+					aisTrackPanel.updateAisPanelStatus((posUpdates-onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / "
 							+ nbNamesReceived + " new names");
 					aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 							+ diffMinutes + " minutes " + diffSeconds + " seconds");
