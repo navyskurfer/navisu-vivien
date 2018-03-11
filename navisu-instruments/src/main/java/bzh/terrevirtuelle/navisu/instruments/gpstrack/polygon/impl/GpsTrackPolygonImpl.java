@@ -805,7 +805,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisShips.add(aisShip);
             lastUpdateDate.add(date);
             aisTrackPanel.updateAisPanelMmsi(dateFormatTime.format(date), inSight, target.getMmsi());
-            aisTrackPanel.updateAisPanelStatus("New ship : " + target.getMmsi());
+            //aisTrackPanel.updateAisPanelStatus("New ship : " + target.getMmsi());
             
             shipMatrix[0][aisShips.size() - 1] = Integer.toString(aisShip.getMMSI());
             shipMatrix[1][aisShips.size() - 1] = aisShip.getName();
@@ -1982,7 +1982,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                         if (nbNamesReceived % 10 == 0) {
                         	aisTrackPanel.updateAisPanelStatus(nbNamesReceived + " new name(s) received");
                         	}
-                        aisTrackPanel.updateAisPanelStatus("New name " + target.getName());
+                        //aisTrackPanel.updateAisPanelStatus("New name " + target.getName());
                         
                         if (nbNamesReceived % 20 == 0) {
                         	saveShips();
@@ -2009,7 +2009,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                         }
 
                 	} else {
-                		aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " name already in database (AIS5)"));
+                		//aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " name already in database (AIS5)"));
+                		//ou bien : aisTrackPanel.updateAisPanelStatus(target.getName() + " name already in database");
                 		}
                 
                 shipMatrix[0][i] = Integer.toString(resu.getMMSI());
