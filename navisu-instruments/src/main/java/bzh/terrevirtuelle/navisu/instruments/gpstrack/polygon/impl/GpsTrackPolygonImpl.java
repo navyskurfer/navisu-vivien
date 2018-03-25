@@ -232,6 +232,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int nbMmsiReceived = 0;
     protected int nbNamesReceived = 0;
     protected int nbNamesRetrieved = 0;
+    protected int nbNamesMessages = 0;
     protected int updateMessages = 0;
     protected Date startTime;
     protected int nbNamesDB = 0;
@@ -853,10 +854,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 					nbNamesDB + nbNamesReceived);
 			if (newRecord) {
-				aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " (new record !)");
+				aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
+				aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 				newRecord = false;
 			} else {
-				aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " - last run : " + maxLastRunHisto);
+				aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 			}
         }
         
@@ -978,10 +980,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 								nbNamesDB + nbNamesReceived);
 						if (newRecord) {
-							aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " (new record !)");
+							aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
+							aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 							newRecord = false;
 						} else {
-							aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " - last run : " + maxLastRunHisto);
+							aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 						}
 					}
 					
@@ -1072,10 +1075,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 					nbNamesDB + nbNamesReceived);
 			if (newRecord) {
-				aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " (new record !)");
+				aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
+				aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 				newRecord = false;
 			} else {
-				aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " - last run : " + maxLastRunHisto);
+				aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 			}
 		}
 	}
@@ -1825,10 +1829,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
 				nbNamesDB + nbNamesReceived);
 		if (newRecord) {
-			aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " (new record !)");
+			aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
+			aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 			newRecord = false;
 		} else {
-			aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " - last run : " + maxLastRunHisto);
+			aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 		}
     }
 
@@ -1961,6 +1966,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     	
     	Date date = new Date();
     	boolean shipExistsAis5 = false;
+    	nbNamesMessages++;
         
     	for (int i = 0; i < aisShips.size(); i++) {
             if (aisShips.get(i).getMMSI() == target.getMMSI()) {
@@ -2001,10 +2007,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 								nbNamesDB + nbNamesReceived);
 						if (newRecord) {
-							aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " (new record !)");
+							aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
+							aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 							newRecord = false;
 						} else {
-							aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " - last run : " + maxLastRunHisto);
+							aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 						}
                         }
 
@@ -2060,10 +2067,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					aisTrackPanel.updateAisPanelCount(dateFormatTime.format(date), inSight, aisShips.size(),
 							nbNamesDB + nbNamesReceived);
 					if (newRecord) {
-						aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " (new record !)");
+						aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
+						aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 						newRecord = false;
 					} else {
-						aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget + " - last run : " + maxLastRunHisto);
+						aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
 					}
                 }
             }
@@ -2276,7 +2284,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					target.setShipName(s.getName());
 					nbNamesRetrieved++;
 					//aisTrackPanel.updateAisPanelStatus(s.getName() + " retrieved from database");
-					if (nbNamesRetrieved % 100 == 0) {
+					if (nbNamesRetrieved % 250 == 0) {
 						aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
 					}
 				}
