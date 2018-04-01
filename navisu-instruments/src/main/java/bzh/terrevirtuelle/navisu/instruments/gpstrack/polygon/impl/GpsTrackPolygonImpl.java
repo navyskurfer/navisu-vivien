@@ -37,7 +37,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.TimeZone;
@@ -50,15 +49,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import java.io.*;
-import sun.audio.*;
-import test.test2components.numberproducer.NumberProducerService;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import netscape.security.ForbiddenTargetException;
 import bzh.terrevirtuelle.navisu.app.dpagent.DpAgentServices;
 import bzh.terrevirtuelle.navisu.app.drivers.instrumentdriver.InstrumentDriver;
 import bzh.terrevirtuelle.navisu.app.drivers.instrumentdriver.ZoneDriver;
@@ -70,8 +66,6 @@ import bzh.terrevirtuelle.navisu.client.nmea.controller.events.nmea183.RMCEvent;
 import bzh.terrevirtuelle.navisu.client.nmea.controller.events.nmea183.VTGEvent;
 import bzh.terrevirtuelle.navisu.core.view.geoview.layer.GeoLayer;
 import bzh.terrevirtuelle.navisu.core.view.geoview.worldwind.impl.GeoWorldWindViewImpl;
-import bzh.terrevirtuelle.navisu.domain.nmea.model.NMEA;
-import bzh.terrevirtuelle.navisu.domain.nmea.model.nmea183.GGA;
 import bzh.terrevirtuelle.navisu.domain.ship.model.Ship;
 import bzh.terrevirtuelle.navisu.instruments.ais.base.AisServices;
 import bzh.terrevirtuelle.navisu.instruments.ais.base.impl.controller.events.AisCreateTargetEvent;
@@ -81,8 +75,6 @@ import bzh.terrevirtuelle.navisu.instruments.common.view.targets.GShip;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygon;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygonServices;
 import bzh.terrevirtuelle.navisu.server.DataServerServices;
-import bzh.terrevirtuelle.navisu.server.impl.vertx.DataServerImpl;
-
 import org.capcaval.c3.component.ComponentEventSubscribe;
 import org.capcaval.c3.component.ComponentState;
 import org.capcaval.c3.component.annotation.UsedService;
@@ -174,23 +166,30 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int maxLastRunHisto;
     protected String dayMaxLastRun;
     protected String hourMaxLastRun;
+    
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
-    protected long updateInterval = 30;   //number of minutes within ships positions are not updated
-    protected long updateInterval2 = 180; //number of seconds for online ship updates
+    
+    protected long updateInterval = 15;   //number of minutes within ship position updates are not saved
+    protected long updateInterval2 = 60;  //number of seconds for online ship position updates display
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
-    protected int coldStart2 = 25;        //number of ships to create before starting MED AIS stream
     protected int coldStart3 = 25;        //number of ships to create before getting online ships updates
-    protected int coldStart4 = 550;       //number of ships to create before changing saved areas buffer size
-    protected int coldStart5 = 1050;      //number of ships to create before changing saved areas buffer size again
-    protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
-    protected int areaHistory = 15;       //number of saved areas on ship creation
-    protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
-    protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
-    protected int waitRestartTime = 90;   //number of seconds since last target to restart ATL AIS stream
-    protected int waitRestartTime2 = 180; //number of seconds since last target to restart ATL AIS stream
     protected int delayAtl = 15;          //number of seconds to restart ATL AIS stream (timer)
     protected int delayMed = 15;          //number of seconds to restart MED AIS stream (timer)
+    
+    /////////////////////////////////////////// OLD PARAMETERS ////////////////////////////////////////////////////
+    
+    //protected int coldStart2 = 25;        //number of ships to create before starting MED AIS stream
+    //protected int coldStart4 = 550;       //number of ships to create before changing saved areas buffer size
+    //protected int coldStart5 = 1050;      //number of ships to create before changing saved areas buffer size again
+    //protected int restartFreq = 1;        //number of ship creations before attempting to restart AIS stream
+    //protected int areaHistory = 15;       //number of saved areas on ship creation
+    //protected int areaHistory2 = 10;      //number of saved areas on ship creation after buffer size change
+    //protected int areaHistory3 = 7;       //number of saved areas on ship creation after second buffer size change
+    //protected int waitRestartTime = 90;   //number of seconds since last target to restart ATL AIS stream
+    //protected int waitRestartTime2 = 180; //number of seconds since last target to restart ATL AIS stream
+    
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     protected int inSight = 0;
     protected int posUpdates = 0;
     protected int lastUpdateIndex = -1;
