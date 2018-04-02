@@ -169,8 +169,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     
-    protected long updateInterval = 15;   //number of minutes within ship position updates are not saved
-    protected long updateInterval2 = 60;  //number of seconds for online ship position updates display
+    protected long updateInterval = 10;   //number of minutes within ship position updates are not saved
+    protected long updateInterval2 = 30;  //number of seconds for online ship position updates display
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
     protected int coldStart3 = 25;        //number of ships to create before getting online ships updates
     protected int delayAtl = 15;          //number of seconds to restart ATL AIS stream (timer)
@@ -901,7 +901,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //		}		
 
 		for (int i = 0; i < aisShips.size(); i++) {
-			if (aisShips.get(i).getMMSI() == target.getMmsi() && (secondsBetween(date, lastUpdateDate.get(i)) > updateInterval2 || secondsBetween(lastUpdateDate.get(i), startTime) < 3)) {
+			if (aisShips.get(i).getMMSI() == target.getMmsi() && secondsBetween(date, lastUpdateDate.get(i)) > updateInterval2) {
 				//System.out.println(target.getMmsi());
 					//aisTrackPanel.updateAisPanelStatus(target.getMmsi() + "-online update: " + secondsBetween(date, lastUpdateDate.get(i)) + " seconds");
 					updateMessages++;
@@ -2048,9 +2048,26 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 }
             }
         }
-        for (Ship s : aisShips) {
-        	lastUpdateDate.add(startTime);
-        	}
+        
+		Date echantillon = new Date();
+		echantillon.setTime(0);
+        //System.out.println(echantillon);
+        
+		for (Ship s : aisShips) {
+			int indice = 0;
+			if (shipMatrix[4][indice] != null && shipMatrix[5][indice] != null) {
+				try {
+					lastUpdateDate.add(convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					System.err.println("Date parse exception");
+					lastUpdateDate.add(echantillon);
+				}
+			} else {
+				lastUpdateDate.add(echantillon);
+			}
+			indice++;
+		}
         loadMaxTarget();
         //aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
     }
