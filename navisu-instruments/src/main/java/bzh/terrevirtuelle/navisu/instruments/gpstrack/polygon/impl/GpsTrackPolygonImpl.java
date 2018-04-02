@@ -169,8 +169,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     
-    protected long updateInterval = 10;   //number of minutes within ship position updates are not saved
-    protected long updateInterval2 = 30;  //number of seconds for online ship position updates display
+    protected long updateInterval = 15;   //number of minutes within ship position updates are not saved
+    protected long updateInterval2 = 45;  //number of seconds for online ship position updates display
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
     protected int coldStart3 = 25;        //number of ships to create before getting online ships updates
     protected int delayAtl = 15;          //number of seconds to restart ATL AIS stream (timer)
