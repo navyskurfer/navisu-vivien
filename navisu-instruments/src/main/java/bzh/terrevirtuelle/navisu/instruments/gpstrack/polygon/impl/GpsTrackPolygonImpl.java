@@ -166,6 +166,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int maxLastRunHisto;
     protected String dayMaxLastRun;
     protected String hourMaxLastRun;
+    protected float maxRatio;
+    protected String dayMaxRatio;
+    protected String hourMaxRatio;
     
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     
@@ -936,7 +939,15 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						}
 						onlineUpdatedShips = lastUpdateDate.size()-notUpdated;
 						float percent = (onlineUpdatedShips * 100.0f) / inSight;
+						if (percent > maxRatio) {
+							maxRatio = percent;
+							Date now = new Date();
+							dayMaxRatio = dateFormatDate.format(now);
+							hourMaxRatio = dateFormatTime.format(now);
+							saveMaxLastRun();
+							}
 						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + inSight + " in sight (ratio : " + String.format ("%.1f", percent) + "%)");
+						aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%");
 					}
 
 					if (updateMessages % 250 == 0) {
@@ -2091,6 +2102,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisTrackPanel.updateAisPanelStatus("Reading file done (" + aisShips.size() + " ships / " + nbNamesDB + " names)");
             aisTrackPanel.updateAisPanelStatus("In sight record : " + maxTarget + " (" + dayMaxTarget + " - " + hourMaxTarget + ")");
             aisTrackPanel.updateAisPanelStatus("Last run : " + maxLastRun + " (" + dayMaxLastRun + " - " + hourMaxLastRun + ")");
+            aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%" + " (" + dayMaxRatio + " - " + hourMaxRatio + ")");
         });
 
     }
@@ -2207,6 +2219,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					maxLastRunHisto = maxLastRun;
 					dayMaxLastRun = numbers[4];
 					hourMaxLastRun = numbers[5];
+					maxRatio = Integer.parseInt(numbers[6]);
+					dayMaxRatio = numbers[7];
+					hourMaxRatio = numbers[8];
 				} catch (Exception e) {
 					System.out.println("Please enter a number not string");
 				}
@@ -2241,7 +2256,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 // open file for writing
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/saved/savedMaxTarget.csv"), "utf-8"));
                 //Put data - if needed put the loop around more than orw of records
-                writer.write(maxTarget + ";" + day + ";" + hour + ";" + maxTarget + ";" + day + ";" + hour + ";" + "\r\n");
+                writer.write(maxTarget + ";" + day + ";" + hour + ";" + maxTarget + ";" + day + ";" + hour + ";" + maxRatio + ";" + dayMaxRatio + ";" + hourMaxRatio + ";" + "\r\n");
             } catch (IOException ex) {
                 // report
             } finally {
@@ -2262,7 +2277,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             // open file for writing
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/saved/savedMaxTarget.csv"), "utf-8"));
             //Put data - if needed put the loop around more than orw of records
-            writer.write(maxTarget + ";" + dayMaxTarget + ";" + hourMaxTarget + ";" + maxLastRun + ";" + dayMaxLastRun + ";" + hourMaxLastRun + ";" + "\r\n");
+            writer.write(maxTarget + ";" + dayMaxTarget + ";" + hourMaxTarget + ";" + maxLastRun + ";" + dayMaxLastRun + ";" + hourMaxLastRun + ";" + maxRatio + ";" + dayMaxRatio + ";" + hourMaxRatio + ";" + "\r\n");
         } catch (IOException ex) {
             // report
         } finally {
