@@ -947,7 +947,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 							saveMaxLastRun();
 							}
 						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + inSight + " in sight (ratio : " + String.format ("%.1f", percent) + "%)");
-						aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%");
+						aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%" + " (" + dayMaxRatio + " - " + hourMaxRatio + ")");
 					}
 
 					if (updateMessages % 250 == 0) {
@@ -2219,7 +2219,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					maxLastRunHisto = maxLastRun;
 					dayMaxLastRun = numbers[4];
 					hourMaxLastRun = numbers[5];
-					maxRatio = Integer.parseInt(numbers[6]);
+					maxRatio = Float.parseFloat(numbers[6]);
 					dayMaxRatio = numbers[7];
 					hourMaxRatio = numbers[8];
 				} catch (Exception e) {
