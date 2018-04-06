@@ -169,6 +169,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected float maxRatio;
     protected String dayMaxRatio;
     protected String hourMaxRatio;
+    protected boolean maxRatioRecord = false;
     
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     
@@ -940,14 +941,20 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						onlineUpdatedShips = lastUpdateDate.size()-notUpdated;
 						float percent = (onlineUpdatedShips * 100.0f) / inSight;
 						if (percent > maxRatio) {
+							maxRatioRecord = true;
 							maxRatio = percent;
 							Date now = new Date();
 							dayMaxRatio = dateFormatDate.format(now);
 							hourMaxRatio = dateFormatTime.format(now);
 							saveMaxLastRun();
 							}
+						else {
+							maxRatioRecord = false;
+							}
 						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + inSight + " in sight (ratio : " + String.format ("%.1f", percent) + "%)");
-						aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%" + " (" + dayMaxRatio + " - " + hourMaxRatio + ")");
+						if (!maxRatioRecord) {
+							aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%" + " (" + dayMaxRatio + " - " + hourMaxRatio + ")");
+							}
 					}
 
 					if (updateMessages % 250 == 0) {
