@@ -929,7 +929,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						}
 					}
 					
-					if (updateMessages % 25 == 0) {
+					if (updateMessages % 100 == 0) {
 						//aisTrackPanel.updateAisPanelStatus(updateMessages + " online position updates");
 						int onlineUpdatedShips;
 						int notUpdated = 0;
