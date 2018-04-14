@@ -930,19 +930,15 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					}
 					
 					if (updateMessages % 100 == 0) {
-						//aisTrackPanel.updateAisPanelStatus(updateMessages + " online position updates");
-						int onlineUpdatedShips;
-						int notUpdated = 0;
-						for (Date d : lastUpdateDate) {
-							if (secondsBetween(d, startTime) < 3) {
-								notUpdated++;
-							}
-						}
-						onlineUpdatedShips = lastUpdateDate.size()-notUpdated;
+						
+						int onlineUpdatedShips = computeUpdatedTarget();
+						
 						float percent = (onlineUpdatedShips * 100.0f) / inSight;
-						if (percent > maxRatio) {
+						float percent2 = (onlineUpdatedShips * 100.0f) / aisShips.size();
+						
+						if (percent2 > maxRatio) {
 							maxRatioRecord = true;
-							maxRatio = percent;
+							maxRatio = percent2;
 							Date now = new Date();
 							dayMaxRatio = dateFormatDate.format(now);
 							hourMaxRatio = dateFormatTime.format(now);
@@ -951,7 +947,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						else {
 							maxRatioRecord = false;
 							}
+						
 						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + inSight + " in sight (ratio : " + String.format ("%.1f", percent) + "%)");
+						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + aisShips.size() + " in database (ratio : " + String.format ("%.1f", percent2) + "%)");
+						
 						if (!maxRatioRecord) {
 							aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%" + " (" + dayMaxRatio + " - " + hourMaxRatio + ")");
 							}
@@ -2309,6 +2308,21 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			hourMaxLastRun = dateFormatTime.format(date);
 			saveMaxLastRun();
 		}
+	}
+	
+	public int computeUpdatedTarget() {
+		
+		int notUpdated = 0;
+		
+		for (Date d : lastUpdateDate) {
+			if (secondsBetween(d, startTime) < 0) {
+				notUpdated++;
+			}
+		}
+		
+		int resu = lastUpdateDate.size()-notUpdated;
+		
+		return resu;
 	}
 	
 	public void saveData() {
