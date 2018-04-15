@@ -32,10 +32,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.CharBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -948,8 +950,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 							maxRatioRecord = false;
 							}
 						
+						int length = String.valueOf(onlineUpdatedShips).length();
+						String SPACES = Utils.spaces(length+16);//repeatChar('-', length+10);
+						
 						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + inSight + " in sight (ratio : " + String.format ("%.1f", percent) + "%)");
-						aisTrackPanel.updateAisPanelStatus(onlineUpdatedShips + " updates / " + aisShips.size() + " in database (ratio : " + String.format ("%.1f", percent2) + "%)");
+						aisTrackPanel.updateAisPanelStatus(SPACES + " / " + aisShips.size() + " in database (ratio : " + String.format ("%.1f", percent2) + "%)");
 						
 						if (!maxRatioRecord) {
 							aisTrackPanel.updateAisPanelStatus("Max ratio : " + String.format ("%.1f", maxRatio) + "%" + " (" + dayMaxRatio + " - " + hourMaxRatio + ")");

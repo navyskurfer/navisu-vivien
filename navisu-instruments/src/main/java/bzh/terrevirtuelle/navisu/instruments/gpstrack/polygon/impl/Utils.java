@@ -7,7 +7,9 @@ import gov.nasa.worldwind.util.WWUtil;
 import gov.nasa.worldwind.util.measure.MeasureTool;
 import gov.nasa.worldwind.util.measure.MeasureToolController;
 
+import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -242,6 +244,20 @@ public class Utils {
 			resu.add(pos);
 		}
 		return resu;
+	}
+	
+	public static String repeatChar(char c, int length) {
+		
+	    char[] data = new char[length];
+	    Arrays.fill(data, c);
+	    return new String(data);
+	
+	}
+	
+	public static String spaces( int spaces ) {
+		
+		  return CharBuffer.allocate( spaces ).toString().replace( '\0', ' ' );
+		  
 	}
 
 }
