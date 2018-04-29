@@ -149,6 +149,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected Date lastAtlDate;
     protected Date lastReceptionDateAtl;
     protected Date lastReceptionDateMed;
+    protected Date lastSaveDate;
     protected boolean isTimerOn;
     protected Timer t;
     protected MeasureTool dmp;
@@ -181,6 +182,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int coldStart3 = 25;        //number of ships to create before getting online ships updates
     protected int delayAtl = 15;          //number of seconds to restart ATL AIS stream (timer)
     protected int delayMed = 15;          //number of seconds to restart MED AIS stream (timer)
+    protected int saveDelay = 30;		  //number of seconds to wait before next save
     
     /////////////////////////////////////////// OLD PARAMETERS ////////////////////////////////////////////////////
     
@@ -584,6 +586,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
       //dataServerServices.openGpsd("fridu.net", 2947);
       //dataServerServices.openGpsd("http://hd-sf.com", 9009);
       
+      lastSaveDate = new Date();
       playSound2();
       
       if (!isTimerOn) {
@@ -2331,28 +2334,42 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 	}
 	
 	public void saveData() {
-		
-		saveShips();
-        nbSave++;
-        
-        Date now = new Date();
-        long diff = now.getTime() - startTime.getTime();
-        long diffSeconds = diff / 1000 % 60;
-        long diffMinutes = diff / (60 * 1000) % 60;
-        long diffHours = diff / (60 * 60 * 1000) % 24;
-        long diffDays = diff / (60 * 60 * 1000) / 24;
-        
-		aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
-		aisTrackPanel.updateAisPanelStatus((posUpdates-onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names");
-		aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes " + diffSeconds + " seconds");
-		aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(), nbNamesDB + nbNamesReceived);
-		
-		if (newRecord) {
-			aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
-			aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
-			newRecord = false;
+
+		Date now = new Date();
+
+		if (secondsBetween(now, lastSaveDate) > saveDelay) {
+
+			saveShips();
+			nbSave++;
+
+			long diff = now.getTime() - startTime.getTime();
+			long diffSeconds = diff / 1000 % 60;
+			long diffMinutes = diff / (60 * 1000) % 60;
+			long diffHours = diff / (60 * 60 * 1000) % 24;
+			long diffDays = diff / (60 * 60 * 1000) / 24;
+
+			aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
+			aisTrackPanel.updateAisPanelStatus((posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived
+					+ " new ships / " + nbNamesReceived + " new names");
+			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
+					+ diffMinutes + " minutes " + diffSeconds + " seconds");
+			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
+					nbNamesDB + nbNamesReceived);
+
+			if (newRecord) {
+				aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " (new record !)");
+				aisTrackPanel.updateAisPanelStatus("Last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
+				newRecord = false;
+			} else {
+				aisTrackPanel.updateAisPanelStatus(
+						"Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
+			}
+
+			lastSaveDate = now;
+
 		} else {
-			aisTrackPanel.updateAisPanelStatus("Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages);
+			aisTrackPanel.updateAisPanelStatus(
+					"Please wait " + (saveDelay - (secondsBetween(now, lastSaveDate))) + " seconds before next save");
 		}
 	}
 	
