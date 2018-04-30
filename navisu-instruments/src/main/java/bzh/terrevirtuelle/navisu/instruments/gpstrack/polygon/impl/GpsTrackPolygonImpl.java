@@ -182,7 +182,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int coldStart3 = 25;        //number of ships to create before getting online ships updates
     protected int delayAtl = 15;          //number of seconds to restart ATL AIS stream (timer)
     protected int delayMed = 15;          //number of seconds to restart MED AIS stream (timer)
-    protected int saveDelay = 30;		  //number of seconds to wait before next save
+    protected int saveDelay = 60;		  //number of seconds to wait before next save
     
     /////////////////////////////////////////// OLD PARAMETERS ////////////////////////////////////////////////////
     
@@ -611,8 +611,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				lastReceptionDateMed = dataServerServices.getMedDate();
 				}
 
-			long delayAtlCalculated = secondsBetween(date, lastReceptionDateAtl);
-			long delayMedCalculated = secondsBetween(date, lastReceptionDateMed);
+			long delayAtlCalculated = Utils.secondsBetween(date, lastReceptionDateAtl);
+			long delayMedCalculated = Utils.secondsBetween(date, lastReceptionDateMed);
 			if (delayAtlCalculated > delayAtl) {
 				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
 				System.err.println("restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
@@ -776,7 +776,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				updateCreatedTargetDB(target, indice);
 			} else {
 				try {
-					if (inSight > coldStart1 && minutesBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice])) > updateInterval) {
+					if (inSight > coldStart1 && Utils.minutesBetween(date, Utils.convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice])) > updateInterval) {
 //						System.err.println("            ");
 //						System.err.println("---------------------------------------------");
 //						System.err.println(daysBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice])) + " days");
@@ -849,52 +849,6 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
         
     }
-    
-    private Date convDate(Date date, String hour) {
-    	
-    	Character a = hour.charAt(0);//ab:cd:xx
-    	Character b = hour.charAt(1);
-    	Character c = hour.charAt(3);
-    	Character d = hour.charAt(4);
-    	String h = "" + a + b;
-    	String m = "" + c + d;
-    	
-    	Calendar cal = Calendar.getInstance();
-    	cal.setTime(date);
-    	cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(h.toString()));
-    	cal.set(Calendar.MINUTE, Integer.parseInt(m.toString()));
-    	cal.setTimeZone(TimeZone.getTimeZone("CET"));
-    	
-    	date = cal.getTime();
-    	
-    	return date;
-    }
-    
-    private long diffDates(Date one, Date two) {
-    	
-    	long difference  = one.getTime() - two.getTime();
-    	return difference;
-    }
-    
-    private long daysBetween(Date one, Date two) {
-    	
-    	return TimeUnit.MILLISECONDS.toDays(diffDates(one, two));
-    }
-    
-    private long hoursBetween(Date one, Date two) {
-    	
-        return TimeUnit.MILLISECONDS.toHours(diffDates(one, two));
-    }
-    
-    private long minutesBetween(Date one, Date two) {
-    	
-    	return TimeUnit.MILLISECONDS.toMinutes(diffDates(one, two));
-    }
-    
-    private long secondsBetween(Date one, Date two) {
-    	
-    	return TimeUnit.MILLISECONDS.toSeconds(diffDates(one, two));
-    }
 
     private void updateOnlineTarget(Ship target) {
 
@@ -910,7 +864,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //		}		
 
 		for (int i = 0; i < aisShips.size(); i++) {
-			if (aisShips.get(i).getMMSI() == target.getMmsi() && secondsBetween(date, lastUpdateDate.get(i)) > updateInterval2) {
+			if (aisShips.get(i).getMMSI() == target.getMmsi() && Utils.secondsBetween(date, lastUpdateDate.get(i)) > updateInterval2) {
 				//System.out.println(target.getMmsi());
 					//aisTrackPanel.updateAisPanelStatus(target.getMmsi() + "-online update: " + secondsBetween(date, lastUpdateDate.get(i)) + " seconds");
 					updateMessages++;
@@ -921,7 +875,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						onlineDBupdate++;
 					} else {
 						try {
-							if (inSight > coldStart1 && minutesBetween(date, convDate(dateFormatDate.parse(shipMatrix[4][i]), shipMatrix[5][i])) > updateInterval) {
+							if (inSight > coldStart1 && Utils.minutesBetween(date, Utils.convDate(dateFormatDate.parse(shipMatrix[4][i]), shipMatrix[5][i])) > updateInterval) {
 								updateCreatedTargetDB(target, i);
 								onlineDBupdate++;
 							}
@@ -2082,7 +2036,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			int indice = 0;
 			if (shipMatrix[4][indice] != null && shipMatrix[5][indice] != null) {
 				try {
-					lastUpdateDate.add(convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]));
+					lastUpdateDate.add(Utils.convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					System.err.println("Date parse exception");
@@ -2323,7 +2277,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		int notUpdated = 0;
 		
 		for (Date d : lastUpdateDate) {
-			if (secondsBetween(d, startTime) < 0) {
+			if (Utils.secondsBetween(d, startTime) < 0) {
 				notUpdated++;
 			}
 		}
@@ -2337,7 +2291,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		Date now = new Date();
 
-		if (secondsBetween(now, lastSaveDate) > saveDelay) {
+		if (Utils.secondsBetween(now, lastSaveDate) > saveDelay) {
 
 			saveShips();
 			nbSave++;
@@ -2369,7 +2323,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		} else {
 			aisTrackPanel.updateAisPanelStatus(
-					"Please wait " + (saveDelay - (secondsBetween(now, lastSaveDate))) + " seconds before next save");
+					"Please wait " + (saveDelay - (Utils.secondsBetween(now, lastSaveDate))) + " seconds before next save");
 		}
 	}
 	
