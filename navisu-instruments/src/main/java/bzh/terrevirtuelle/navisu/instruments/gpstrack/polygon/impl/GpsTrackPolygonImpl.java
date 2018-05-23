@@ -888,7 +888,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						}
 					}
 					
-					if (updateMessages % 100 == 0) {
+					if (updateMessages % 500 == 0) {
 						
 						int onlineUpdatedShips = computeUpdatedTarget();
 						
@@ -918,7 +918,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 							}
 					}
 
-					if (updateMessages % 250 == 0) {
+					if (updateMessages % 500 == 0) {
 						saveData();
 					}
 					
@@ -985,12 +985,12 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		posUpdates++;
 		
-		if (posUpdates % 50 == 0) {
+		if (posUpdates % 250 == 0) {
 			aisTrackPanel.updateAisPanelStatus((posUpdates-onlineDBupdate) + " position updates (on ship creation)");
 			aisTrackPanel.updateAisPanelStatus(onlineDBupdate + " position updates (on ship update)");
 		}
 
-		if (posUpdates % 100 == 0) {
+		if (posUpdates % 500 == 0) {
 			saveData();
 		}
 	}
