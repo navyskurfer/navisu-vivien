@@ -1875,7 +1875,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	resu.setLongitude(target.getLongitude());
                 	resu.setMMSI(target.getMMSI());
                 		
-                	if (!target.getName().equals(aisShips.get(i).getName())) {
+                	if (!target.getName().equals(aisShips.get(i).getName()) && !(Utils.isEmpty(target.getName()))) {
                 		resu.setName(target.getName());
                 		aisShips.set(i, resu);
                         nbNamesReceived++;
@@ -1892,14 +1892,11 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                         	saveData();
                         }
 
-                	} else {
-                		//aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " name already in database (AIS5)"));
-                		//ou bien : aisTrackPanel.updateAisPanelStatus(target.getName() + " name already in database");
-                		}
+                	}
                 
                 shipMatrix[0][i] = Integer.toString(resu.getMMSI());
                 shipMatrix[1][i] = aisShips.get(i).getName();
-                if (target.getLatitude()!=0 && target.getLongitude()!=0) {
+                if (target.getLatitude() != 0.0 && target.getLongitude() != 0.0) {
                 	shipMatrix[2][i] = Double.toString(resu.getLatitude());
                 	shipMatrix[3][i] = Double.toString(resu.getLongitude());
                     shipMatrix[4][i] = dateFormatDate.format(date);
@@ -1916,7 +1913,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisShip.setMMSI(target.getMMSI());
             aisShip.setLatitude(target.getLatitude());
             aisShip.setLongitude(target.getLongitude());
-            if (!target.getName().equals("") && target.getName() != null) {
+            
+            if (!(Utils.isEmpty(target.getName()))) {
             	aisShip.setName(target.getName());
                 nbNamesReceived++;
             	aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " new ship & name - (AIS5)"));
@@ -1937,7 +1935,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             shipMatrix[0][aisShips.size() - 1] = Integer.toString(aisShip.getMMSI());
             shipMatrix[1][aisShips.size() - 1] = aisShip.getName();
             
-            if (target.getLatitude()!=0 && target.getLongitude()!=0) {
+            if (target.getLatitude() != 0.0 && target.getLongitude() != 0.0) {
             	shipMatrix[2][aisShips.size() - 1] = Double.toString(target.getLatitude());
             	shipMatrix[3][aisShips.size() - 1] = Double.toString(target.getLongitude());
                 shipMatrix[4][aisShips.size() - 1] = dateFormatDate.format(date);
