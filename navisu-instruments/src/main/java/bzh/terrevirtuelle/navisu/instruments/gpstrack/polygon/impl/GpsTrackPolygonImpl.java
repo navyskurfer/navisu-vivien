@@ -580,8 +580,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         
       //dataServerServices.openGpsd("sinagot.net", 2947);//atlantique
       //dataServerServices.openGpsd("sinagot.net", 2948);//méditerranée
+      
       dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
       dataServerServices.openGpsd("5.39.78.33", 2948);//méditerranée
+      
       //dataServerServices.openGpsd("sinagot.net", 2947);
       //dataServerServices.openGpsd("fridu.net", 2947);
       //dataServerServices.openGpsd("http://hd-sf.com", 9009);
