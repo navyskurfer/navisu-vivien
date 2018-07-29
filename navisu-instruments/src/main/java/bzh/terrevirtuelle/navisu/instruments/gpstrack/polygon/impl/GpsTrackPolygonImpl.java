@@ -618,7 +618,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			if (delayAtlCalculated > delayAtl) {
 				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
 				System.err.println("restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
-				lastReceptionDateAtl.setTime(date.getTime() + 10*1000);
+				lastReceptionDateAtl.setTime(date.getTime() + 120*1000);
 			} else {
 				System.out.println(ANSI_GREEN + "ATL stream OK (delay : " + delayAtlCalculated + ")" + ANSI_RESET);
 //				if (dataServerServices.getAtlDate() != null) {
@@ -631,7 +631,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			if (delayMedCalculated > delayMed) {
 				dataServerServices.openGpsd("5.39.78.33", 2948);// méditerranée
 				System.err.println("restart MED AIS stream (delay : " + delayMedCalculated + ")");
-				lastReceptionDateMed.setTime(date.getTime() + 10*1000);
+				lastReceptionDateMed.setTime(date.getTime() + 120*1000);
 			} else {
 				System.out.println(ANSI_GREEN + "MED stream OK (delay : " + delayMedCalculated + ")" + ANSI_RESET);
 //				if (dataServerServices.getMedDate() != null) {
