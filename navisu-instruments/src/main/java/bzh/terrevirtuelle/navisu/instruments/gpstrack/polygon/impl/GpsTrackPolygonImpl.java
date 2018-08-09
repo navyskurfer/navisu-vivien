@@ -1888,7 +1888,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 		}
                 		else {
                 			nbNamesUpdated++;
-                            aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("Name updated - (AIS5)"));
+                            aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getMMSI() + " name updated - (AIS5)"));
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("Old name : " + aisShips.get(i).getName()));
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("New name : " + target.getName()));
                             aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " name(s) updated");
