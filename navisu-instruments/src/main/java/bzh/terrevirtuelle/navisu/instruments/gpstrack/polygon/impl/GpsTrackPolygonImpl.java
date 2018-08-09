@@ -239,6 +239,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int nbSave = 0;
     protected int nbMmsiReceived = 0;
     protected int nbNamesReceived = 0;
+    protected int nbNamesUpdated = 0;
     protected int nbNamesRetrieved = 0;
     protected int nbNamesMessages = 0;
     protected int updateMessages = 0;
@@ -1879,12 +1880,25 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	resu.setMMSI(target.getMMSI());
                 		
                 	if (!target.getName().equals(aisShips.get(i).getName()) && !(Utils.isEmpty(target.getName()))) {
+                		
+                		if (Utils.isEmpty(aisShips.get(i).getName())) {
+                            nbNamesReceived++;
+                            aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " new name - (AIS5)"));
+                            playSound();
+                		}
+                		else {
+                			nbNamesUpdated++;
+                            aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("Name updated - (AIS5)"));
+                            aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("Old name : " + aisShips.get(i).getName()));
+                            aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("New name : " + target.getName()));
+                            aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " name(s) updated");
+                            playSound();	
+                		}
+                		
+                		
                 		resu.setName(target.getName());
                 		aisShips.set(i, resu);
-                        nbNamesReceived++;
-                       
-                        aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " new name - (AIS5)"));
-                        playSound();
+
                         
                         if (nbNamesReceived % 10 == 0) {
                         	aisTrackPanel.updateAisPanelStatus(nbNamesReceived + " new name(s) received");
