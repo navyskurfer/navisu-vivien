@@ -1891,7 +1891,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getMMSI() + " name updated - (AIS5)"));
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("Old name : " + aisShips.get(i).getName()));
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("New name : " + target.getName()));
-                            aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " name(s) updated");
+                            //aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " name(s) updated");
                             playSound();	
                 		}
                 		
@@ -2328,6 +2328,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
 			aisTrackPanel.updateAisPanelStatus((posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived
 					+ " new ships / " + nbNamesReceived + " new names");
+			aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " names updated");
 			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
