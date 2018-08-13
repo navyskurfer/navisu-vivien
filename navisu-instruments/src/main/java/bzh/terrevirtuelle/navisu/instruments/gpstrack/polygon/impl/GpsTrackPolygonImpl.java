@@ -199,7 +199,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    protected int inSight = 0;
+    public static int inSight = 0;
     protected int posUpdates = 0;
     protected int lastUpdateIndex = -1;
     protected int onlineDBupdate = 0;
@@ -230,7 +230,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected static final String ANSI_PURPLE = "\u001B[35m";
     protected static final String ANSI_CYAN = "\u001B[36m";
     protected static final String ANSI_WHITE = "\u001B[37m";
-    protected TrackPanel aisTrackPanel;
+    protected static TrackPanel aisTrackPanel;
     protected DateFormat dateFormatDate = new SimpleDateFormat("dd/MM/yyyy");
     protected DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
     protected Boolean[][] detected = new Boolean[1000][5000];
@@ -240,6 +240,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected int nbMmsiReceived = 0;
     protected int nbNamesReceived = 0;
     protected int nbNamesUpdated = 0;
+    public static int nbEmptyNamesReceived = 0;
     protected int nbNamesRetrieved = 0;
     protected int nbNamesMessages = 0;
     protected int updateMessages = 0;
@@ -1879,9 +1880,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	resu.setLongitude(target.getLongitude());
                 	resu.setMMSI(target.getMMSI());
                 		
-                	if (!target.getName().equals(aisShips.get(i).getName()) && !(Utils.isEmpty(target.getName()))) {
+                	if (!target.getName().equals(aisShips.get(i).getName()) && !(Utils.isEmptyReceived(target.getMMSI(), target.getName().replaceAll("\\s+","")))) {
                 		
-                		if (Utils.isEmpty(aisShips.get(i).getName())) {
+                		if (Utils.isEmpty(aisShips.get(i).getName().replaceAll("\\s+",""))) {
                             nbNamesReceived++;
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " new name - (AIS5)"));
                             playSound();
@@ -1893,12 +1894,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("New name : " + target.getName()));
                             //aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " name(s) updated");
                             playSound();	
-                		}
-                		
+                		}	
                 		
                 		resu.setName(target.getName());
                 		aisShips.set(i, resu);
-
                         
                         if (nbNamesReceived % 10 == 0) {
                         	aisTrackPanel.updateAisPanelStatus(nbNamesReceived + " new name(s) received");
@@ -1931,7 +1930,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisShip.setLatitude(target.getLatitude());
             aisShip.setLongitude(target.getLongitude());
             
-            if (!(Utils.isEmpty(target.getName()))) {
+            if (!(Utils.isEmptyReceived(target.getMMSI(), target.getName().replaceAll("\\s+","")))) {
             	aisShip.setName(target.getName());
                 nbNamesReceived++;
             	aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, (target.getName() + " new ship & name - (AIS5)"));
@@ -2329,6 +2328,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelStatus((posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived
 					+ " new ships / " + nbNamesReceived + " new names");
 			aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " names updated");
+			aisTrackPanel.updateAisPanelStatus(nbEmptyNamesReceived + " empty names received");
 			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),

@@ -8,6 +8,8 @@ import gov.nasa.worldwind.util.measure.MeasureTool;
 import gov.nasa.worldwind.util.measure.MeasureToolController;
 
 import java.nio.CharBuffer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -15,9 +17,15 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import org.capcaval.c3.component.annotation.UsedService;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
+import bzh.terrevirtuelle.navisu.instruments.common.view.panel.TrackPanel;
+import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygon;
+import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygonServices;
 
 /*import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -308,16 +316,39 @@ public class Utils {
 
 	}
 	
-	 /**
+    public static boolean isEmptyReceived(int MMSI, CharSequence str) {
+        if (str == null || str.length() < 1)
+            {
+            DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
+        	int n = GpsTrackPolygonImpl.inSight;
+        	Date d = new Date();
+        	System.err.println("MMSI " + MMSI + " - Name received is empty");
+        	GpsTrackPolygonImpl.aisTrackPanel.updateAisPanelName(dateFormatTime.format(d), n, MMSI + " name empty - (AIS5)");
+        	GpsTrackPolygonImpl.nbEmptyNamesReceived++;
+        	return true;
+        	}
+        else
+            {
+        	System.err.println("MMSI " + MMSI + " - Name received OK");
+        	return false;
+        	}
+    }
+    
+    /**
      * Returns true if the string is null or 0-length.
      * @param str the string to be examined
      * @return true if str is null or zero length
      */
+    
     public static boolean isEmpty(CharSequence str) {
-        if (str == null || str.length() <= 1)
-            return true;
+        if (str == null || str.length() < 1)
+            {
+        	return true;
+        	}
         else
-            return false;
+            {
+        	return false;
+        	}
     }
 
 	public static Date convDate(Date date, String hour) {
