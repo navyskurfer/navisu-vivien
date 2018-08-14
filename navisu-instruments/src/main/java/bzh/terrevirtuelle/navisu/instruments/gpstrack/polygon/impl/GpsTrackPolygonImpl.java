@@ -843,7 +843,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 //        }
         
         if (inSight == coldStart3) {
-        	aisTrackPanel.updateAisPanelStatus("Cold start 3 complete ("+coldStart3+" ships)");
+        	//aisTrackPanel.updateAisPanelStatus("Cold start 3 complete ("+coldStart3+" ships)");
         	aisTrackPanel.updateAisPanelStatus("Starting online ship updates");
         	playSound2();
         }
