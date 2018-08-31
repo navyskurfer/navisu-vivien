@@ -329,7 +329,7 @@ public class Utils {
         	}
         else
             {
-        	System.err.println("MMSI " + MMSI + " - Name received OK");
+        	System.err.println("MMSI " + MMSI + " - Name received OK (not empty)");
         	return false;
         	}
     }
