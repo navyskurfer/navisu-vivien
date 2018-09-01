@@ -317,7 +317,8 @@ public class Utils {
 	}
 	
     public static boolean isEmptyReceived(int MMSI, CharSequence str) {
-        if (str == null || str.length() < 1)
+    	str = str.toString().replaceAll("\\s+","");
+    	if (str == null || str.length() < 1)
             {
             DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
         	int n = GpsTrackPolygonImpl.inSight;
@@ -341,6 +342,7 @@ public class Utils {
      */
     
     public static boolean isEmpty(CharSequence str) {
+    	str = str.toString().replaceAll("\\s+","");
         if (str == null || str.length() < 1)
             {
         	return true;
