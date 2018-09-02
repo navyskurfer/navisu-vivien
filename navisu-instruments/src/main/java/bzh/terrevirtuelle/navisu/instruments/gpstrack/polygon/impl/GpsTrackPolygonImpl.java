@@ -2337,8 +2337,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
 			aisTrackPanel.updateAisPanelStatus((posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived
 					+ " new ships / " + nbNamesReceived + " new names");
-			aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " names updated");
-			aisTrackPanel.updateAisPanelStatus(nbEmptyNamesReceived + " empty names received");
+			aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " names updated / " + nbEmptyNamesReceived + " empty names received");
 			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
