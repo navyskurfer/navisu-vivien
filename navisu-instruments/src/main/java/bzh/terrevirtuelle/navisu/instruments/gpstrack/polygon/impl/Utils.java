@@ -316,8 +316,22 @@ public class Utils {
 
 	}
 	
+	public static boolean isStringNullOrWhiteSpace(String value) {
+		if (value == null) {
+			return true;
+		}
+
+		for (int i = 0; i < value.length(); i++) {
+			if (!Character.isWhitespace(value.charAt(i))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
     public static boolean isEmptyReceived(int MMSI, String str) {
-    	if (str == null || str.replaceAll("\\s+","").length() == 0 || "".equals(str.replaceAll("\\s+","")))
+    	if (isStringNullOrWhiteSpace(str) || str.replaceAll("\\s+","").length() == 0 || "".equals(str.replaceAll("\\s+","")))
             {
             DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
         	int n = GpsTrackPolygonImpl.inSight;
@@ -341,7 +355,7 @@ public class Utils {
      */
     
     public static boolean isEmpty(String str) {
-        if (str == null || str.replaceAll("\\s+","").length() == 0 || "".equals(str.replaceAll("\\s+","")))
+        if (isStringNullOrWhiteSpace(str) || str.replaceAll("\\s+","").length() == 0 || "".equals(str.replaceAll("\\s+","")))
             {
         	return true;
         	}
