@@ -56,17 +56,17 @@ public class NetReaderImpl
 								if (source.contains("tcp://data.aishub.net:4299")) {
 									countAtl++;
 									dateAtl = new Date();
-									if (countAtl % 50 == 0) {
-										System.out.println(ANSI_PURPLE + "atl" + ANSI_RESET);
-									}
+//									if (countAtl % 100 == 0) {
+//										System.out.println(ANSI_PURPLE + "atl" + ANSI_RESET);
+//									}
 								}
 
 								if (source.contains("tcp://data.aishub.net:4572")) {
 									countMed++;
 									dateMed = new Date();
-									if (countMed % 50 == 0) {
-										System.out.println(ANSI_BLUE + "med" + ANSI_RESET);
-									}
+//									if (countMed % 100 == 0) {
+//										System.out.println(ANSI_BLUE + "med" + ANSI_RESET);
+//									}
 								}
                         
                         if ((source.startsWith("{") && source.endsWith("}")) // Gpsd well formatted
