@@ -618,9 +618,10 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 			long delayAtlCalculated = Utils.secondsBetween(date, lastReceptionDateAtl);
 			long delayMedCalculated = Utils.secondsBetween(date, lastReceptionDateMed);
+			
 			if (delayAtlCalculated > delayAtl) {
 				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
-				System.err.println("restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
+				System.err.println(dateFormatTime.format(date) + " - restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
 				lastReceptionDateAtl.setTime(date.getTime() + delayRestart*1000);
 			} else {
 				if (delayAtlCalculated != 0) {System.out.println(ANSI_GREEN + "ATL stream OK (delay : " + delayAtlCalculated + ")" + ANSI_RESET);}
@@ -633,7 +634,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 			if (delayMedCalculated > delayMed) {
 				dataServerServices.openGpsd("5.39.78.33", 2948);// méditerranée
-				System.err.println("restart MED AIS stream (delay : " + delayMedCalculated + ")");
+				System.err.println(dateFormatTime.format(date) + " - restart MED AIS stream (delay : " + delayMedCalculated + ")");
 				lastReceptionDateMed.setTime(date.getTime() + delayRestart*1000);
 			} else {
 				if (delayMedCalculated != 0) {System.out.println(ANSI_GREEN + "MED stream OK (delay : " + delayMedCalculated + ")" + ANSI_RESET);}
