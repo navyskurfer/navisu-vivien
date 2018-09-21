@@ -341,19 +341,20 @@ public class Utils {
 	}
 	
     public static boolean isEmptyReceived(int MMSI, String str) {
+    	Date date = new Date();
+    	DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
     	if (isStringNullOrWhiteSpace(str) || str.replaceAll("\\s+","").length() == 0 || "".equals(str.replaceAll("\\s+","")))
             {
-            DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
         	int n = GpsTrackPolygonImpl.inSight;
         	Date d = new Date();
-        	System.err.println("MMSI " + MMSI + " - Name received is empty");
+        	System.err.println(dateFormatTime.format(date) + " - MMSI " + MMSI + " - Name received is empty");
         	GpsTrackPolygonImpl.aisTrackPanel.updateAisPanelName(dateFormatTime.format(d), n, MMSI + " name empty - (AIS5)");
         	GpsTrackPolygonImpl.nbEmptyNamesReceived++;
         	return true;
         	}
         else
             {
-        	System.out.println(ANSI_GREEN + "MMSI " + MMSI + " - Name received OK (not empty) : " + str + ANSI_RESET);
+        	System.out.println(ANSI_GREEN + dateFormatTime.format(date) + " - MMSI " + MMSI + " - Name received OK (not empty) : " + str + ANSI_RESET);
         	return false;
         	}
     }

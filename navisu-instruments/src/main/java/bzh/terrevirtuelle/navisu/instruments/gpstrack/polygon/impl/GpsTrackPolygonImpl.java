@@ -624,7 +624,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				System.err.println(dateFormatTime.format(date) + " - restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
 				lastReceptionDateAtl.setTime(date.getTime() + delayRestart*1000);
 			} else {
-				if (delayAtlCalculated != 0) {System.out.println(ANSI_GREEN + "ATL stream OK (delay : " + delayAtlCalculated + ")" + ANSI_RESET);}
+				if (delayAtlCalculated != 0) {System.out.println(ANSI_GREEN + dateFormatTime.format(date) + " - ATL stream OK (delay : " + delayAtlCalculated + ")" + ANSI_RESET);}
 //				if (dataServerServices.getAtlDate() != null) {
 //					System.err.println(dateFormatTime.format(dataServerServices.getAtlDate()));
 //					}
@@ -637,7 +637,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				System.err.println(dateFormatTime.format(date) + " - restart MED AIS stream (delay : " + delayMedCalculated + ")");
 				lastReceptionDateMed.setTime(date.getTime() + delayRestart*1000);
 			} else {
-				if (delayMedCalculated != 0) {System.out.println(ANSI_GREEN + "MED stream OK (delay : " + delayMedCalculated + ")" + ANSI_RESET);}
+				if (delayMedCalculated != 0) {System.out.println(ANSI_GREEN + dateFormatTime.format(date) + " - MED stream OK (delay : " + delayMedCalculated + ")" + ANSI_RESET);}
 //				if (dataServerServices.getMedDate() != null) {
 //					System.err.println(dateFormatTime.format(dataServerServices.getMedDate()));
 //					}
