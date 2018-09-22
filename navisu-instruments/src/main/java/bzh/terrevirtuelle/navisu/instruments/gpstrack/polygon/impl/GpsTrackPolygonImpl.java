@@ -886,7 +886,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 								onlineDBupdate++;
 							}
 						} catch (ParseException e) {
-							System.err.println("Date parse exception : " + aisShips.get(i).getMMSI() + " / " + aisShips.get(i).getName()+ " / " +shipMatrix[4][i]);
+							System.err.println(dateFormatTime.format(date) + " - Date parse exception : " + aisShips.get(i).getMMSI() + " / " + aisShips.get(i).getName()+ " / " +shipMatrix[4][i]);
 							aisTrackPanel.updateAisPanelStatus("Date parse exception :");
 							aisTrackPanel.updateAisPanelStatus(aisShips.get(i).getMMSI() + "/" + aisShips.get(i).getName()+ "/" +shipMatrix[4][i]);
 							updateCreatedTargetDB(target, i);
