@@ -894,7 +894,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 						}
 					}
 					
-					if (updateMessages % 250 == 0) {
+					if (updateMessages % 1000 == 0) {
 						
 						int onlineUpdatedShips = computeUpdatedTarget();
 						
@@ -994,7 +994,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		posUpdates++;
 		
-		if (posUpdates % 250 == 0) {
+		if (posUpdates % 1000 == 0) {
 			aisTrackPanel.updateAisPanelStatus((posUpdates-onlineDBupdate) + " position updates (on ship creation)");
 			aisTrackPanel.updateAisPanelStatus(onlineDBupdate + " position updates (on ship update)");
 		}
@@ -2183,7 +2183,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					target.setShipName(s.getName());
 					nbNamesRetrieved++;
 					//aisTrackPanel.updateAisPanelStatus(s.getName() + " retrieved from database");
-					if (nbNamesRetrieved % 250 == 0) {
+					if (nbNamesRetrieved % 1000 == 0) {
 						aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
 					}
 				}
