@@ -1736,8 +1736,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		if (Utils.secondsBetween(now2, lastSaveDate) > saveDelay) {
 			saveData();
 		} else {
-			aisTrackPanel.updateAisPanelStatus("Please wait " + (saveDelay - (Utils.secondsBetween(now2, lastSaveDate)))
-					+ " seconds before next save");
+			aisTrackPanel.updateAisPanelStatus("Save skipped. " + (saveDelay - (Utils.secondsBetween(now2, lastSaveDate))) + " seconds remaining");
 		}
 	}
 
@@ -2356,7 +2355,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			lastSaveDate = now;
 
 		} else {
-			aisTrackPanel.updateAisPanelStatus("Save skipped. " + (saveDelay - (Utils.secondsBetween(now, lastSaveDate))) + " seconds remaining");
+			System.err.println(dateFormatTime.format(now) + " - Save skipped. " + (saveDelay - (Utils.secondsBetween(now, lastSaveDate))) + " seconds remaining");
 		}
 	}
 	
