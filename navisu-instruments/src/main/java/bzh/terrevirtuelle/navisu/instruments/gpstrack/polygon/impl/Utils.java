@@ -26,12 +26,17 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import bzh.terrevirtuelle.navisu.instruments.common.view.panel.TrackPanel;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygon;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygonServices;
+import bzh.terrevirtuelle.navisu.server.DataServerServices;
 
 /*import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;*/
 
 public class Utils {
+	
+    @UsedService
+	static
+    DataServerServices dataServerServices;
 	
     protected static final String ANSI_RESET = "\u001B[0m";
     protected static final String ANSI_BLACK = "\u001B[30m";

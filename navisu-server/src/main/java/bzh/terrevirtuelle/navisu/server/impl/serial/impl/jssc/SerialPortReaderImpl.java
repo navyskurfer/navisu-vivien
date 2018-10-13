@@ -102,4 +102,5 @@ public class SerialPortReaderImpl
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }

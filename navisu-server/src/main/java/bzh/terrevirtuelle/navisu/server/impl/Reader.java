@@ -19,5 +19,5 @@ public interface Reader {
 
 	public Date getAtlDate();
 	public Date getMedDate();
-
+	
 }
