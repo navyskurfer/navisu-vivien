@@ -30,6 +30,8 @@ import bzh.terrevirtuelle.navisu.instruments.ais.base.AisServices;
 import bzh.terrevirtuelle.navisu.instruments.ais.base.impl.controller.events.AisUpdateStationEvent;
 import bzh.terrevirtuelle.navisu.instruments.ais.base.impl.controller.events.AisUpdateTargetEvent;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygonServices;
+import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.impl.Utils;
+import bzh.terrevirtuelle.navisu.server.DataServerServices;
 import bzh.terrevirtuelle.navisu.speech.SpeakerServices;
 
 import java.io.BufferedReader;
@@ -69,6 +71,9 @@ public class AisImpl
     SpeakerServices speakerServices;
     @UsedService
     GpsTrackPolygonServices gpsTrackPolygonServices;
+    
+    @UsedService
+    DataServerServices dataServerServices;
 
     @ProducedEvent
     protected AisCreateTargetEvent aisCreateTargetEvent;
@@ -101,6 +106,7 @@ public class AisImpl
     protected LinkedList<Ship> savedAisShips;
     protected int nbNamesRetrieved = 0;
     protected DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
+    public String lastNameReceivedOrigin;
 
     ComponentManager cm;
     ComponentEventSubscribe<AIS01Event> ais1ES;
@@ -278,9 +284,17 @@ public class AisImpl
 
             @Override
             public <T extends NMEA> void notifyNmeaMessageChanged(T data) {
-                AIS05 ais = (AIS05) data;
+                
+				if (Utils.diffDates(dataServerServices.getAtlDate(), dataServerServices.getMedDate()) > 0) {
+					lastNameReceivedOrigin = "ATL";
+				} else {
+					lastNameReceivedOrigin = "MED";
+				}
+            	
+            	AIS05 ais = (AIS05) data;
                 int mmsi = ais.getMMSI();
                 Date date = new Date();
+                
                 if (!ships.containsKey(mmsi)) {
                     ship = ShipBuilder.create()
                             .mmsi(ais.getMMSI())
@@ -290,14 +304,14 @@ public class AisImpl
                             .build();
                     ships.put(mmsi, ship);
                     //aisCreateTargetEvent.notifyAisMessageChanged(ship);
-                    gpsTrackPolygonServices.newNameAis5(ship);
+                    gpsTrackPolygonServices.newNameAis5(ship, lastNameReceivedOrigin);
                 } else {
                     ship = ships.get(mmsi);
                     ship.setShipType(ais.getShipType());
                     ship.setName(ais.getShipName());
                     ship.setETA(ais.getETA());
                     ship.setDestination(ais.getDestination());
-                    gpsTrackPolygonServices.newNameAis5(ship);
+                    gpsTrackPolygonServices.newNameAis5(ship, lastNameReceivedOrigin);
                     //aisUpdateTargetEvent.notifyAisMessageChanged(ship);
                 }
                 timestamps.put(mmsi, Calendar.getInstance());

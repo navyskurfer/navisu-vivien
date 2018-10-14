@@ -36,13 +36,14 @@ public class ShapefileController {
         return INSTANCE;
     }
 
-    public final List<Layer> init(String path) {
+    @SuppressWarnings("unchecked")
+	public final List<Layer> init(String path) {
         this.path = path;
 
         RenderableLayer layer = new RenderableLayer();
         layer.setName("SHP");
         SingleAREA_ShapefileLoader shapefileLoader = new SingleAREA_ShapefileLoader();
-        layers = shapefileLoader.createLayersFromSource(new File(path));
+        layers = (List<Layer>) shapefileLoader.createLayerFromSource(new File(path));
         return layers;
     }
 }

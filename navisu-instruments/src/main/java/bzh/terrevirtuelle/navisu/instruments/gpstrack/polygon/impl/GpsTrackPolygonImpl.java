@@ -1865,7 +1865,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
     }
     
-    public void newNameAis5(Ship target) {
+    public void newNameAis5(Ship target, String origin) {
     	
     	Date date = new Date();
     	boolean shipExistsAis5 = false;
@@ -1880,7 +1880,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	resu.setLongitude(target.getLongitude());
                 	resu.setMMSI(target.getMMSI());
                 		
-                	if (!target.getName().equals(aisShips.get(i).getName()) && !(Utils.isEmptyReceived(target.getMMSI(), target.getName()))) {
+                	if (!target.getName().equals(aisShips.get(i).getName()) && !(Utils.isEmptyReceived(target.getMMSI(), target.getName(),origin))) {
                 		
                 		if (Utils.isEmpty(aisShips.get(i).getName())) {
                             nbNamesReceived++;
@@ -1931,7 +1931,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             aisShip.setLatitude(target.getLatitude());
             aisShip.setLongitude(target.getLongitude());
             
-            if (!(Utils.isEmptyReceived(target.getMMSI(), target.getName()))) {
+            if (!(Utils.isEmptyReceived(target.getMMSI(), target.getName(), origin))) {
             	noName = false;
             	aisShip.setName(target.getName());
                 nbNamesReceived++;

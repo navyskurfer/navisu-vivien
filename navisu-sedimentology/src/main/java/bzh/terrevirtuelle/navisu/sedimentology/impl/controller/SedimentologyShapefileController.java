@@ -36,13 +36,14 @@ public class SedimentologyShapefileController {
         return INSTANCE;
     }
 
-    public final List<Layer> init(String path) {
+    @SuppressWarnings("deprecation")
+	public final List<Layer> init(String path) {
         this.path = path;
 
         RenderableLayer layer = new RenderableLayer();
         layer.setName("NFD");
         NFD_ShapefileLoader shapefileLoader = new NFD_ShapefileLoader();
-        layers = shapefileLoader.createLayersFromSource(new File(path));
+        layers = (List<Layer>) shapefileLoader.createLayerFromSource(new File(path));
         return layers;
     }
 }

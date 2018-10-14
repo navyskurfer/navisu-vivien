@@ -43,7 +43,6 @@ public class SingleAREA_ShapefileLoader
 
     }
 
-    @Override
     protected void addRenderablesForPolygons(Shapefile shp, List<Layer> layers) {
         RenderableLayer layer = new RenderableLayer();
         layers.add(layer);
