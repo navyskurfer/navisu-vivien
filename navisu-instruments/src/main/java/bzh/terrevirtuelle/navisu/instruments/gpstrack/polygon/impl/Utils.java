@@ -348,7 +348,7 @@ public class Utils {
     public static boolean isEmptyReceived(int MMSI, String str) {
     	Date date = new Date();
     	DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
-    	if (isStringNullOrWhiteSpace(str) || str.replaceAll("\\s+","").length() == 0 || "".equals(str.replaceAll("\\s+","")))
+    	if (isStringNullOrWhiteSpace(str) || str.replaceAll("\\s+","").length() <= 1 || "".equals(str.replaceAll("\\s+","")))
             {
         	int n = GpsTrackPolygonImpl.inSight;
         	Date d = new Date();
@@ -371,7 +371,7 @@ public class Utils {
      */
     
     public static boolean isEmpty(String str) {
-        if (isStringNullOrWhiteSpace(str) || str.replaceAll("\\s+","").length() == 0 || "".equals(str.replaceAll("\\s+","")))
+        if (isStringNullOrWhiteSpace(str) || str.replaceAll("\\s+","").length() <= 1 || "".equals(str.replaceAll("\\s+","")))
             {
         	return true;
         	}
