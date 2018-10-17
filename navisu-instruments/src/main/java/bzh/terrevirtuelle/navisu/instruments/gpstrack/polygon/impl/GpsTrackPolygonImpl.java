@@ -46,6 +46,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -2319,6 +2321,19 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		return resu;
 	}
 	
+	public void sendMailReport(String title, String message) {
+		try {
+			GoogleMail.Send(title, message);
+			System.out.println(ANSI_GREEN + "Email sent !" + ANSI_RESET);
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void saveData() {
 
 		Date now = new Date();
@@ -2353,6 +2368,13 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			}
 
 			lastSaveDate = now;
+			
+			String title = new String();
+			String message = new String();
+			title = "NAVISU REPORT - Database saved (save #" + nbSave + ")";
+			message = (posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names. " + nbNamesUpdated + " names updated / " + nbEmptyNamesReceived + " empty names received. " + "Running for " + diffDays + " days " + diffHours + " hours "
+							+ diffMinutes + " minutes " + diffSeconds + " seconds. " + "Insight : " + inSight + " - Ships in DB : " + aisShips.size() + " - Names in DB : " + (nbNamesDB + nbNamesReceived) + ". " + "Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages;
+			sendMailReport(title, message);
 
 		} else {
 			System.err.println(dateFormatTime.format(now) + " - Save skipped. " + (saveDelay - (Utils.secondsBetween(now, lastSaveDate))) + " seconds remaining");

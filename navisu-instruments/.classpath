@@ -14,8 +14,7 @@
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="lib" path="C:/Users/Vivien Bontoux/git/navisu-vivien/navisu-instruments/lib/jts-1.9.jar"/>
-	<classpathentry kind="lib" path="lib/javax.mail-api-1.4.7.jar"/>
-	<classpathentry kind="lib" path="lib/com.sun.mail_1.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/javax.mail.jar"/>
 	<classpathentry kind="src" path="/navisu-server"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
