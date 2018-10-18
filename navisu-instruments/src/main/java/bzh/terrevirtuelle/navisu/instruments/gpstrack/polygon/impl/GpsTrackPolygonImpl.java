@@ -2369,12 +2369,19 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 			lastSaveDate = now;
 			
-			String title = new String();
-			String message = new String();
-			title = "NAVISU REPORT - Database saved (save #" + nbSave + ")";
-			message = (posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / " + nbNamesReceived + " new names. " + nbNamesUpdated + " names updated / " + nbEmptyNamesReceived + " empty names received. " + "Running for " + diffDays + " days " + diffHours + " hours "
-							+ diffMinutes + " minutes " + diffSeconds + " seconds. " + "Insight : " + inSight + " - Ships in DB : " + aisShips.size() + " - Names in DB : " + (nbNamesDB + nbNamesReceived) + ". " + "Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages;
-			sendMailReport(title, message);
+			if (nbSave == 1 || (nbSave % 10 == 0)) {
+				String title = new String();
+				String message = new String();
+				title = "NAVISU REPORT - Database saved (save #" + nbSave + ")";
+				message = (posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / "
+						+ nbNamesReceived + " new names. " + nbNamesUpdated + " names updated / " + nbEmptyNamesReceived
+						+ " empty names received. " + "Running for " + diffDays + " days " + diffHours + " hours "
+						+ diffMinutes + " minutes " + diffSeconds + " seconds. " + "Insight : " + inSight
+						+ " - Ships in DB : " + aisShips.size() + " - Names in DB : " + (nbNamesDB + nbNamesReceived)
+						+ ". " + "Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : "
+						+ nbNamesMessages;
+				sendMailReport(title, message);
+			}
 
 		} else {
 			System.err.println(dateFormatTime.format(now) + " - Save skipped. " + (saveDelay - (Utils.secondsBetween(now, lastSaveDate))) + " seconds remaining");
