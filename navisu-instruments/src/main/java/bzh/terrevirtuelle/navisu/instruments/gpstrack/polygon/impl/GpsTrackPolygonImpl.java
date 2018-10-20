@@ -175,6 +175,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected String dayMaxUpdate;
     protected String hourMaxUpdate;
     protected boolean maxUpdateRecord = false;
+    protected boolean manualSave = false;
     
     ///////////////////////////////////////////// PARAMETERS //////////////////////////////////////////////////////
     
@@ -1736,6 +1737,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
 		Date now2 = new Date();
 		if (Utils.secondsBetween(now2, lastSaveDate) > saveDelay) {
+			manualSave = true;
 			saveData();
 		} else {
 			aisTrackPanel.updateAisPanelStatus("Save skipped. " + (saveDelay - (Utils.secondsBetween(now2, lastSaveDate))) + " seconds remaining");
@@ -2321,9 +2323,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		return resu;
 	}
 	
-	public void sendMailReport(String title, String message) {
+	public void sendMailReport(String title, String line1, String line2, String line3, String line4, String line5) {
 		try {
-			GoogleMail.Send(title, message);
+			GoogleMail.Send(title, line1, line2, line3, line4, line5);
 			System.out.println(ANSI_GREEN + "Email sent !" + ANSI_RESET);
 		} catch (AddressException e) {
 			// TODO Auto-generated catch block
@@ -2352,7 +2354,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			aisTrackPanel.updateAisPanelStatus("Database saved (save #" + nbSave + ")");
 			aisTrackPanel.updateAisPanelStatus((posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived
 					+ " new ships / " + nbNamesReceived + " new names");
-			aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " names updated / " + nbEmptyNamesReceived + " empty names received");
+			aisTrackPanel.updateAisPanelStatus(
+					nbNamesUpdated + " names updated / " + nbEmptyNamesReceived + " empty names received");
 			aisTrackPanel.updateAisPanelStatus("Running for " + diffDays + " days " + diffHours + " hours "
 					+ diffMinutes + " minutes " + diffSeconds + " seconds");
 			aisTrackPanel.updateAisPanelCount(dateFormatTime.format(now), inSight, aisShips.size(),
@@ -2368,24 +2371,32 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			}
 
 			lastSaveDate = now;
-			
-			if (nbSave == 1 || (nbSave % 10 == 0)) {
+
+			if (nbSave == 1 || (nbSave % 5 == 0) || manualSave) {
 				String title = new String();
-				String message = new String();
-				title = "NAVISU REPORT - Database saved (save #" + nbSave + ")";
-				message = (posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / "
-						+ nbNamesReceived + " new names. " + nbNamesUpdated + " names updated / " + nbEmptyNamesReceived
-						+ " empty names received. " + "Running for " + diffDays + " days " + diffHours + " hours "
-						+ diffMinutes + " minutes " + diffSeconds + " seconds. " + "Insight : " + inSight
-						+ " - Ships in DB : " + aisShips.size() + " - Names in DB : " + (nbNamesDB + nbNamesReceived)
-						+ ". " + "Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : "
-						+ nbNamesMessages;
-				sendMailReport(title, message);
+				String line1 = new String();
+				String line2 = new String();
+				String line3 = new String();
+				String line4 = new String();
+				String line5 = new String();
+				title = "NAVISU REPORT - Save #" + nbSave;
+				line1 = (posUpdates - onlineDBupdate) + " pos updated / " + nbMmsiReceived + " new ships / "
+						+ nbNamesReceived + " new names. ";
+				line2 = nbNamesUpdated + " names updated / " + nbEmptyNamesReceived + " empty names received. ";
+				line3 = "Running for " + diffDays + " days " + diffHours + " hours " + diffMinutes + " minutes "
+						+ diffSeconds + " seconds. ";
+				line4 = "Insight : " + inSight + " - DB (ships/names) : " + aisShips.size() + " / "
+						+ (nbNamesDB + nbNamesReceived) + ". ";
+				line5 = "Record : " + maxTarget + " - last : " + maxLastRunHisto + " - AIS5 msg : " + nbNamesMessages
+						+ ".";
+				sendMailReport(title, line1, line2, line3, line4, line5);
 			}
 
 		} else {
-			System.err.println(dateFormatTime.format(now) + " - Save skipped. " + (saveDelay - (Utils.secondsBetween(now, lastSaveDate))) + " seconds remaining");
+			System.err.println(dateFormatTime.format(now) + " - Save skipped. "
+					+ (saveDelay - (Utils.secondsBetween(now, lastSaveDate))) + " seconds remaining");
 		}
+		manualSave = false;
 	}
 	
 

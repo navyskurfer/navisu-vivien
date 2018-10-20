@@ -20,7 +20,7 @@ public class GoogleMail {
 //
 //	}
 
-	public static void Send(String title, String message) throws AddressException, MessagingException {
+	public static void Send(String title, String line1, String line2, String line3, String line4, String line5) throws AddressException, MessagingException {
 
 			 
 			// Step1
@@ -41,7 +41,7 @@ public class GoogleMail {
 			generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("navyskurfer@gmail.com"));
 			//generateMailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress("test2@crunchify.com"));
 			generateMailMessage.setSubject(title);
-			String emailBody = message;
+			String emailBody = line1 + "<br>" + line2 + "<br>" + line3 + "<br>" + line4 + "<br>" + line5;
 			generateMailMessage.setContent(emailBody, "text/html");
 			//System.out.println("Mail Session has been created successfully..");
 	 
@@ -51,7 +51,7 @@ public class GoogleMail {
 	 
 			// Enter your correct gmail UserID and Password
 			// if you have 2FA enabled then provide App Specific Password
-			transport.connect("smtp.gmail.com", "navisuvivien@gmail.com", "laralara56");
+			transport.connect("smtp.gmail.com", "navisuvivien@gmail.com", "navisu56520");
 			transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 			transport.close();
 			
