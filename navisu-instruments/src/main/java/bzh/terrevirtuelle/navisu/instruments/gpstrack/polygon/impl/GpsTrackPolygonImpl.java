@@ -2325,8 +2325,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 	
 	public void sendMailReport(String title, String line1, String line2, String line3, String line4, String line5) {
 		try {
+			Date date = new Date();
 			GoogleMail.Send(title, line1, line2, line3, line4, line5);
-			System.out.println(ANSI_GREEN + "Email sent !" + ANSI_RESET);
+			System.out.println(ANSI_GREEN + dateFormatTime.format(date) + " - Email sent !" + ANSI_RESET);
 		} catch (AddressException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
