@@ -5,6 +5,8 @@
  */
 package bzh.terrevirtuelle.navisu.server.impl.gpsd.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.print.attribute.standard.Media;
@@ -43,6 +45,9 @@ public class NetReaderImpl
     protected static final String ANSI_CYAN = "\u001B[36m";
     protected static final String ANSI_WHITE = "\u001B[37m";
     
+    protected DateFormat dateFormatDate = new SimpleDateFormat("dd/MM/yyyy");
+    protected DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
+    
     public NetReaderImpl(int index, Vertx vertx, String hostname, int port) {
         vertx.createNetClient().connect(port, hostname, (AsyncResultHandler<NetSocket>) new AsyncResultHandler<NetSocket>() {
 
@@ -56,17 +61,17 @@ public class NetReaderImpl
 								if (source.contains("tcp://data.aishub.net:4299")) {
 									countAtl++;
 									dateAtl = new Date();
-//									if (countAtl % 100 == 0) {
-//										System.out.println(ANSI_PURPLE + "atl" + ANSI_RESET);
-//									}
+									if (countAtl % 2500 == 0) {
+										System.out.println(ANSI_PURPLE + dateFormatTime.format(dateAtl) + " - ATL stream" + ANSI_RESET);
+									}
 								}
 
 								if (source.contains("tcp://data.aishub.net:4572")) {
 									countMed++;
 									dateMed = new Date();
-//									if (countMed % 100 == 0) {
-//										System.out.println(ANSI_BLUE + "med" + ANSI_RESET);
-//									}
+									if (countMed % 500 == 0) {
+										System.out.println(ANSI_BLUE + dateFormatTime.format(dateMed) + " - MED stream" + ANSI_RESET);
+									}
 								}
                         
                         if ((source.startsWith("{") && source.endsWith("}")) // Gpsd well formatted

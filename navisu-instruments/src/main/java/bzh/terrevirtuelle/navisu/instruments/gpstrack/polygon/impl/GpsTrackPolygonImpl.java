@@ -182,7 +182,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected long updateInterval = 15;   //number of minutes within ship position updates are not saved
     protected long updateInterval2 = 45;  //number of seconds for online ship position updates display
     protected int coldStart1 = 0;         //number of ships to create before getting database ships updates
-    protected int coldStart3 = 25;        //number of ships to create before getting online ships updates
+    protected int coldStart3 = 10;         //number of ships to create before getting online ships updates
     protected int frequency = 10;         //number of seconds to check AIS streams (timer)
     protected int delayAtl = 5;           //number of seconds to restart ATL AIS stream (timer)
     protected int delayMed = 5;           //number of seconds to restart MED AIS stream (timer)
@@ -274,6 +274,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected MouseAdapter ma2;
     protected MouseAdapter ma3;
     protected MouseMotionAdapter mma1;
+    protected int nbAtlStreamRestart = 0;
+    protected int nbMedStreamRestart = 0;
 
     @Override
     public void componentInitiated() {
@@ -591,18 +593,20 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
       dataServerServices.openGpsd("5.39.78.33", 2947);//atlantique
       dataServerServices.openGpsd("5.39.78.33", 2948);//méditerranée
       
+      //dataServerServices.openGpsd("data.aishub.net", 4299);     
       //dataServerServices.openGpsd("sinagot.net", 2947);
       //dataServerServices.openGpsd("fridu.net", 2947);
       //dataServerServices.openGpsd("http://hd-sf.com", 9009);
+      //dataServerServices.openGpsd("207.7.148.216", 9009);
       
       lastSaveDate = new Date();
       playSound2();
       
       if (!isTimerOn) {
-      	isTimerOn = true;
-      	System.out.println("timer on");
       	t = new Timer();
       	t.scheduleAtFixedRate(new MonAction(), 20*1000, frequency*1000);
+      	System.out.println(dateFormatTime.format(startTime) + " - Timer ON");
+      	isTimerOn = true;
       }
         
     }
@@ -624,8 +628,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			long delayMedCalculated = Utils.secondsBetween(date, lastReceptionDateMed);
 			
 			if (delayAtlCalculated > delayAtl) {
+				nbAtlStreamRestart++;
 				dataServerServices.openGpsd("5.39.78.33", 2947);// atlantique
-				System.err.println(dateFormatTime.format(date) + " - restart ATL AIS stream (delay : " + delayAtlCalculated + ")");
+				System.err.println(dateFormatTime.format(date) + " - restart ATL AIS stream (delay : " + delayAtlCalculated + " / restart : " + nbAtlStreamRestart + ")");
 				lastReceptionDateAtl.setTime(date.getTime() + delayRestart*1000);
 			} else {
 				if (delayAtlCalculated != 0) {System.out.println(ANSI_GREEN + dateFormatTime.format(date) + " - ATL stream OK (delay : " + delayAtlCalculated + ")" + ANSI_RESET);}
@@ -637,8 +642,9 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 			}
 
 			if (delayMedCalculated > delayMed) {
+				nbMedStreamRestart++;
 				dataServerServices.openGpsd("5.39.78.33", 2948);// méditerranée
-				System.err.println(dateFormatTime.format(date) + " - restart MED AIS stream (delay : " + delayMedCalculated + ")");
+				System.err.println(dateFormatTime.format(date) + " - restart MED AIS stream (delay : " + delayMedCalculated + " / restart : " + nbMedStreamRestart + ")");
 				lastReceptionDateMed.setTime(date.getTime() + delayRestart*1000);
 			} else {
 				if (delayMedCalculated != 0) {System.out.println(ANSI_GREEN + dateFormatTime.format(date) + " - MED stream OK (delay : " + delayMedCalculated + ")" + ANSI_RESET);}
