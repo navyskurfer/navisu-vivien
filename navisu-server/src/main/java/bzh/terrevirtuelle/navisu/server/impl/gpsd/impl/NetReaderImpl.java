@@ -57,6 +57,8 @@ public class NetReaderImpl
                     NetSocket socket = asyncResult.result();
                     socket.dataHandler((Buffer buffer) -> {
                         String source = buffer.toString().trim();
+                        
+                        //System.out.println(source);
                       
 								if (source.contains("tcp://data.aishub.net:4299")) {
 									countAtl++;
