@@ -507,7 +507,18 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
             lastReceptionDateAtl = startTime;
             lastReceptionDateMed = startTime;
             isTimerOn = false;
-            readShips();
+            
+            //readShips();
+            
+			String csvFile = "data/saved/savedAisShips.csv";
+			LogAnalyzer readship = new LogAnalyzer(csvFile);
+			try {
+				readship.analyze();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
             addPanelController();
             
             //feu vert pour l'actualisation des noms depuis la base pour le module AIS
@@ -655,6 +666,85 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 				// isTimerOn = false;
 			}
 		}
+	}
+	
+	private class LogAnalyzer {
+	    private final String logFile;
+        int i = 0;
+        String cvsSplitBy = ";";
+        int bufferSize = 128*1024;
+        boolean firstLine = true;
+
+	    LogAnalyzer(String logFile) {
+	        this.logFile = logFile;
+	    }
+
+	    void analyze() throws IOException {
+	        try(FileReader fileReader = new FileReader(logFile)) {
+	            try(BufferedReader bufferedReader = new BufferedReader(fileReader, bufferSize)) {
+	                String line;
+	                while ((line = bufferedReader.readLine()) != null) {
+	                	
+	                    if (firstLine) {
+	                        firstLine = false;
+	                        continue;
+	                    }
+	                	
+	                    analyzeLine(line);
+	                }
+	                
+	                Date echantillon = new Date();
+	        		echantillon.setTime(0);
+	                //System.out.println(echantillon);
+	                
+	        		for (Ship s : aisShips) {
+	        			int indice = 0;
+	        			if (shipMatrix[4][indice] != null && shipMatrix[5][indice] != null) {
+	        				try {
+	        					lastUpdateDate.add(Utils.convDate(dateFormatDate.parse(shipMatrix[4][indice]), shipMatrix[5][indice]));
+	        				} catch (ParseException e) {
+	        					// TODO Auto-generated catch block
+	        					System.err.println("Date parse exception");
+	        					lastUpdateDate.add(echantillon);
+	        				}
+	        			} else {
+	        				lastUpdateDate.add(echantillon);
+	        			}
+	        			indice++;
+	        		}
+	                loadMaxTarget();
+	                //aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
+	                
+	            }
+	        }
+	    }
+
+	    private void analyzeLine(String line) {
+	        // do whatever you need here
+
+            // use separator
+            String[] ship = line.split(cvsSplitBy);
+
+            shipMatrix[0][i] = ship[0];
+            shipMatrix[1][i] = ship[1];
+            shipMatrix[2][i] = ship[2];
+            shipMatrix[3][i] = ship[3];
+            shipMatrix[4][i] = ship[4];
+            shipMatrix[5][i] = ship[5];
+
+			//System.out.println("Ship [MMSI= " + ship[0] + " , name=" + ship[1] + " , lat=" + ship[2] + " , lon=" + ship[3] + " , date=" + ship[4] + " , time=" + ship[5] + " , i=" + i + "]");
+            Ship s = new Ship();
+            s.setMMSI(Integer.parseInt(ship[0]));
+            s.setName(ship[1]);
+            if (!ship[1].equals("")) {
+                nbNamesDB++;
+            }
+			//on ne charge pas les dernières positions connues des bateaux car ceux-ci ne sont peut-être plus actifs, les positions seront mises à jour à la réception de nouveaux signaux AIS (pour les bateaux actifs)
+            //s.setLatitude(Double.parseDouble(ship[2]));
+            //s.setLongitude(Double.parseDouble(ship[3]));
+            aisShips.add(s);
+            i++;
+	    }
 	}
 
     private void createTarget(Ship target) {
@@ -2017,17 +2107,18 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
         }
     }
 
-    private void readShips() {
+    /*private void readShips() {
         boolean firstLine = true;
         int i = 0;
         String csvFile = "data/saved/savedAisShips.csv";
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ";";
+        int bufferSize = 128*1024;
 
         try {
 
-            br = new BufferedReader(new FileReader(csvFile));
+            br = new BufferedReader(new FileReader(csvFile), bufferSize);
             while ((line = br.readLine()) != null) {
 
                 if (firstLine) {
@@ -2056,6 +2147,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 //s.setLongitude(Double.parseDouble(ship[3]));
                 aisShips.add(s);
                 i++;
+                
             }
 
         } catch (FileNotFoundException e) {
@@ -2093,7 +2185,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 		}
         loadMaxTarget();
         //aisTrackPanel.updateAisPanelStatus("Max target : " + maxTarget);
-    }
+    }*/
 
     private void addPanelController() {
         Platform.runLater(() -> {
