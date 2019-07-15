@@ -2285,7 +2285,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 					target.setShipName(s.getName());
 					nbNamesRetrieved++;
 					//aisTrackPanel.updateAisPanelStatus(s.getName() + " retrieved from database");
-					if (nbNamesRetrieved % 1000 == 0) {
+					if (nbNamesRetrieved % 500 == 0) {
 						aisTrackPanel.updateAisPanelStatus(nbNamesRetrieved + " names retrieved from database");
 					}
 				}
