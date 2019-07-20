@@ -1994,7 +1994,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("Old name : " + aisShips.get(i).getName()));
                             aisTrackPanel.updateAisPanelName(dateFormatTime.format(date), inSight, ("New name : " + target.getName()));
                             //aisTrackPanel.updateAisPanelStatus(nbNamesUpdated + " name(s) updated");
-                            playSound();	
+                            //playSound();	
                 		}	
                 		
                 		resu.setName(target.getName());
