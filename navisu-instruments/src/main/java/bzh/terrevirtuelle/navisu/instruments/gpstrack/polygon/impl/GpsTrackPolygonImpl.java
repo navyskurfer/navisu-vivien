@@ -2000,7 +2000,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 		resu.setName(target.getName());
                 		aisShips.set(i, resu);
                         
-                        if (nbNamesReceived % 10 == 0) {
+                        if (nbNamesReceived > 0 && nbNamesReceived % 10 == 0) {
                         	aisTrackPanel.updateAisPanelStatus(nbNamesReceived + " new name(s) received");
                         	}
                         //aisTrackPanel.updateAisPanelStatus("New name " + target.getName());
