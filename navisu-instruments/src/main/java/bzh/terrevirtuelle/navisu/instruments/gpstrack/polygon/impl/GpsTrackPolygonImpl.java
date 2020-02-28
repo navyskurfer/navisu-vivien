@@ -227,7 +227,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
     protected boolean pathLoaded = false;
     protected static final String ANSI_RESET = "\u001B[0m";
     protected static final String ANSI_BLACK = "\u001B[30m";
-    protected static final String ANSI_RED = "\u001B[31m";
+    protected static final String ANSI_RED = "\u001b[31m";
     protected static final String ANSI_GREEN = "\u001B[32m";
     protected static final String ANSI_YELLOW = "\u001B[33m";
     protected static final String ANSI_BLUE = "\u001B[34m";
@@ -279,8 +279,8 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
 
     @Override
     public void componentInitiated() {
-
-        maxTarget = 0;
+    	
+    	maxTarget = 0;
         watchedShip = new Ship();
         watchedShip.setMMSI(999999998);
         watchedShip.setName("PLASTRON2");
@@ -1981,7 +1981,7 @@ public class GpsTrackPolygonImpl implements GpsTrackPolygon,
                 	resu.setLongitude(target.getLongitude());
                 	resu.setMMSI(target.getMMSI());
                 		
-                	if (!target.getName().equals(aisShips.get(i).getName()) && !(Utils.isEmptyReceived(target.getMMSI(), target.getName(),origin))) {
+                	if (!target.getName().replaceAll("\\s+","").contentEquals(Utils.convertFromUTF8(aisShips.get(i).getName()).replaceAll("\\s+","")) && !(Utils.isEmptyReceived(target.getMMSI(), target.getName(),origin))) {
                 		
                 		if (Utils.isEmpty(aisShips.get(i).getName())) {
                             nbNamesReceived++;
