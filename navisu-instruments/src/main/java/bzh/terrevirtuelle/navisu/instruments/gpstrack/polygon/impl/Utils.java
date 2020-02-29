@@ -7,6 +7,7 @@ import gov.nasa.worldwind.util.WWUtil;
 import gov.nasa.worldwind.util.measure.MeasureTool;
 import gov.nasa.worldwind.util.measure.MeasureToolController;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.CharBuffer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,19 +15,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.derby.iapi.services.io.ArrayUtil;
 import org.capcaval.c3.component.annotation.UsedService;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
+import antlr.collections.List;
 import bzh.terrevirtuelle.navisu.instruments.common.view.panel.TrackPanel;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygon;
 import bzh.terrevirtuelle.navisu.instruments.gpstrack.polygon.GpsTrackPolygonServices;
 import bzh.terrevirtuelle.navisu.server.DataServerServices;
+
+import java.lang.*;
 
 /*import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -47,6 +53,13 @@ public class Utils {
     protected static final String ANSI_PURPLE = "\u001B[35m";
     protected static final String ANSI_CYAN = "\u001B[36m";
     protected static final String ANSI_WHITE = "\u001B[37m";
+    
+    public static final String UTF8_BOM = "\uFEFF";
+    
+    public static int nbBracketsRemoved = 0;
+    
+    protected static DateFormat dateFormatDate = new SimpleDateFormat("dd/MM/yyyy");
+    protected static DateFormat dateFormatTime = new SimpleDateFormat("HH:mm:ss");
 
 	public static Position barycenter(ArrayList<? extends Position> list) {
 		double latmax = list.get(0).getLatitude().getDegrees();
@@ -402,6 +415,45 @@ public class Utils {
         }
         return out;
     }
+    
+    public static String removeUTF8BOM(String s) {
+        if (s.startsWith(UTF8_BOM)) {
+            s = s.substring(1);
+        }
+        return s;
+    }
+    
+    public static void displayChar(String s) {
+    	byte [] array = s.getBytes();
+    	for(byte b: array){
+            System.err.print(b);
+         }
+    	System.err.print("\n");
+    }
+    
+	public static String removeBrackets(String s) {
+		if (s.length() >= 3) {
+			byte[] array = s.getBytes();
+			byte[] result = new byte[s.length() - 2];
+
+			if (array[0] == 34 && array[array.length - 1] == 34) {
+				for (int i = 0; i <= s.length() - 3; i++) {
+					result[i] = array[i + 1];
+				}
+				String s1 = new String(result);
+				// System.err.println("Brackets removed ! Before : " + s + " -
+				// After : " + s1);
+				nbBracketsRemoved++;
+				if (nbBracketsRemoved % 50 == 0) {
+					Date now = new Date();
+					System.err.println(dateFormatTime.format(now) + " - " + nbBracketsRemoved + " brackets removed");
+				}
+				return s1;
+			} else
+				return s;
+		} else
+			return s;
+	}
 
 	public static Date convDate(Date date, String hour) {
 
