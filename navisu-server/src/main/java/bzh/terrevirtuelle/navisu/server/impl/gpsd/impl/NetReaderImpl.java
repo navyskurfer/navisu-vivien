@@ -63,7 +63,7 @@ public class NetReaderImpl
 								if (source.contains("tcp://data.aishub.net:4299")) {
 									countAtl++;
 									dateAtl = new Date();
-									if (countAtl % 2500 == 0) {
+									if (countAtl % 1000 == 0) {
 										System.out.println(ANSI_PURPLE + dateFormatTime.format(dateAtl) + " - ATL stream" + ANSI_RESET);
 									}
 								}
